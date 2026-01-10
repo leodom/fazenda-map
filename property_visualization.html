@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fazenda Santa Fé - Property Boundary Visualization</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .info-box {
+            background: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #4CAF50;
+            border-radius: 4px;
+        }
+        .info-box h3 {
+            margin: 0 0 10px 0;
+            color: #555;
+            font-size: 14px;
+        }
+        .info-box .value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        .success {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+        #canvas {
+            border: 1px solid #ddd;
+            background: #fafafa;
+            cursor: crosshair;
+            margin: 20px 0;
+            display: block;
+        }
+        .controls {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .legend {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+        .legend-color {
+            width: 30px;
+            height: 3px;
+            margin-right: 10px;
+        }
+        #info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fazenda Santa Fé - DESMEMBRADO</h1>
+        <p><strong>Property Boundary Visualization</strong> | Cachoeiras de Macacu, RJ, Brazil</p>
+
+        <div class="info-grid">
+            <div class="info-box success">
+                <h3>CLOSURE VERIFICATION</h3>
+                <div class="value">PERFECT ✓</div>
+                <div style="font-size: 12px; color: #666; margin-top: 5px;">0.000m error</div>
+            </div>
+            <div class="info-box">
+                <h3>CALCULATED AREA</h3>
+                <div class="value">97.66 ha</div>
+                <div style="font-size: 12px; color: #666; margin-top: 5px;">976,599.40 m²</div>
+            </div>
+            <div class="info-box warning">
+                <h3>DOCUMENTED AREA</h3>
+                <div class="value">156.83 ha</div>
+                <div style="font-size: 12px; color: #666; margin-top: 5px;">1,568,337.90 m²</div>
+            </div>
+            <div class="info-box">
+                <h3>PERIMETER</h3>
+                <div class="value">7.39 km</div>
+                <div style="font-size: 12px; color: #666; margin-top: 5px;">49 boundary points</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button onclick="resetView()">Reset View</button>
+            <button onclick="toggleLabels()">Toggle Labels</button>
+            <button onclick="toggleGrid()">Toggle Grid</button>
+            <button onclick="downloadSVG()">Download SVG</button>
+        </div>
+
+        <canvas id="canvas" width="1200" height="800"></canvas>
+
+        <div id="info">Hover over points to see details. Scroll to zoom, drag to pan.</div>
+
+        <div class="legend">
+            <h3>Legend</h3>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #2196F3; height: 2px;"></div>
+                <span>Property Boundary</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #f44336;"></div>
+                <span>Main Markers (M-series)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4CAF50;"></div>
+                <span>Intermediate Points (E-series)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #FF9800; height: 4px; border-radius: 2px;"></div>
+                <span>Estimated Curve Segments</span>
+            </div>
+        </div>
+
+        <div style="background: #fff3cd; padding: 15px; border-radius: 4px; margin-top: 20px;">
+            <strong>⚠️ Important Notes:</strong>
+            <ul style="margin: 10px 0;">
+                <li>Area discrepancy of 37.7% likely due to curve segment approximations</li>
+                <li>Two road curves (CMU-009 and CMU-007) approximated as straight lines</li>
+                <li>Some OCR data quality issues in source document</li>
+                <li>Professional survey verification recommended for legal purposes</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Property coordinates (from analysis)
+        const points = [
+            {name: "M-0", x: 1346.092, y: 1509.458, type: "M"},
+            {name: "E-26", x: 16.150, y: -1.271, type: "E"},
+            {name: "E-27", x: 41.455, y: 100.222, type: "E"},
+            {name: "E-30", x: 119.736, y: 101.930, type: "E"},
+            {name: "E-31", x: 122.855, y: 122.798, type: "E"},
+            {name: "E-32", x: 157.742, y: 140.230, type: "E"},
+            {name: "E-33", x: 185.374, y: 110.076, type: "E"},
+            {name: "E-34", x: 235.336, y: 161.363, type: "E"},
+            {name: "E-35", x: 268.851, y: 164.886, type: "E"},
+            {name: "E-36", x: 254.914, y: 187.189, type: "E"},
+            {name: "E-37", x: 298.774, y: 220.541, type: "E"},
+            {name: "E-39", x: 339.809, y: 215.866, type: "E"},
+            {name: "E-40", x: 359.909, y: 242.540, type: "E"},
+            {name: "E-41", x: 406.552, y: 271.686, type: "E"},
+            {name: "E-42", x: 430.328, y: 263.960, type: "E"},
+            {name: "k-42", x: 535.988, y: 172.112, type: "E"},
+            {name: "M-13", x: 795.372, y: -55.362, type: "M"},
+            {name: "M-14", x: 704.941, y: -325.635, type: "M", curve: true},
+            {name: "M-15", x: 1006.380, y: 575.273, type: "M"},
+            {name: "M-15A", x: 740.464, y: 349.419, type: "M"},
+            {name: "M-15B", x: 698.915, y: 254.088, type: "M"},
+            {name: "M-15C", x: 913.086, y: 40.632, type: "M"},
+            {name: "M-15D", x: 1142.951, y: -26.766, type: "M"},
+            {name: "M-15E", x: 1262.394, y: -149.758, type: "M"},
+            {name: "M-16", x: 1309.034, y: -518.285, type: "M"},
+            {name: "E-43", x: 1393.955, y: -482.923, type: "E"},
+            {name: "E-44", x: 1412.824, y: -443.632, type: "E"},
+            {name: "E-45", x: 1429.986, y: -405.940, type: "E"},
+            {name: "E-46", x: 1497.092, y: -368.093, type: "E"},
+            {name: "E-47", x: 1582.016, y: -334.683, type: "E"},
+            {name: "E-48", x: 1607.020, y: -328.761, type: "E"},
+            {name: "E-49", x: 1715.991, y: -516.382, type: "E"},
+            {name: "M-6", x: 1716.092, y: -596.339, type: "M"},
+            {name: "M-7", x: 1636.406, y: -947.192, type: "M"},
+            {name: "M-8", x: 1583.020, y: -1052.870, type: "M"},
+            {name: "M-9", x: 1470.652, y: -1468.915, type: "M"},
+            {name: "E-11A", x: 1453.083, y: -1486.046, type: "E"},
+            {name: "E-12", x: 1426.932, y: -1513.311, type: "E"},
+            {name: "M-10", x: 1359.485, y: -1591.725, type: "M"},
+            {name: "E-13", x: 1324.950, y: -1626.606, type: "E"},
+            {name: "E-14", x: 1251.291, y: -1679.395, type: "E"},
+            {name: "E-15", x: 1211.748, y: -1726.986, type: "E"},
+            {name: "E-16", x: 1082.930, y: -1835.561, type: "E"},
+            {name: "E-17", x: 936.565, y: -1981.535, type: "E"},
+            {name: "E-18", x: 911.479, y: -2009.457, type: "E"},
+            {name: "E-19", x: 888.866, y: -2041.330, type: "E"},
+            {name: "M-11", x: 850.476, y: -2082.933, type: "M"},
+            {name: "M-1B", x: 568.063, y: -1945.159, type: "M", curve: true},
+            {name: "M-1", x: 468.063, y: -1945.159, type: "M"}
+        ];
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let showLabels = true;
+        let showGrid = true;
+        let scale = 1;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        // Calculate bounds
+        let minX = Math.min(...points.map(p => p.x));
+        let maxX = Math.max(...points.map(p => p.x));
+        let minY = Math.min(...points.map(p => p.y));
+        let maxY = Math.max(...points.map(p => p.y));
+
+        const padding = 50;
+        const rangeX = maxX - minX;
+        const rangeY = maxY - minY;
+
+        function resetView() {
+            const scaleX = (canvas.width - 2 * padding) / rangeX;
+            const scaleY = (canvas.height - 2 * padding) / rangeY;
+            scale = Math.min(scaleX, scaleY);
+            offsetX = padding - minX * scale;
+            offsetY = canvas.height - padding + minY * scale;
+            draw();
+        }
+
+        function toCanvasX(x) {
+            return x * scale + offsetX;
+        }
+
+        function toCanvasY(y) {
+            return canvas.height - (y * scale + offsetY - canvas.height + padding);
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw grid
+            if (showGrid) {
+                ctx.strokeStyle = '#e0e0e0';
+                ctx.lineWidth = 1;
+                for (let i = 0; i <= 10; i++) {
+                    const x = padding + (canvas.width - 2 * padding) * i / 10;
+                    ctx.beginPath();
+                    ctx.moveTo(x, padding);
+                    ctx.lineTo(x, canvas.height - padding);
+                    ctx.stroke();
+
+                    const y = padding + (canvas.height - 2 * padding) * i / 10;
+                    ctx.beginPath();
+                    ctx.moveTo(padding, y);
+                    ctx.lineTo(canvas.width - padding, y);
+                    ctx.stroke();
+                }
+            }
+
+            // Draw property boundary
+            ctx.strokeStyle = '#2196F3';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            let lastCurve = false;
+            points.forEach((point, i) => {
+                const x = toCanvasX(point.x);
+                const y = toCanvasY(point.y);
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    if (point.curve || lastCurve) {
+                        ctx.strokeStyle = '#FF9800';
+                        ctx.lineWidth = 3;
+                        ctx.lineTo(x, y);
+                        ctx.stroke();
+                        ctx.strokeStyle = '#2196F3';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                lastCurve = point.curve || false;
+            });
+
+            // Close polygon
+            ctx.lineTo(toCanvasX(points[0].x), toCanvasY(points[0].y));
+            ctx.stroke();
+
+            // Draw points
+            points.forEach(point => {
+                const x = toCanvasX(point.x);
+                const y = toCanvasY(point.y);
+
+                ctx.fillStyle = point.type === 'M' ? '#f44336' : '#4CAF50';
+                ctx.beginPath();
+                ctx.arc(x, y, point.type === 'M' ? 5 : 3, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // Draw labels
+                if (showLabels && (point.type === 'M' || point.name.startsWith('E-4'))) {
+                    ctx.fillStyle = '#333';
+                    ctx.font = '11px monospace';
+                    ctx.fillText(point.name, x + 8, y - 8);
+                }
+            });
+
+            // Draw scale bar
+            const scaleBarLength = 500; // meters
+            const scaleBarPixels = scaleBarLength * scale;
+            ctx.fillStyle = '#333';
+            ctx.fillRect(canvas.width - 150, canvas.height - 40, scaleBarPixels / 5, 3);
+            ctx.font = '12px sans-serif';
+            ctx.fillText(`${scaleBarLength / 5}m`, canvas.width - 150, canvas.height - 20);
+        }
+
+        function toggleLabels() {
+            showLabels = !showLabels;
+            draw();
+        }
+
+        function toggleGrid() {
+            showGrid = !showGrid;
+            draw();
+        }
+
+        function downloadSVG() {
+            alert('SVG download functionality would be implemented here. For now, use browser print-to-PDF.');
+        }
+
+        // Mouse interaction for hover info
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            let found = null;
+            for (let point of points) {
+                const x = toCanvasX(point.x);
+                const y = toCanvasY(point.y);
+                const dist = Math.sqrt((mouseX - x) ** 2 + (mouseY - y) ** 2);
+                if (dist < 10) {
+                    found = point;
+                    break;
+                }
+            }
+
+            if (found) {
+                document.getElementById('info').textContent =
+                    `${found.name}: X=${found.x.toFixed(2)}m, Y=${found.y.toFixed(2)}m`;
+            } else {
+                document.getElementById('info').textContent =
+                    'Hover over points to see details. Scroll to zoom, drag to pan.';
+            }
+        });
+
+        // Initial draw
+        resetView();
+    </script>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Fazenda Santa Fé - Satellite Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+        .info-panel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            z-index: 1000;
+            max-width: 300px;
+        }
+        .info-panel h3 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        .stat {
+            margin: 5px 0;
+            font-size: 13px;
+        }
+        .stat strong {
+            color: #2c3e50;
+        }
+        .warning {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 12px;
+            border-left: 3px solid #ffc107;
+        }
+        .layers-control {
+            position: absolute;
+            top: 10px;
+            left: 50px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .layer-option {
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        .layer-option input {
+            margin-right: 5px;
+        }
+        .alert-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff3cd;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            z-index: 2000;
+            max-width: 500px;
+            border: 2px solid #ffc107;
+        }
+        .alert-box h2 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .alert-box button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .alert-box button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="alert" class="alert-box">
+        <h2>⚠️ Geographic Coordinates Required</h2>
+        <p>To display the property boundary on satellite imagery, we need the actual GPS coordinates (latitude/longitude) of at least one reference point.</p>
+        <p><strong>Currently missing:</strong></p>
+        <ul>
+            <li>GPS coordinates for boundary markers (M-0, M-1, etc.)</li>
+            <li>Or approximate location to anchor the map</li>
+        </ul>
+        <p><strong>What we have:</strong> Relative coordinates in meters from point M-0</p>
+        <p><strong>To enable this map:</strong> Provide GPS coordinates for at least one marker point.</p>
+        <button onclick="closeAlert()">I understand - Show Demo Map</button>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="info-panel">
+        <h3>Fazenda Santa Fé</h3>
+        <div class="stat"><strong>Location:</strong> Funchal, 3º Distrito</div>
+        <div class="stat"><strong>Municipality:</strong> Cachoeiras de Macacu, RJ</div>
+        <div class="stat"><strong>Area (calc):</strong> 97.66 ha</div>
+        <div class="stat"><strong>Area (doc):</strong> 156.83 ha</div>
+        <div class="stat"><strong>Perimeter:</strong> 7.39 km</div>
+        <div class="stat"><strong>Points:</strong> 49 markers</div>
+        <div class="warning">
+            <strong>⚠️ Note:</strong> Property boundary is approximate until GPS coordinates are obtained.
+            Current display is centered on Cachoeiras de Macacu for demonstration.
+        </div>
+    </div>
+
+    <div class="layers-control">
+        <div><strong>Map Layers:</strong></div>
+        <div class="layer-option">
+            <input type="radio" name="basemap" id="satellite" checked onchange="changeBasemap('satellite')">
+            <label for="satellite">Satellite (Esri)</label>
+        </div>
+        <div class="layer-option">
+            <input type="radio" name="basemap" id="street" onchange="changeBasemap('street')">
+            <label for="street">Street Map</label>
+        </div>
+        <div class="layer-option">
+            <input type="radio" name="basemap" id="topo" onchange="changeBasemap('topo')">
+            <label for="topo">Topographic</label>
+        </div>
+        <div class="layer-option" style="margin-top: 10px;">
+            <input type="checkbox" id="boundary" checked onchange="toggleBoundary()">
+            <label for="boundary">Show Property Boundary</label>
+        </div>
+    </div>
+
+    <script>
+        // Approximate center of Cachoeiras de Macacu, RJ
+        // TODO: Replace with actual property coordinates once GPS data is available
+        const centerLat = -22.4667;
+        const centerLon = -42.6533;
+
+        let map, satelliteLayer, streetLayer, topoLayer, boundaryLayer;
+        let currentBasemap = 'satellite';
+
+        function closeAlert() {
+            document.getElementById('alert').style.display = 'none';
+            initMap();
+        }
+
+        function initMap() {
+            // Initialize map
+            map = L.map('map').setView([centerLat, centerLon], 13);
+
+            // Satellite imagery (Esri World Imagery - trusted source)
+            satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Street map (OpenStreetMap - trusted source)
+            streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            });
+
+            // Topographic map (OpenTopoMap - trusted source)
+            topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+                maxZoom: 17
+            });
+
+            // Add scale
+            L.control.scale({imperial: false, metric: true}).addTo(map);
+
+            // TODO: Add actual property boundary once GPS coordinates are available
+            // This is a placeholder showing approximate area
+            createDemoBoundary();
+        }
+
+        function createDemoBoundary() {
+            // This creates a DEMO polygon - NOT the actual property boundary
+            // Actual boundary requires GPS coordinates
+
+            const demoPolygon = [
+                [centerLat + 0.01, centerLon - 0.01],
+                [centerLat + 0.01, centerLon + 0.01],
+                [centerLat - 0.01, centerLon + 0.01],
+                [centerLat - 0.01, centerLon - 0.01]
+            ];
+
+            boundaryLayer = L.polygon(demoPolygon, {
+                color: '#FF0000',
+                fillColor: '#FF0000',
+                fillOpacity: 0.2,
+                weight: 2
+            }).addTo(map);
+
+            boundaryLayer.bindPopup('<strong>⚠️ DEMO BOUNDARY</strong><br>This is not the actual property boundary.<br>Awaiting GPS coordinates for accurate display.');
+        }
+
+        function changeBasemap(type) {
+            map.removeLayer(satelliteLayer);
+            map.removeLayer(streetLayer);
+            map.removeLayer(topoLayer);
+
+            if (type === 'satellite') {
+                satelliteLayer.addTo(map);
+            } else if (type === 'street') {
+                streetLayer.addTo(map);
+            } else if (type === 'topo') {
+                topoLayer.addTo(map);
+            }
+            currentBasemap = type;
+        }
+
+        function toggleBoundary() {
+            if (document.getElementById('boundary').checked) {
+                boundaryLayer.addTo(map);
+            } else {
+                map.removeLayer(boundaryLayer);
+            }
+        }
+
+        // Function to add actual property boundary when GPS coordinates become available
+        function addActualBoundary(gpsCoordinates) {
+            // gpsCoordinates should be array of [lat, lon] pairs for each marker
+            // Example: [[lat1, lon1], [lat2, lon2], ...]
+
+            if (boundaryLayer) {
+                map.removeLayer(boundaryLayer);
+            }
+
+            boundaryLayer = L.polygon(gpsCoordinates, {
+                color: '#2196F3',
+                fillColor: '#2196F3',
+                fillOpacity: 0.2,
+                weight: 3
+            }).addTo(map);
+
+            // Add markers for each point
+            gpsCoordinates.forEach((coord, i) => {
+                L.circleMarker(coord, {
+                    radius: 4,
+                    fillColor: '#FF0000',
+                    color: '#FFF',
+                    weight: 1,
+                    fillOpacity: 1
+                }).bindPopup(`Point ${i + 1}`).addTo(map);
+            });
+
+            // Fit map to boundary
+            map.fitBounds(boundaryLayer.getBounds());
+        }
+
+        /*
+        TO USE THIS MAP WITH ACTUAL COORDINATES:
+
+        1. Obtain GPS coordinates for boundary markers
+        2. Create an array of [latitude, longitude] pairs
+        3. Call: addActualBoundary(coordinates)
+
+        Example:
+        const actualCoords = [
+            [-22.4667, -42.6533],  // M-0
+            [-22.4677, -42.6543],  // E-26
+            // ... more coordinates
+        ];
+        addActualBoundary(actualCoords);
+        */
+    </script>
+</body>
+</html>

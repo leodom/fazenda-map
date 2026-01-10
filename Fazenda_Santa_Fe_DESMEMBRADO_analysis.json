@@ -1,0 +1,655 @@
+{
+  "property_name": "Fazenda_Santa_Fe_DESMEMBRADO",
+  "segments": [
+    {
+      "from": "M-0",
+      "to": "E-26",
+      "distance": 16.2,
+      "bearing": "94\u00b030'NE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 94.5
+    },
+    {
+      "from": "E-26",
+      "to": "E-27",
+      "distance": 104.6,
+      "bearing": "14\u00b0NE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 14.0
+    },
+    {
+      "from": "E-27",
+      "to": "E-30",
+      "distance": 78.3,
+      "bearing": "88\u00b045'NE",
+      "is_curve": false,
+      "note": "E-28,E-29 missing in OCR",
+      "azimuth": 88.75
+    },
+    {
+      "from": "E-30",
+      "to": "E-31",
+      "distance": 21.1,
+      "bearing": "08\u00b030'NE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 8.5
+    },
+    {
+      "from": "E-31",
+      "to": "E-32",
+      "distance": 39.0,
+      "bearing": "63\u00b027'NE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 63.45
+    },
+    {
+      "from": "E-32",
+      "to": "E-33",
+      "distance": 40.9,
+      "bearing": "42\u00b030'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 137.5
+    },
+    {
+      "from": "E-33",
+      "to": "E-34",
+      "distance": 71.6,
+      "bearing": "44\u00b015'NE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 44.25
+    },
+    {
+      "from": "E-34",
+      "to": "E-35",
+      "distance": 33.7,
+      "bearing": "84\u00b000'NE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 84.0
+    },
+    {
+      "from": "E-35",
+      "to": "E-36",
+      "distance": 26.3,
+      "bearing": "32\u00b000'NW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 328.0
+    },
+    {
+      "from": "E-36",
+      "to": "E-37",
+      "distance": 55.1,
+      "bearing": "52\u00b045'NE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 52.75
+    },
+    {
+      "from": "E-37",
+      "to": "E-39",
+      "distance": 41.3,
+      "bearing": "83\u00b030'SE",
+      "is_curve": false,
+      "note": "E-38 skipped",
+      "azimuth": 96.5
+    },
+    {
+      "from": "E-39",
+      "to": "E-40",
+      "distance": 33.4,
+      "bearing": "37\u00b000'NE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 37.0
+    },
+    {
+      "from": "E-40",
+      "to": "E-41",
+      "distance": 55.0,
+      "bearing": "58\u00b000'NE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 58.0
+    },
+    {
+      "from": "E-41",
+      "to": "E-42",
+      "distance": 25.0,
+      "bearing": "72\u00b000'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 108.0
+    },
+    {
+      "from": "E-42",
+      "to": "k-42",
+      "distance": 140.0,
+      "bearing": "49\u00b000'SE",
+      "is_curve": false,
+      "note": "OCR: k-42 likely E-42 duplicate",
+      "azimuth": 131.0
+    },
+    {
+      "from": "k-42",
+      "to": "M-13",
+      "distance": 345.0,
+      "bearing": "48\u00b045'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 131.25
+    },
+    {
+      "from": "M-13",
+      "to": "M-14",
+      "distance": 285.0,
+      "bearing": null,
+      "is_curve": true,
+      "note": "Along road CMU-009",
+      "azimuth": null
+    },
+    {
+      "from": "M-14",
+      "to": "M-15",
+      "distance": 950.0,
+      "bearing": "18\u00b030'NE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 18.5
+    },
+    {
+      "from": "M-15",
+      "to": "M-15A",
+      "distance": 327.0,
+      "bearing": "55\u00b030'SW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 235.5
+    },
+    {
+      "from": "M-15A",
+      "to": "M-15B",
+      "distance": 110.0,
+      "bearing": "24\u00b030'SW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 204.5
+    },
+    {
+      "from": "M-15B",
+      "to": "M-15C",
+      "distance": 455.0,
+      "bearing": "28\u00b000'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 152.0
+    },
+    {
+      "from": "M-15C",
+      "to": "M-15D",
+      "distance": 240.0,
+      "bearing": "74\u00b000'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 106.0
+    },
+    {
+      "from": "M-15D",
+      "to": "M-15E",
+      "distance": 170.0,
+      "bearing": "48\u00b000'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 132.0
+    },
+    {
+      "from": "M-15E",
+      "to": "M-16",
+      "distance": 370.0,
+      "bearing": "08\u00b000'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 172.0
+    },
+    {
+      "from": "M-16",
+      "to": "E-43",
+      "distance": 90.0,
+      "bearing": "71\u00b030'NE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 71.5
+    },
+    {
+      "from": "E-43",
+      "to": "E-44",
+      "distance": 42.0,
+      "bearing": "62\u00b015'NW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 297.75
+    },
+    {
+      "from": "E-44",
+      "to": "E-45",
+      "distance": 38.0,
+      "bearing": "61\u00b000'NW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 299.0
+    },
+    {
+      "from": "E-45",
+      "to": "E-46",
+      "distance": 77.0,
+      "bearing": "61\u00b030'NE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 61.5
+    },
+    {
+      "from": "E-46",
+      "to": "E-47",
+      "distance": 90.0,
+      "bearing": "69\u00b030'NW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 290.5
+    },
+    {
+      "from": "E-47",
+      "to": "E-48",
+      "distance": 25.0,
+      "bearing": "76\u00b000'NW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 284.0
+    },
+    {
+      "from": "E-48",
+      "to": "E-49",
+      "distance": 220.0,
+      "bearing": "59\u00b000'NW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 301.0
+    },
+    {
+      "from": "E-49",
+      "to": "M-6",
+      "distance": 80.0,
+      "bearing": "83\u00b017'NW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 276.7166666666667
+    },
+    {
+      "from": "M-6",
+      "to": "M-7",
+      "distance": 360.0,
+      "bearing": "167\u00b002'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 12.966666666666669
+    },
+    {
+      "from": "M-7",
+      "to": "M-8",
+      "distance": 110.0,
+      "bearing": "149\u00b002'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 30.96666666666667
+    },
+    {
+      "from": "M-8",
+      "to": "M-9",
+      "distance": 432.64,
+      "bearing": "165\u00b020'06\"SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 14.664999999999992
+    },
+    {
+      "from": "M-9",
+      "to": "E-11A",
+      "distance": 28.2,
+      "bearing": "221\u00b010'SW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 401.16666666666663
+    },
+    {
+      "from": "E-11A",
+      "to": "E-12",
+      "distance": 36.45,
+      "bearing": "226\u00b033'SW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 406.55
+    },
+    {
+      "from": "E-12",
+      "to": "M-10",
+      "distance": 103.78,
+      "bearing": "238\u00b057'SW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 418.95
+    },
+    {
+      "from": "M-10",
+      "to": "E-13",
+      "distance": 47.63,
+      "bearing": "145\u00b026'08\"SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 34.56444444444443
+    },
+    {
+      "from": "E-13",
+      "to": "E-14",
+      "distance": 86.29,
+      "bearing": "158\u00b016'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 21.73333333333332
+    },
+    {
+      "from": "E-14",
+      "to": "E-15",
+      "distance": 63.34,
+      "bearing": "136\u00b021'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 43.650000000000006
+    },
+    {
+      "from": "E-15",
+      "to": "E-16",
+      "distance": 149.83,
+      "bearing": "157\u00b031'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 22.48333333333332
+    },
+    {
+      "from": "E-16",
+      "to": "E-17",
+      "distance": 146.75,
+      "bearing": "157\u00b020'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 22.666666666666657
+    },
+    {
+      "from": "E-17",
+      "to": "E-18",
+      "distance": 31.3,
+      "bearing": "151\u00b036'SE",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 28.400000000000006
+    },
+    {
+      "from": "E-18",
+      "to": "E-19",
+      "distance": 36.93,
+      "bearing": "245\u00b025'21\"SW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 425.4225
+    },
+    {
+      "from": "E-19",
+      "to": "M-11",
+      "distance": 58.27,
+      "bearing": "240\u00b039'SW",
+      "is_curve": false,
+      "note": "",
+      "azimuth": 420.65
+    },
+    {
+      "from": "M-11",
+      "to": "M-1B",
+      "distance": 470.0,
+      "bearing": null,
+      "is_curve": true,
+      "note": "Along road CMU-007",
+      "azimuth": null
+    },
+    {
+      "from": "M-1B",
+      "to": "M-1",
+      "distance": 100.0,
+      "bearing": "270\u00b000'NW",
+      "is_curve": false,
+      "note": "Bearing estimated",
+      "azimuth": 90.0
+    },
+    {
+      "from": "M-1",
+      "to": "M-0",
+      "distance": 430.0,
+      "bearing": "180\u00b000'SE",
+      "is_curve": false,
+      "note": "Bearing estimated to close",
+      "azimuth": 0.0
+    }
+  ],
+  "points": {
+    "M-0": {
+      "x": 1346.0918543280295,
+      "y": 1509.4583963149548
+    },
+    "E-26": {
+      "x": 16.150060806476674,
+      "y": -1.2710373507910868
+    },
+    "E-27": {
+      "x": 41.45509108620192,
+      "y": 100.22189561767813
+    },
+    "E-30": {
+      "x": 119.7364578065588,
+      "y": 101.93000111588427
+    },
+    "E-31": {
+      "x": 122.85523638139358,
+      "y": 122.79823583282071
+    },
+    "E-32": {
+      "x": 157.74247733507656,
+      "y": 140.23040203899444
+    },
+    "E-33": {
+      "x": 185.37411682655707,
+      "y": 110.07575896346037
+    },
+    "E-34": {
+      "x": 235.33591375122137,
+      "y": 161.36297811266562
+    },
+    "E-35": {
+      "x": 268.8513016251322,
+      "y": 164.88558732478555
+    },
+    "E-36": {
+      "x": 254.91442497579888,
+      "y": 187.18925225369955
+    },
+    "E-37": {
+      "x": 298.77413531545653,
+      "y": 220.54095099486304
+    },
+    "E-39": {
+      "x": 339.80865295489957,
+      "y": 215.8656582662485
+    },
+    "E-40": {
+      "x": 359.909274728178,
+      "y": 242.54008430182807
+    },
+    "E-41": {
+      "x": 406.5519200167814,
+      "y": 271.68564383465434
+    },
+    "E-42": {
+      "x": 430.32833292416024,
+      "y": 263.96021897528067
+    },
+    "k-42": {
+      "x": 535.9876741553484,
+      "y": 172.11195491660965
+    },
+    "M-13": {
+      "x": 795.3724077355955,
+      "y": -55.3623512929141
+    },
+    "M-14": {
+      "x": 704.9405806601443,
+      "y": -325.63459302668093
+    },
+    "M-15": {
+      "x": 1006.3800042449818,
+      "y": 575.2728794192084
+    },
+    "M-15A": {
+      "x": 736.8907405655827,
+      "y": 390.05803994478805
+    },
+    "M-15B": {
+      "x": 691.2744838733964,
+      "y": 289.9623001483683
+    },
+    "M-15C": {
+      "x": 904.8840449409768,
+      "y": -111.77885460244352
+    },
+    "M-15D": {
+      "x": 1135.5868519661733,
+      "y": -177.93181999852328
+    },
+    "M-15E": {
+      "x": 1261.9214722973304,
+      "y": -291.6840230795292
+    },
+    "M-16": {
+      "x": 1313.4155196525546,
+      "y": -658.0832085139102
+    },
+    "E-43": {
+      "x": 1398.7646486211127,
+      "y": -629.525789437452
+    },
+    "E-44": {
+      "x": 1361.595167847665,
+      "y": -609.9699795837973
+    },
+    "E-45": {
+      "x": 1328.359618976368,
+      "y": -591.5472140144366
+    },
+    "E-46": {
+      "x": 1396.0285366513394,
+      "y": -554.8059894744467
+    },
+    "E-47": {
+      "x": 1311.7280396189835,
+      "y": -523.2873251610947
+    },
+    "E-48": {
+      "x": 1287.4706464620836,
+      "y": -517.239277771103
+    },
+    "E-49": {
+      "x": 1098.8938403076188,
+      "y": -403.93090129089114
+    },
+    "M-6": {
+      "x": 1019.4429067573622,
+      "y": -394.5741305876671
+    },
+    "M-7": {
+      "x": 1100.2212010387034,
+      "y": -43.753852991007875
+    },
+    "M-8": {
+      "x": 1156.82052492487,
+      "y": 50.56749419842119
+    },
+    "M-9": {
+      "x": 1266.3507074989825,
+      "y": 469.1132010277728
+    },
+    "E-11A": {
+      "x": 1284.9134029410848,
+      "y": 490.3421043890809
+    },
+    "E-12": {
+      "x": 1311.3751843071286,
+      "y": 515.4095459604838
+    },
+    "M-10": {
+      "x": 1400.2853284149435,
+      "y": 568.937806484506
+    },
+    "E-13": {
+      "x": 1427.307391060178,
+      "y": 608.1605681210485
+    },
+    "E-14": {
+      "x": 1459.259477180045,
+      "y": 688.31684231458
+    },
+    "E-15": {
+      "x": 1502.9799907364943,
+      "y": 734.1477521283763
+    },
+    "E-16": {
+      "x": 1560.277180819919,
+      "y": 872.5892954184736
+    },
+    "E-17": {
+      "x": 1616.8301206263234,
+      "y": 1008.0046841276348
+    },
+    "E-18": {
+      "x": 1631.717158370223,
+      "y": 1035.53768445836
+    },
+    "E-19": {
+      "x": 1665.3012823491179,
+      "y": 1050.8977468465866
+    },
+    "M-11": {
+      "x": 1716.0918543280295,
+      "y": 1079.4583963149548
+    },
+    "M-1B": {
+      "x": 1246.0918543280295,
+      "y": 1079.4583963149548
+    },
+    "M-1": {
+      "x": 1346.0918543280295,
+      "y": 1079.4583963149548
+    }
+  },
+  "errors": [],
+  "warnings": [
+    "Curve M-13->M-14: position estimated using reverse bearing",
+    "Curve M-11->M-1B: position estimated using reverse bearing"
+  ],
+  "closure_error": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "calculated_area_m2": 976599.4013832867
+}

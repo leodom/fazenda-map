@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Fazenda Santa Fé - Property Map</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin: 0 0 10px 0;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-box {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .stat-box.success { border-left-color: #27ae60; background: #d4edda; }
+        .stat-box.warning { border-left-color: #f39c12; background: #fff3cd; }
+        .stat-box h3 {
+            margin: 0 0 5px 0;
+            font-size: 12px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+        }
+        .stat-box .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        svg {
+            border: 1px solid #ddd;
+            background: white;
+            display: block;
+            margin: 20px auto;
+        }
+        .controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 5px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .legend {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .legend h3 {
+            margin: 0 0 10px 0;
+        }
+        .legend-item {
+            display: inline-block;
+            margin: 5px 15px 5px 0;
+        }
+        .legend-icon {
+            display: inline-block;
+            width: 20px;
+            height: 4px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        .info-panel {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fazenda Santa Fé - DESMEMBRADO</h1>
+        <p>Property Boundary Visualization | Funchal, 3º Distrito, Cachoeiras de Macacu, RJ</p>
+
+        <div class="stats">
+            <div class="stat-box success">
+                <h3>Closure Verification</h3>
+                <div class="value">PERFECT ✓</div>
+                <small>0.000m error</small>
+            </div>
+            <div class="stat-box">
+                <h3>Calculated Area</h3>
+                <div class="value">97.66 ha</div>
+                <small>976,599 m²</small>
+            </div>
+            <div class="stat-box warning">
+                <h3>Documented Area</h3>
+                <div class="value">156.83 ha</div>
+                <small>1,568,338 m²</small>
+            </div>
+            <div class="stat-box">
+                <h3>Perimeter</h3>
+                <div class="value">7.39 km</div>
+                <small>49 points</small>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button onclick="showLabels = !showLabels; render()">Toggle Labels</button>
+            <button onclick="showGrid = !showGrid; render()">Toggle Grid</button>
+            <button onclick="resetZoom()">Reset Zoom</button>
+        </div>
+
+        <svg id="map" width="1200" height="900"></svg>
+
+        <div class="legend">
+            <h3>Legend</h3>
+            <div class="legend-item">
+                <span class="legend-icon" style="background: #2196F3; height: 2px;"></span>
+                <span>Property Boundary</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon" style="background: #f44336; width: 8px; height: 8px; border-radius: 50%;"></span>
+                <span>Main Markers (M-series)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon" style="background: #4CAF50; width: 6px; height: 6px; border-radius: 50%;"></span>
+                <span>Intermediate Points (E-series)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon" style="background: #FF9800; height: 4px;"></span>
+                <span>Curve Segments (estimated)</span>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <strong>⚠️ Important:</strong> Area discrepancy of 37.7% likely due to curve segment approximations along roads CMU-009 and CMU-007.
+            Professional survey verification recommended for legal purposes.
+        </div>
+    </div>
+
+    <script>
+        const svg = document.getElementById('map');
+        const NS = 'http://www.w3.org/2000/svg';
+
+        let showLabels = true;
+        let showGrid = true;
+
+        // Property coordinates (in order of traversal)
+        const coords = [
+            ["M-0", 1346.092, 1509.458],
+            ["E-26", 16.150, -1.271],
+            ["E-27", 41.455, 100.222],
+            ["E-30", 119.736, 101.930],
+            ["E-31", 122.855, 122.798],
+            ["E-32", 157.742, 140.230],
+            ["E-33", 185.374, 110.076],
+            ["E-34", 235.336, 161.363],
+            ["E-35", 268.851, 164.886],
+            ["E-36", 254.914, 187.189],
+            ["E-37", 298.774, 220.541],
+            ["E-39", 339.809, 215.866],
+            ["E-40", 359.909, 242.540],
+            ["E-41", 406.552, 271.686],
+            ["E-42", 430.328, 263.960],
+            ["k-42", 535.988, 172.112],
+            ["M-13", 795.372, -55.362],
+            ["M-14", 704.941, -325.635, true], // curve
+            ["M-15", 1006.380, 575.273],
+            ["M-15A", 740.464, 349.419],
+            ["M-15B", 698.915, 254.088],
+            ["M-15C", 913.086, 40.632],
+            ["M-15D", 1142.951, -26.766],
+            ["M-15E", 1262.394, -149.758],
+            ["M-16", 1309.034, -518.285],
+            ["E-43", 1393.955, -482.923],
+            ["E-44", 1412.824, -443.632],
+            ["E-45", 1429.986, -405.940],
+            ["E-46", 1497.092, -368.093],
+            ["E-47", 1582.016, -334.683],
+            ["E-48", 1607.020, -328.761],
+            ["E-49", 1715.991, -516.382],
+            ["M-6", 1716.092, -596.339],
+            ["M-7", 1636.406, -947.192],
+            ["M-8", 1583.020, -1052.870],
+            ["M-9", 1470.652, -1468.915],
+            ["E-11A", 1453.083, -1486.046],
+            ["E-12", 1426.932, -1513.311],
+            ["M-10", 1359.485, -1591.725],
+            ["E-13", 1324.950, -1626.606],
+            ["E-14", 1251.291, -1679.395],
+            ["E-15", 1211.748, -1726.986],
+            ["E-16", 1082.930, -1835.561],
+            ["E-17", 936.565, -1981.535],
+            ["E-18", 911.479, -2009.457],
+            ["E-19", 888.866, -2041.330],
+            ["M-11", 850.476, -2082.933],
+            ["M-1B", 568.063, -1945.159, true], // curve
+            ["M-1", 468.063, -1945.159]
+        ];
+
+        // Calculate bounds
+        const xs = coords.map(c => c[1]);
+        const ys = coords.map(c => c[2]);
+        const minX = Math.min(...xs);
+        const maxX = Math.max(...xs);
+        const minY = Math.min(...ys);
+        const maxY = Math.max(...ys);
+
+        const rangeX = maxX - minX;
+        const rangeY = maxY - minY;
+
+        const width = 1200;
+        const height = 900;
+        const padding = 60;
+
+        function resetZoom() {
+            render();
+        }
+
+        function toSVG(x, y) {
+            // Scale to fit with padding
+            const scaleX = (width - 2 * padding) / rangeX;
+            const scaleY = (height - 2 * padding) / rangeY;
+            const scale = Math.min(scaleX, scaleY);
+
+            const svgX = padding + (x - minX) * scale;
+            const svgY = height - (padding + (y - minY) * scale);
+
+            return [svgX, svgY];
+        }
+
+        function render() {
+            // Clear SVG
+            svg.innerHTML = '';
+
+            // Add grid
+            if (showGrid) {
+                const gridGroup = document.createElementNS(NS, 'g');
+                gridGroup.setAttribute('stroke', '#e0e0e0');
+                gridGroup.setAttribute('stroke-width', '0.5');
+
+                for (let i = 0; i <= 10; i++) {
+                    const x = padding + (width - 2 * padding) * i / 10;
+                    const y = padding + (height - 2 * padding) * i / 10;
+
+                    const vLine = document.createElementNS(NS, 'line');
+                    vLine.setAttribute('x1', x);
+                    vLine.setAttribute('y1', padding);
+                    vLine.setAttribute('x2', x);
+                    vLine.setAttribute('y2', height - padding);
+                    gridGroup.appendChild(vLine);
+
+                    const hLine = document.createElementNS(NS, 'line');
+                    hLine.setAttribute('x1', padding);
+                    hLine.setAttribute('y1', y);
+                    hLine.setAttribute('x2', width - padding);
+                    hLine.setAttribute('y2', y);
+                    gridGroup.appendChild(hLine);
+                }
+                svg.appendChild(gridGroup);
+            }
+
+            // Draw boundary polygon
+            const pathData = [];
+            for (let i = 0; i < coords.length; i++) {
+                const [name, x, y, isCurve] = coords[i];
+                const [svgX, svgY] = toSVG(x, y);
+
+                if (i === 0) {
+                    pathData.push(`M ${svgX} ${svgY}`);
+                } else {
+                    pathData.push(`L ${svgX} ${svgY}`);
+                }
+            }
+            // Close path back to M-0
+            const [svgX0, svgY0] = toSVG(coords[0][1], coords[0][2]);
+            pathData.push(`L ${svgX0} ${svgY0}`);
+
+            const path = document.createElementNS(NS, 'path');
+            path.setAttribute('d', pathData.join(' '));
+            path.setAttribute('stroke', '#2196F3');
+            path.setAttribute('stroke-width', '2');
+            path.setAttribute('fill', 'rgba(33, 150, 243, 0.1)');
+            svg.appendChild(path);
+
+            // Draw curve segments with different style
+            for (let i = 1; i < coords.length; i++) {
+                const [name, x, y, isCurve] = coords[i];
+                if (isCurve) {
+                    const [prevName, prevX, prevY] = coords[i-1];
+                    const [x1, y1] = toSVG(prevX, prevY);
+                    const [x2, y2] = toSVG(x, y);
+
+                    const curveLine = document.createElementNS(NS, 'line');
+                    curveLine.setAttribute('x1', x1);
+                    curveLine.setAttribute('y1', y1);
+                    curveLine.setAttribute('x2', x2);
+                    curveLine.setAttribute('y2', y2);
+                    curveLine.setAttribute('stroke', '#FF9800');
+                    curveLine.setAttribute('stroke-width', '3');
+                    curveLine.setAttribute('stroke-dasharray', '5,5');
+                    svg.appendChild(curveLine);
+                }
+            }
+
+            // Draw points
+            coords.forEach(([name, x, y, isCurve]) => {
+                const [svgX, svgY] = toSVG(x, y);
+                const isM = name.startsWith('M-');
+
+                const circle = document.createElementNS(NS, 'circle');
+                circle.setAttribute('cx', svgX);
+                circle.setAttribute('cy', svgY);
+                circle.setAttribute('r', isM ? 5 : 3);
+                circle.setAttribute('fill', isM ? '#f44336' : '#4CAF50');
+                circle.setAttribute('stroke', 'white');
+                circle.setAttribute('stroke-width', '1');
+
+                const title = document.createElementNS(NS, 'title');
+                title.textContent = `${name}: (${x.toFixed(1)}, ${y.toFixed(1)})`;
+                circle.appendChild(title);
+
+                svg.appendChild(circle);
+
+                // Labels for M-series and some E-series
+                if (showLabels && (isM || name.match(/E-(26|30|40|43|49)/))) {
+                    const text = document.createElementNS(NS, 'text');
+                    text.setAttribute('x', svgX + 8);
+                    text.setAttribute('y', svgY - 8);
+                    text.setAttribute('font-size', '11');
+                    text.setAttribute('font-family', 'monospace');
+                    text.setAttribute('fill', '#333');
+                    text.textContent = name;
+                    svg.appendChild(text);
+                }
+            });
+
+            // Add scale bar
+            const scaleBarLength = 500; // meters
+            const [sb1x, sb1y] = toSVG(minX, minY);
+            const [sb2x, sb2y] = toSVG(minX + scaleBarLength, minY);
+            const scaleBarPixels = sb2x - sb1x;
+
+            const scaleBar = document.createElementNS(NS, 'line');
+            scaleBar.setAttribute('x1', width - 200);
+            scaleBar.setAttribute('y1', height - 30);
+            scaleBar.setAttribute('x2', width - 200 + scaleBarPixels);
+            scaleBar.setAttribute('y2', height - 30);
+            scaleBar.setAttribute('stroke', '#333');
+            scaleBar.setAttribute('stroke-width', '3');
+            svg.appendChild(scaleBar);
+
+            const scaleText = document.createElementNS(NS, 'text');
+            scaleText.setAttribute('x', width - 200);
+            scaleText.setAttribute('y', height - 35);
+            scaleText.setAttribute('font-size', '12');
+            scaleText.setAttribute('font-family', 'Arial');
+            scaleText.textContent = `${scaleBarLength}m`;
+            svg.appendChild(scaleText);
+
+            // Add compass
+            const compassX = padding + 30;
+            const compassY = padding + 30;
+
+            const compass = document.createElementNS(NS, 'g');
+
+            // N arrow
+            const arrow = document.createElementNS(NS, 'path');
+            arrow.setAttribute('d', `M ${compassX} ${compassY - 20} L ${compassX - 5} ${compassY - 10} L ${compassX} ${compassY - 12} L ${compassX + 5} ${compassY - 10} Z`);
+            arrow.setAttribute('fill', '#f44336');
+            compass.appendChild(arrow);
+
+            const nText = document.createElementNS(NS, 'text');
+            nText.setAttribute('x', compassX);
+            nText.setAttribute('y', compassY - 25);
+            nText.setAttribute('text-anchor', 'middle');
+            nText.setAttribute('font-size', '14');
+            nText.setAttribute('font-weight', 'bold');
+            nText.textContent = 'N';
+            compass.appendChild(nText);
+
+            svg.appendChild(compass);
+        }
+
+        // Initial render
+        render();
+    </script>
+</body>
+</html>

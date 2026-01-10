@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Fazenda do Francês - Editor de Limites</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        #map { height: 100vh; width: 100%; }
+
+        .info-panel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            max-width: 300px;
+            font-size: 13px;
+        }
+        .info-panel h3 { margin: 0 0 10px 0; color: #2c3e50; }
+        .stat { margin: 5px 0; }
+        .stat strong { color: #2c3e50; }
+
+        .layers-control {
+            position: absolute;
+            top: 10px;
+            left: 60px;
+            background: white;
+            padding: 12px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .layer-option { margin: 5px 0; font-size: 13px; }
+        .layer-option input { margin-right: 5px; }
+
+        /* Marker Panel */
+        .marker-panel {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 500px;
+            max-height: 70vh;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+        .panel-header {
+            padding: 12px 15px;
+            background: #2196F3;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px 8px 0 0;
+            user-select: none;
+        }
+        .panel-header.collapsed { border-radius: 8px; }
+        .panel-header .toggle { font-size: 12px; }
+
+        .panel-tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+        }
+        .panel-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .panel-tab.active { background: white; border-bottom: 2px solid #2196F3; }
+        .panel-tab.desmembrado { color: #9E9E9E; }
+        .panel-tab.fazenda { color: #2196F3; }
+
+        .panel-stats {
+            padding: 10px 15px;
+            background: #f9f9f9;
+            border-bottom: 1px solid #eee;
+            font-size: 12px;
+        }
+        .panel-stats .area { font-weight: bold; font-size: 14px; }
+        .panel-stats .area.valid { color: #4CAF50; }
+        .panel-stats .area.invalid { color: #f44336; }
+        .panel-stats .closure { color: #666; }
+
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            max-height: 350px;
+        }
+        .panel-content.collapsed { display: none; }
+
+        .segment-row {
+            display: grid;
+            grid-template-columns: 100px 70px 80px 50px 25px 25px;
+            gap: 5px;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+            font-size: 11px;
+        }
+        .segment-row.curve { background: #fff3e0; }
+        .segment-row .marker-name { font-weight: bold; color: #333; }
+        .segment-row input[type="number"],
+        .segment-row input[type="text"] {
+            width: 100%;
+            padding: 4px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+        .segment-row select {
+            padding: 4px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+        .segment-row .btn-add {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px 6px;
+        }
+        .segment-row .btn-del {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 2px 6px;
+            display: none;
+        }
+        .segment-row.user-added .btn-del { display: inline-block; }
+        .segment-row.user-added { background: #e3f2fd; }
+
+        .panel-footer {
+            padding: 10px 15px;
+            background: #f5f5f5;
+            border-top: 1px solid #ddd;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            border-radius: 0 0 8px 8px;
+        }
+        .panel-footer button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .panel-footer .btn-calc { background: #2196F3; color: white; }
+        .panel-footer .btn-save { background: #4CAF50; color: white; }
+        .panel-footer .btn-export { background: #FF9800; color: white; }
+        .panel-footer .btn-reset { background: #9E9E9E; color: white; }
+
+        .legend {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 11px;
+        }
+        .legend-item { margin: 3px 0; display: flex; align-items: center; gap: 5px; }
+        .legend-color { width: 20px; height: 3px; }
+
+        del { color: #999; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <div class="info-panel">
+        <h3>Fazenda do Francês</h3>
+        <div class="stat"><strong>Município:</strong> Cachoeiras de Macacu, RJ</div>
+        <div class="stat"><strong>Distrito:</strong> Funchal, 3º Distrito</div>
+        <hr>
+        <div class="stat"><strong>Fazenda (REMANESCENTE):</strong></div>
+        <div class="stat" style="color:#2196F3">Target: 425.350,15 m² (42,54 ha)</div>
+        <div class="stat"><strong><del>Vendida</del> (DESMEMBRADO):</strong></div>
+        <div class="stat" style="color:#9E9E9E">Target: 1.568.337,90 m² (156,83 ha)</div>
+    </div>
+
+    <div class="layers-control">
+        <div><strong>Mapa Base:</strong></div>
+        <div class="layer-option">
+            <input type="radio" name="basemap" id="satellite" checked onchange="changeBasemap('satellite')">
+            <label for="satellite">Satélite</label>
+        </div>
+        <div class="layer-option">
+            <input type="radio" name="basemap" id="topo" onchange="changeBasemap('topo')">
+            <label for="topo">Topográfico</label>
+        </div>
+        <hr>
+        <div><strong>Camadas:</strong></div>
+        <div class="layer-option">
+            <input type="checkbox" id="showFazenda" checked onchange="togglePolygon('fazenda')">
+            <label for="showFazenda" style="color:#2196F3"><strong>Fazenda</strong></label>
+        </div>
+        <div class="layer-option" style="padding-left:20px;font-size:11px;">
+            <label>Opacidade: <input type="range" id="opacityFazenda" min="0" max="100" value="25" onchange="setOpacity('fazenda', this.value)" style="width:80px;vertical-align:middle;"></label>
+            <span id="opacityFazendaVal">25%</span>
+        </div>
+        <div class="layer-option">
+            <input type="checkbox" id="showDesmembrado" onchange="togglePolygon('desmembrado')">
+            <label for="showDesmembrado" style="color:#9E9E9E"><del>Vendida</del></label>
+        </div>
+        <div class="layer-option" style="padding-left:20px;font-size:11px;">
+            <label>Opacidade: <input type="range" id="opacityDesmembrado" min="0" max="100" value="15" onchange="setOpacity('desmembrado', this.value)" style="width:80px;vertical-align:middle;"></label>
+            <span id="opacityDesmembradoVal">15%</span>
+        </div>
+    </div>
+
+    <div class="marker-panel">
+        <div class="panel-header" onclick="togglePanel()">
+            <span>Lista de Marcos</span>
+            <span class="toggle" id="toggleIcon">▼</span>
+        </div>
+        <div id="panelBody">
+            <div class="panel-tabs">
+                <button class="panel-tab fazenda active" onclick="switchTab('fazenda')">Fazenda (42,54 ha)</button>
+                <button class="panel-tab desmembrado" onclick="switchTab('desmembrado')"><del>Vendida</del> (156,83 ha)</button>
+            </div>
+            <div class="panel-stats">
+                <div class="area" id="areaDisplay">Área: calculando...</div>
+                <div class="closure" id="closureDisplay">Erro fechamento: --</div>
+                <div id="targetDisplay">Target: --</div>
+            </div>
+            <div class="panel-content" id="markerList"></div>
+            <div class="panel-footer">
+                <button class="btn-calc" onclick="recalculate()">Recalcular</button>
+                <button class="btn-save" onclick="saveData()">Salvar</button>
+                <button class="btn-export" onclick="exportData()">Exportar JSON</button>
+                <button class="btn-reset" onclick="resetToOCR()">Reset OCR</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <strong>Legenda:</strong>
+        <div class="legend-item"><span class="legend-color" style="background:#2196F3"></span> Fazenda do Francês</div>
+        <div class="legend-item"><span class="legend-color" style="background:#9E9E9E; border-top:2px dashed #9E9E9E"></span> <del>Parcela Vendida</del></div>
+    </div>
+
+    <script>
+        // =====================================================
+        // RAW SEGMENT DATA FROM OCR
+        // =====================================================
+
+        // DESMEMBRADO segments - "rumo magnético" format for most, some azimuth format
+        const desmembradoOCR = [
+            { from: 'M-0', to: 'E-26', distance: 16.20, bearing: "94°30'", quadrant: 'NE', format: 'rumo' },
+            { from: 'E-26', to: 'E-27', distance: 104.60, bearing: "14°", quadrant: 'NE', format: 'rumo' },
+            { from: 'E-27', to: 'E-28', distance: 89.00, bearing: "83°15'", quadrant: 'SE', format: 'rumo' },
+            { from: 'E-28', to: 'E-29', distance: 34.50, bearing: "08°15'", quadrant: 'NW', format: 'rumo' },
+            { from: 'E-29', to: 'E-30', distance: 78.30, bearing: "88°45'", quadrant: 'NE', format: 'rumo' },
+            { from: 'E-30', to: 'E-31', distance: 21.10, bearing: "08°30'", quadrant: 'NE', format: 'rumo' },
+            { from: 'E-31', to: 'E-32', distance: 39.00, bearing: "63°27'", quadrant: 'NE', format: 'rumo' },
+            { from: 'E-32', to: 'E-33', distance: 40.90, bearing: "42°30'", quadrant: 'SE', format: 'rumo' },
+            { from: 'E-33', to: 'E-34', distance: 71.60, bearing: "44°15'", quadrant: 'NE', format: 'rumo' },
+            { from: 'E-34', to: 'E-35', distance: 33.70, bearing: "84°00'", quadrant: 'NE', format: 'rumo' },
+            { from: 'E-35', to: 'E-36', distance: 26.30, bearing: "32°00'", quadrant: 'NW', format: 'rumo' },
+            { from: 'E-36', to: 'E-37', distance: 55.10, bearing: "52°45'", quadrant: 'NE', format: 'rumo' },
+            { from: 'E-37', to: 'E-38', distance: 41.30, bearing: "83°30'", quadrant: 'SE', format: 'rumo' },
+            { from: 'E-38', to: 'E-39', distance: 33.40, bearing: "37°00'", quadrant: 'NE', format: 'rumo' },
+            { from: 'E-39', to: 'E-40', distance: 55.00, bearing: "58°00'", quadrant: 'NE', format: 'rumo' },
+            { from: 'E-40', to: 'E-41', distance: 25.00, bearing: "72°00'", quadrant: 'SE', format: 'rumo' },
+            { from: 'E-41', to: 'E-42', distance: 140.00, bearing: "49°00'", quadrant: 'SE', format: 'rumo' },
+            { from: 'E-42', to: 'M-13', distance: 345.00, bearing: "48°45'", quadrant: 'SE', format: 'rumo' },
+            { from: 'M-13', to: 'M-14', distance: 285.00, bearing: null, quadrant: null, format: 'curve', note: 'curva estrada CMU-009' },
+            { from: 'M-14', to: 'M-15', distance: 950.00, bearing: "18°30'", quadrant: 'NE', format: 'rumo' },
+            { from: 'M-15', to: 'M-15A', distance: 327.00, bearing: "55°30'", quadrant: 'SW', format: 'rumo' },
+            { from: 'M-15A', to: 'M-15B', distance: 110.00, bearing: "24°30'", quadrant: 'SW', format: 'rumo' },
+            { from: 'M-15B', to: 'M-15C', distance: 455.00, bearing: "28°00'", quadrant: 'SE', format: 'rumo' },
+            { from: 'M-15C', to: 'M-15D', distance: 240.00, bearing: "74°00'", quadrant: 'SE', format: 'rumo' },
+            { from: 'M-15D', to: 'M-15E', distance: 170.00, bearing: "48°00'", quadrant: 'SE', format: 'rumo' },
+            { from: 'M-15E', to: 'M-16', distance: 370.00, bearing: "08°00'", quadrant: 'SE', format: 'rumo' },
+            { from: 'M-16', to: 'E-43', distance: 90.00, bearing: "71°30'", quadrant: 'NE', format: 'rumo' },
+            { from: 'E-43', to: 'E-44', distance: 42.00, bearing: "62°15'", quadrant: 'NW', format: 'rumo' },
+            { from: 'E-44', to: 'E-45', distance: 38.00, bearing: "61°00'", quadrant: 'NW', format: 'rumo' },
+            { from: 'E-45', to: 'E-46', distance: 77.00, bearing: "61°30'", quadrant: 'NE', format: 'rumo' },
+            { from: 'E-46', to: 'E-47', distance: 90.00, bearing: "69°30'", quadrant: 'NW', format: 'rumo' },
+            { from: 'E-47', to: 'E-48', distance: 25.00, bearing: "76°00'", quadrant: 'NW', format: 'rumo' },
+            { from: 'E-48', to: 'E-49', distance: 220.00, bearing: "59°00'", quadrant: 'NW', format: 'rumo' },
+            { from: 'E-49', to: 'M-6', distance: 80.00, bearing: "83°17'", quadrant: 'NW', format: 'rumo' },
+            { from: 'M-6', to: 'M-7', distance: 360.00, bearing: "167°02'", quadrant: 'SE', format: 'az' },
+            { from: 'M-7', to: 'M-8', distance: 110.00, bearing: "149°02'", quadrant: 'SE', format: 'az' },
+            { from: 'M-8', to: 'M-9', distance: 432.64, bearing: "165°02'06\"", quadrant: 'SE', format: 'az' },
+            { from: 'M-9', to: 'E-11A', distance: 28.20, bearing: "221°10'", quadrant: 'SW', format: 'az' },
+            { from: 'E-11A', to: 'E-12', distance: 36.45, bearing: "226°33'", quadrant: 'SW', format: 'az' },
+            { from: 'E-12', to: 'M-10', distance: 103.78, bearing: "238°57'", quadrant: 'SW', format: 'az' },
+            { from: 'M-10', to: 'E-13', distance: 47.63, bearing: "145°26'08\"", quadrant: 'SE', format: 'az' },
+            { from: 'E-13', to: 'E-14', distance: 86.29, bearing: "158°16'", quadrant: 'SE', format: 'az' },
+            { from: 'E-14', to: 'E-15', distance: 63.34, bearing: "136°21'", quadrant: 'SE', format: 'az' },
+            { from: 'E-15', to: 'E-16', distance: 149.83, bearing: "157°31'", quadrant: 'SE', format: 'az' },
+            { from: 'E-16', to: 'E-17', distance: 146.75, bearing: "157°20'", quadrant: 'SE', format: 'az' },
+            { from: 'E-17', to: 'E-18', distance: 31.30, bearing: "151°36'", quadrant: 'SE', format: 'az' },
+            { from: 'E-18', to: 'E-19', distance: 36.93, bearing: "245°25'21\"", quadrant: 'SW', format: 'az' },
+            { from: 'E-19', to: 'M-11', distance: 58.27, bearing: "240°39'", quadrant: 'SW', format: 'az' },
+            { from: 'M-11', to: 'M-1B', distance: 470.00, bearing: null, quadrant: null, format: 'curve', note: 'curva estrada CMU-007' },
+            { from: 'M-1B', to: 'M-1', distance: 100.00, bearing: "270°", quadrant: 'W', format: 'az', note: 'estimado' },
+            { from: 'M-1', to: 'M-0', distance: 430.00, bearing: "0°", quadrant: 'N', format: 'az', note: 'estimado' }
+        ];
+
+        // REMANESCENTE segments - "AZ=" azimuth format
+        const remanescenteOCR = [
+            { from: '1-B', to: 'M-11', distance: 470.00, bearing: null, quadrant: null, format: 'curve', note: 'curva estrada CMU-007' },
+            { from: 'M-11', to: 'E-19', distance: 58.27, bearing: "240°39'", quadrant: 'SW', format: 'az' },
+            { from: 'E-19', to: 'E-18', distance: 36.93, bearing: "245°25'21\"", quadrant: 'SW', format: 'az' },
+            { from: 'E-18', to: 'E-17', distance: 31.30, bearing: "151°36'", quadrant: 'SE', format: 'az' },
+            { from: 'E-17', to: 'E-16', distance: 146.75, bearing: "157°20'", quadrant: 'SE', format: 'az' },
+            { from: 'E-16', to: 'E-15', distance: 149.83, bearing: "157°31'", quadrant: 'SE', format: 'az' },
+            { from: 'E-15', to: 'E-14', distance: 63.34, bearing: "136°21'", quadrant: 'SE', format: 'az' },
+            { from: 'E-14', to: 'E-13', distance: 86.29, bearing: "158°16'", quadrant: 'SE', format: 'az' },
+            { from: 'E-13', to: 'M-10', distance: 47.63, bearing: "145°25'08\"", quadrant: 'SE', format: 'az' },
+            { from: 'M-10', to: 'E-12', distance: 103.78, bearing: "238°57'", quadrant: 'SW', format: 'az' },
+            { from: 'E-12', to: 'E-11A', distance: 36.45, bearing: "226°33'", quadrant: 'SW', format: 'az' },
+            { from: 'E-11A', to: 'M-9', distance: 28.20, bearing: "221°10'", quadrant: 'SW', format: 'az' },
+            { from: 'M-9', to: 'M-8', distance: 432.64, bearing: "165°20'06\"", quadrant: 'SE', format: 'az' },
+            { from: 'M-8', to: 'M-7', distance: 110.00, bearing: "149°02'", quadrant: 'SE', format: 'az' },
+            { from: 'M-7', to: 'M-6', distance: 360.00, bearing: "167°02'", quadrant: 'SE', format: 'az' },
+            { from: 'M-6', to: 'E-11', distance: 72.00, bearing: "252°38'", quadrant: 'SW', format: 'az' },
+            { from: 'E-11', to: 'E-10', distance: 34.06, bearing: "255°09'", quadrant: 'SW', format: 'az' },
+            { from: 'E-10', to: 'E-9', distance: 75.18, bearing: "249°50'", quadrant: 'SW', format: 'az' },
+            { from: 'E-9', to: 'E-8', distance: 20.08, bearing: "239°30'", quadrant: 'SW', format: 'az' },
+            { from: 'E-8', to: 'E-7', distance: 29.60, bearing: "218°41'", quadrant: 'SW', format: 'az' },
+            { from: 'E-7', to: 'E-6', distance: 26.42, bearing: "200°26'", quadrant: 'SW', format: 'az' },
+            { from: 'E-6', to: 'E-5', distance: 35.85, bearing: "192°14'", quadrant: 'SW', format: 'az' },
+            { from: 'E-5', to: 'E-4', distance: 31.64, bearing: "183°02'", quadrant: 'SW', format: 'az' },
+            { from: 'E-4', to: 'E-3', distance: 45.74, bearing: "208°46'", quadrant: 'SW', format: 'az' },
+            { from: 'E-3', to: 'E-2', distance: 45.21, bearing: "213°18'", quadrant: 'SW', format: 'az' },
+            { from: 'E-2', to: 'E-1', distance: 16.18, bearing: "222°47'", quadrant: 'SW', format: 'az' },
+            { from: 'E-1', to: 'M-5', distance: 21.02, bearing: "224°56'", quadrant: 'SW', format: 'az' },
+            { from: 'M-5', to: 'M-4', distance: 1102.40, bearing: "356°40'", quadrant: 'NW', format: 'az' },
+            { from: 'M-4', to: 'M-3', distance: 582.72, bearing: "357°30'", quadrant: 'NW', format: 'az' },
+            { from: 'M-3', to: 'M-2', distance: 48.24, bearing: "96°33'", quadrant: 'E', format: 'az' },
+            { from: 'M-2', to: '1-A', distance: 334.00, bearing: "183°01'55\"", quadrant: 'SW', format: 'az' },
+            { from: '1-A', to: '1-B', distance: 185.59, bearing: "183°01'55\"", quadrant: 'SW', format: 'az' }
+        ];
+
+        // Working copies (will be modified by user)
+        let desmembradoSegments = JSON.parse(JSON.stringify(desmembradoOCR));
+        let remanescenteSegments = JSON.parse(JSON.stringify(remanescenteOCR));
+
+        // Target areas from document
+        const TARGET_DESMEMBRADO = 1568337.90;
+        const TARGET_REMANESCENTE = 425350.15;
+
+        let currentTab = 'fazenda';
+        let panelExpanded = true;
+
+        // =====================================================
+        // BEARING CONVERSION FUNCTIONS
+        // =====================================================
+
+        function parseBearingString(bearingStr) {
+            if (!bearingStr) return 0;
+            // Parse strings like "94°30'" or "165°02'06\"" to decimal degrees
+            const cleaned = bearingStr.replace(/[°'"]/g, ' ').trim();
+            const parts = cleaned.split(/\s+/).filter(p => p);
+            let deg = parseFloat(parts[0]) || 0;
+            let min = parseFloat(parts[1]) || 0;
+            let sec = parseFloat(parts[2]) || 0;
+            return deg + min/60 + sec/3600;
+        }
+
+        function toAzimuth(segment) {
+            if (segment.format === 'curve' || !segment.bearing) {
+                return null; // Curves have no bearing
+            }
+
+            const deg = parseBearingString(segment.bearing);
+
+            if (segment.format === 'az') {
+                // Already azimuth format, just return the value
+                return deg;
+            }
+
+            // Rumo magnético format - convert based on quadrant
+            switch(segment.quadrant) {
+                case 'NE': return deg;
+                case 'SE': return 180 - deg;
+                case 'SW': return 180 + deg;
+                case 'NW': return 360 - deg;
+                case 'N': return 0;
+                case 'S': return 180;
+                case 'E': return 90;
+                case 'W': return 270;
+                default: return deg;
+            }
+        }
+
+        // =====================================================
+        // COORDINATE CALCULATION
+        // =====================================================
+
+        function calculatePolygon(segments) {
+            let x = 0, y = 0;
+            const points = [];
+
+            if (segments.length === 0) return points;
+
+            points.push({ name: segments[0].from, x: 0, y: 0 });
+
+            for (const seg of segments) {
+                const azimuth = toAzimuth(seg);
+
+                if (azimuth !== null) {
+                    const azRad = azimuth * Math.PI / 180;
+                    x += seg.distance * Math.sin(azRad);
+                    y += seg.distance * Math.cos(azRad);
+                } else {
+                    // For curves, just move in a general direction (simplified)
+                    // User should split into segments for accuracy
+                }
+
+                points.push({ name: seg.to, x, y });
+            }
+
+            return points;
+        }
+
+        function calculateArea(points) {
+            if (points.length < 3) return 0;
+            let area = 0;
+            for (let i = 0; i < points.length; i++) {
+                const j = (i + 1) % points.length;
+                area += points[i].x * points[j].y;
+                area -= points[j].x * points[i].y;
+            }
+            return Math.abs(area / 2);
+        }
+
+        function calculateClosure(points) {
+            if (points.length < 2) return 0;
+            const first = points[0];
+            const last = points[points.length - 1];
+            return Math.sqrt(Math.pow(last.x - first.x, 2) + Math.pow(last.y - first.y, 2));
+        }
+
+        // =====================================================
+        // MAP SETUP
+        // =====================================================
+
+        const referenceLat = -22.48548;
+        const referenceLon = -42.76273;
+        const metersPerDegreeLat = 111000;
+        const metersPerDegreeLon = 102600;
+
+        let map, satelliteLayer, topoLayer;
+        let fazendaPolygon, desmembradoPolygon;
+
+        map = L.map('map').setView([referenceLat, referenceLon], 14);
+
+        satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Esri',
+            maxZoom: 19
+        }).addTo(map);
+
+        topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            attribution: 'OpenTopoMap',
+            maxZoom: 17
+        });
+
+        L.control.scale({imperial: false}).addTo(map);
+
+        function metersToLatLon(x, y) {
+            return [referenceLat + y / metersPerDegreeLat, referenceLon + x / metersPerDegreeLon];
+        }
+
+        function updatePolygons() {
+            // Get current opacity values
+            const fazendaOpacity = (document.getElementById('opacityFazenda')?.value || 25) / 100;
+            const desmembradoOpacity = (document.getElementById('opacityDesmembrado')?.value || 15) / 100;
+
+            // Calculate Fazenda polygon
+            const fazendaPoints = calculatePolygon(remanescenteSegments);
+            const fazendaLatLngs = fazendaPoints.map(p => metersToLatLon(p.x, p.y));
+
+            if (fazendaPolygon) map.removeLayer(fazendaPolygon);
+            fazendaPolygon = L.polygon(fazendaLatLngs, {
+                color: '#2196F3',
+                fillColor: '#2196F3',
+                fillOpacity: fazendaOpacity,
+                weight: 3
+            });
+            if (document.getElementById('showFazenda').checked) {
+                fazendaPolygon.addTo(map);
+            }
+
+            // Calculate Desmembrado polygon
+            const desmembradoPoints = calculatePolygon(desmembradoSegments);
+            const desmembradoLatLngs = desmembradoPoints.map(p => metersToLatLon(p.x, p.y));
+
+            if (desmembradoPolygon) map.removeLayer(desmembradoPolygon);
+            desmembradoPolygon = L.polygon(desmembradoLatLngs, {
+                color: '#9E9E9E',
+                fillColor: '#9E9E9E',
+                fillOpacity: desmembradoOpacity,
+                weight: 2,
+                dashArray: '8,8'
+            });
+            if (document.getElementById('showDesmembrado').checked) {
+                desmembradoPolygon.addTo(map);
+            }
+
+            // Fit to visible polygon
+            if (document.getElementById('showFazenda').checked && fazendaLatLngs.length > 2) {
+                map.fitBounds(fazendaPolygon.getBounds(), {padding: [50, 50]});
+            } else if (document.getElementById('showDesmembrado').checked && desmembradoLatLngs.length > 2) {
+                map.fitBounds(desmembradoPolygon.getBounds(), {padding: [50, 50]});
+            }
+        }
+
+        // =====================================================
+        // UI FUNCTIONS
+        // =====================================================
+
+        function togglePanel() {
+            panelExpanded = !panelExpanded;
+            document.getElementById('panelBody').style.display = panelExpanded ? 'block' : 'none';
+            document.getElementById('toggleIcon').textContent = panelExpanded ? '▼' : '▶';
+            document.querySelector('.panel-header').classList.toggle('collapsed', !panelExpanded);
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.panel-tab.${tab}`).classList.add('active');
+            renderMarkerList();
+            updateStats();
+        }
+
+        function getSegments() {
+            return currentTab === 'fazenda' ? remanescenteSegments : desmembradoSegments;
+        }
+
+        function setSegments(segs) {
+            if (currentTab === 'fazenda') {
+                remanescenteSegments = segs;
+            } else {
+                desmembradoSegments = segs;
+            }
+        }
+
+        function renderMarkerList() {
+            const segments = getSegments();
+            const container = document.getElementById('markerList');
+
+            let html = '<div class="segment-row" style="font-weight:bold;border-bottom:2px solid #333">' +
+                '<span>Segmento</span><span>Dist (m)</span><span>Rumo/Az</span><span>Quad</span><span></span><span></span></div>';
+
+            segments.forEach((seg, idx) => {
+                const isCurve = seg.format === 'curve';
+                const isUserAdded = seg.userAdded === true;
+                const rowClass = [
+                    'segment-row',
+                    isCurve ? 'curve' : '',
+                    isUserAdded ? 'user-added' : ''
+                ].filter(c => c).join(' ');
+
+                html += `<div class="${rowClass}" data-idx="${idx}">
+                    <span class="marker-name">${seg.from} → ${seg.to}</span>
+                    <input type="number" step="0.01" value="${seg.distance}" onchange="updateSegment(${idx}, 'distance', this.value)">
+                    <input type="text" value="${seg.bearing || 'curva'}" ${isCurve ? 'disabled' : ''} onchange="updateSegment(${idx}, 'bearing', this.value)">
+                    <select onchange="updateSegment(${idx}, 'quadrant', this.value)" ${isCurve ? 'disabled' : ''}>
+                        <option value="NE" ${seg.quadrant==='NE'?'selected':''}>NE</option>
+                        <option value="SE" ${seg.quadrant==='SE'?'selected':''}>SE</option>
+                        <option value="SW" ${seg.quadrant==='SW'?'selected':''}>SW</option>
+                        <option value="NW" ${seg.quadrant==='NW'?'selected':''}>NW</option>
+                        <option value="N" ${seg.quadrant==='N'?'selected':''}>N</option>
+                        <option value="S" ${seg.quadrant==='S'?'selected':''}>S</option>
+                        <option value="E" ${seg.quadrant==='E'?'selected':''}>E</option>
+                        <option value="W" ${seg.quadrant==='W'?'selected':''}>W</option>
+                    </select>
+                    <button class="btn-add" onclick="addPointAfter(${idx})" title="Adicionar ponto">+</button>
+                    <button class="btn-del" onclick="deletePoint(${idx})" title="Remover ponto">×</button>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function updateSegment(idx, field, value) {
+            const segments = getSegments();
+            if (field === 'distance') {
+                segments[idx].distance = parseFloat(value) || 0;
+            } else if (field === 'bearing') {
+                segments[idx].bearing = value;
+                segments[idx].format = 'az'; // User edits are treated as azimuth
+            } else if (field === 'quadrant') {
+                segments[idx].quadrant = value;
+            }
+            setSegments(segments);
+        }
+
+        function addPointAfter(idx) {
+            const segments = getSegments();
+            const current = segments[idx];
+            const newName = prompt(`Novo marco entre ${current.from} e ${current.to}:`, `P-${idx+1}`);
+            if (!newName) return;
+
+            // Split segment into two - mark both as user-added
+            const newSeg1 = {
+                ...current,
+                to: newName,
+                distance: current.distance / 2,
+                userAdded: true
+            };
+            const newSeg2 = {
+                from: newName,
+                to: current.to,
+                distance: current.distance / 2,
+                bearing: current.bearing,
+                quadrant: current.quadrant,
+                format: current.format === 'curve' ? 'az' : current.format,
+                userAdded: true
+            };
+
+            segments.splice(idx, 1, newSeg1, newSeg2);
+            setSegments(segments);
+            renderMarkerList();
+            recalculate();
+        }
+
+        function deletePoint(idx) {
+            const segments = getSegments();
+            if (!segments[idx].userAdded) {
+                alert('Somente pontos adicionados manualmente podem ser removidos.');
+                return;
+            }
+
+            // Find the next segment that connects to this one
+            const current = segments[idx];
+            const nextIdx = idx + 1;
+
+            if (nextIdx < segments.length && segments[nextIdx].from === current.to) {
+                // Merge with next segment
+                const merged = {
+                    from: current.from,
+                    to: segments[nextIdx].to,
+                    distance: current.distance + segments[nextIdx].distance,
+                    bearing: segments[nextIdx].bearing,
+                    quadrant: segments[nextIdx].quadrant,
+                    format: segments[nextIdx].format,
+                    userAdded: segments[nextIdx].userAdded
+                };
+                segments.splice(idx, 2, merged);
+            } else {
+                // Just remove this segment
+                segments.splice(idx, 1);
+            }
+
+            setSegments(segments);
+            renderMarkerList();
+            recalculate();
+        }
+
+        function updateStats() {
+            const segments = getSegments();
+            const points = calculatePolygon(segments);
+            const area = calculateArea(points);
+            const closure = calculateClosure(points);
+            const target = currentTab === 'fazenda' ? TARGET_REMANESCENTE : TARGET_DESMEMBRADO;
+            const diff = Math.abs(area - target) / target * 100;
+
+            const areaEl = document.getElementById('areaDisplay');
+            areaEl.textContent = `Área: ${area.toFixed(2)} m² (${(area/10000).toFixed(2)} ha)`;
+            areaEl.className = 'area ' + (diff < 5 ? 'valid' : 'invalid');
+
+            document.getElementById('closureDisplay').textContent = `Erro fechamento: ${closure.toFixed(2)} m`;
+            document.getElementById('targetDisplay').textContent = `Target: ${target.toFixed(2)} m² (diff: ${diff.toFixed(1)}%)`;
+        }
+
+        function recalculate() {
+            updateStats();
+            updatePolygons();
+        }
+
+        function saveData() {
+            localStorage.setItem('fazenda_desmembrado', JSON.stringify(desmembradoSegments));
+            localStorage.setItem('fazenda_remanescente', JSON.stringify(remanescenteSegments));
+            alert('Dados salvos no navegador!');
+        }
+
+        function loadSavedData() {
+            const d = localStorage.getItem('fazenda_desmembrado');
+            const r = localStorage.getItem('fazenda_remanescente');
+            if (d) desmembradoSegments = JSON.parse(d);
+            if (r) remanescenteSegments = JSON.parse(r);
+        }
+
+        function exportData() {
+            const data = {
+                desmembrado: desmembradoSegments,
+                remanescente: remanescenteSegments,
+                exported: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'fazenda_markers.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function resetToOCR() {
+            if (!confirm('Restaurar dados originais do OCR? As alterações serão perdidas.')) return;
+            desmembradoSegments = JSON.parse(JSON.stringify(desmembradoOCR));
+            remanescenteSegments = JSON.parse(JSON.stringify(remanescenteOCR));
+            localStorage.removeItem('fazenda_desmembrado');
+            localStorage.removeItem('fazenda_remanescente');
+            renderMarkerList();
+            recalculate();
+        }
+
+        function changeBasemap(type) {
+            map.removeLayer(satelliteLayer);
+            map.removeLayer(topoLayer);
+            if (type === 'satellite') satelliteLayer.addTo(map);
+            else topoLayer.addTo(map);
+        }
+
+        function togglePolygon(which) {
+            if (which === 'fazenda') {
+                if (document.getElementById('showFazenda').checked) fazendaPolygon.addTo(map);
+                else map.removeLayer(fazendaPolygon);
+            } else {
+                if (document.getElementById('showDesmembrado').checked) desmembradoPolygon.addTo(map);
+                else map.removeLayer(desmembradoPolygon);
+            }
+        }
+
+        function setOpacity(which, value) {
+            const opacity = value / 100;
+            if (which === 'fazenda') {
+                if (fazendaPolygon) fazendaPolygon.setStyle({ fillOpacity: opacity });
+                document.getElementById('opacityFazendaVal').textContent = value + '%';
+            } else {
+                if (desmembradoPolygon) desmembradoPolygon.setStyle({ fillOpacity: opacity });
+                document.getElementById('opacityDesmembradoVal').textContent = value + '%';
+            }
+        }
+
+        // Initialize
+        loadSavedData();
+        renderMarkerList();
+        recalculate();
+    </script>
+</body>
+</html>

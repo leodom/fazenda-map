@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plano de Desenvolvimento - Fazenda do Francês</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Georgia', serif; line-height: 1.6; color: #333; background-color: #f9f7f4; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #2d5016 0%, #4a7c26 100%); color: white; padding: 40px 20px; text-align: center; }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.2em; font-style: italic; }
+
+        /* Compact Navigation */
+        nav { position: fixed; top: 20px; right: 20px; z-index: 1000; background: #fff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); max-width: 280px; }
+        nav.collapsed { max-width: 60px; }
+        .nav-toggle { background: #4a7c26; color: white; border: none; padding: 12px 20px; cursor: pointer; width: 100%; text-align: left; font-size: 1em; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; font-weight: bold; }
+        .nav-toggle:hover { background: #2d5016; }
+        .nav-content { max-height: 400px; overflow-y: auto; padding: 15px; }
+        nav.collapsed .nav-content { max-height: 0; padding: 0; overflow: hidden; }
+        nav ul { list-style: none; }
+        nav ul li { margin: 5px 0; }
+        nav ul li a { color: #4a7c26; text-decoration: none; font-size: 0.9em; display: block; padding: 5px 8px; border-radius: 5px; }
+        nav ul li a:hover { background: #f0f7ed; }
+
+        main { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin: 20px 0 40px 0; }
+        h1 { color: #2d5016; font-size: 2.2em; margin: 40px 0 20px 0; padding-bottom: 15px; border-bottom: 4px solid #4a7c26; }
+        h2 { color: #4a7c26; font-size: 1.8em; margin: 30px 0 15px 0; }
+        h3 { color: #2d5016; font-size: 1.4em; margin: 20px 0 10px 0; padding: 12px; background: #f0f7ed; border-left: 5px solid #4a7c26; border-radius: 5px; }
+        h4 { color: #4a7c26; font-size: 1.2em; margin: 15px 0 10px 0; }
+
+        .activity-card { background: #fff; border: 2px solid #e8f5e3; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        .activity-card:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .investment { background: #fff3cd; padding: 8px 12px; border-left: 4px solid #ffc107; margin: 8px 0; border-radius: 4px; }
+        .revenue { background: #d1ecf1; padding: 8px 12px; border-left: 4px solid #17a2b8; margin: 8px 0; border-radius: 4px; }
+        .note { background: #fff9e6; border-left: 4px solid #ffa500; padding: 12px; margin: 15px 0; border-radius: 4px; font-style: italic; }
+
+        strong { color: #2d5016; }
+        ul, ol { margin: 12px 0 12px 25px; }
+        li { margin: 6px 0; }
+
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        table thead { background: #2d5016; color: white; }
+        table th { padding: 12px; text-align: left; }
+        table td { padding: 10px 12px; border-bottom: 1px solid #e8f5e3; }
+        table tbody tr:nth-child(even) { background: #f9f9f9; }
+        table tbody tr:hover { background: #f0f7ed; }
+
+        .section-divider { height: 4px; background: linear-gradient(90deg, #2d5016 0%, #4a7c26 50%, #2d5016 100%); margin: 40px 0; border-radius: 2px; }
+        a { color: #4a7c26; text-decoration: none; }
+        a:hover { color: #2d5016; text-decoration: underline; }
+
+        #back-to-top { position: fixed; bottom: 30px; right: 30px; background: #4a7c26; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); opacity: 0; visibility: hidden; }
+        #back-to-top.visible { opacity: 1; visibility: visible; }
+        #back-to-top:hover { background: #2d5016; }
+
+        .recruitment-text { background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 15px 0; border: 1px solid #ddd; }
+        .recruitment-text h4 { margin-top: 0; }
+
+        @media print { nav, #back-to-top { display: none; } }
+        @media (max-width: 768px) { header h1 { font-size: 1.8em; } main { padding: 20px; } nav { top: 10px; right: 10px; max-width: 200px; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Plano de Desenvolvimento</h1>
+        <p>Fazenda do Francês - Documento Mestre de Expansão e Novas Receitas</p>
+    </header>
+
+    <nav id="nav-menu">
+        <button class="nav-toggle" onclick="toggleNav()">
+            <span>Sumário</span>
+            <span>▼</span>
+        </button>
+        <div class="nav-content">
+            <ul>
+                <li><a href="#parte-1">1. 24 Ideias de Receita</a></li>
+                <li><a href="#parte-2">2. ONG Bem-Estar Animal</a></li>
+                <li><a href="#parte-3">3. Cantinho do Café</a></li>
+                <li><a href="#parte-4">4. Permacultura</a></li>
+                <li><a href="#parte-5">5. WWOOF</a></li>
+                <li><a href="#anexos">6. Recursos e Links</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <main>
+            <!-- PARTE 1 -->
+            <section id="parte-1">
+                <h1>PARTE 1: 24 Novas Ideias de Receita</h1>
+
+                <h2>Contexto de Mercado</h2>
+                <p>O mercado global de agroturismo foi avaliado em <strong>US$ 69,2 bilhões em 2019</strong> e projetado para <strong>US$ 197,4 bilhões até 2032</strong>. No Brasil, o Ministério do Turismo lançou o projeto "Experiências do Brasil Rural" para inserir produtos da agricultura familiar no mercado turístico.</p>
+                <p><strong>Exemplos de sucesso no Brasil:</strong></p>
+                <ul>
+                    <li><strong>Palmitolândia (Iporanga/SP):</strong> Transformou proteção da palmeira Juçara em turismo criativo, aproveitando 70% da palmeira para brigadeiro, cerveja e nhoque de palmito</li>
+                    <li><strong>Rota Amazônia Atlântica (PA):</strong> Primeiro roteiro de turismo rural da Amazônia validado pelo MTur, combinando bioeconomia com visitação</li>
+                </ul>
+
+                <div class="section-divider"></div>
+                <h2>Categoria A: Agricultura & Produção</h2>
+
+                <div class="activity-card">
+                    <h3>1. Meliponicultura (Abelhas Nativas sem Ferrão)</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 500-2.000 (caixas iniciais)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 80-150/kg de mel + R$ 50/visita educativa</div>
+                    <p><strong>Descrição:</strong> Criação de abelhas nativas brasileiras (Jataí, Mandaçaia, Uruçu) que não ferroam. Produzem mel gourmet de alto valor e são excelentes para polinização da horta.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Adquirir 3-5 colônias de espécies adaptadas à Mata Atlântica</li>
+                        <li>Criar meliponário demonstrativo para visitação</li>
+                        <li>Oferecer "Experiência das Abelhas" para hóspedes</li>
+                        <li>Vender mel artesanal com selo da fazenda</li>
+                    </ul>
+                    <p><strong>Alinhamento:</strong> Regenerativo, educativo, baixo custo de manutenção</p>
+                </div>
+
+                <div class="activity-card">
+                    <h3>2. Produção de Cogumelos Gourmet</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 1.000-3.000 (substrato, spawn, ambiente)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 40-80/kg + uso na gastronomia</div>
+                    <p><strong>Descrição:</strong> Cultivo de Shimeji, Hiratake ou Cogumelo-ostra em ambiente sombreado (pode usar espaço embaixo de árvores ou estrutura existente).</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Utilizar área sombreada/galpão existente</li>
+                        <li>Substrato pode ser feito com palha e borra de café</li>
+                        <li>Colheita em 30-45 dias</li>
+                        <li>Usar na culinária francesa da fazenda (risotto aux champignons)</li>
+                    </ul>
+                    <p><strong>Alinhamento:</strong> Aproveitamento de espaços subutilizados, economia circular</p>
+                </div>
+
+                <div class="activity-card">
+                    <h3>3. Viveiro de Mudas Nativas da Mata Atlântica</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 500-1.500 (sombrite, saquinhos, sementes)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 5-50/muda + educação ambiental</div>
+                    <p><strong>Descrição:</strong> Produção de mudas de espécies nativas para venda, doação e reflorestamento. Pode se tornar atividade educativa para grupos escolares.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Coletar sementes na própria propriedade</li>
+                        <li>Estrutura simples com sombrite</li>
+                        <li>Parceria com projeto SiAMA (Sistemas Agroflorestais na Mata Atlântica)</li>
+                        <li>Incluir no programa Day Use Escolar</li>
+                    </ul>
+                    <p><strong>Alinhamento:</strong> Regeneração, educação ambiental, baixíssimo custo</p>
+                </div>
+
+                <div class="activity-card">
+                    <h3>4. Horta Comunitária para Hóspedes</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 300-800 (ferramentas, sementes, identificação)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> Experiência inclusa + redução custos cozinha</div>
+                    <p><strong>Descrição:</strong> Área da horta onde hóspedes podem participar do plantio e colheita, levando para casa o que colherem ou vendo usado em suas refeições.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Demarcar canteiros "adotáveis"</li>
+                        <li>Criar placas bonitas identificando cada hortaliça</li>
+                        <li>Oferecer "hora na horta" como atividade matinal</li>
+                        <li>Kit de sementes para levar como lembrança</li>
+                    </ul>
+                    <p><strong>Alinhamento:</strong> Experiência imersiva, redução de custos, sustentabilidade</p>
+                </div>
+
+                <div class="activity-card">
+                    <h3>5. Colha e Pague Expandido</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 500-1.000 (novas frutíferas, sinalização)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 15-40/kg conforme fruta</div>
+                    <p><strong>Descrição:</strong> Expandir a atual oferta de "Colha e Pague" com frutas de alto valor e apelo visual (pitaya, physalis, amora, jabuticaba).</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Plantar frutíferas perenes de rápido retorno</li>
+                        <li>Criar "Mapa das Frutas" para hóspedes</li>
+                        <li>Sazonalidade como atrativo (cada visita, frutas diferentes)</li>
+                        <li>Cestas temáticas francesas (frutas vermelhas para tarte)</li>
+                    </ul>
+                </div>
+
+                <div class="section-divider"></div>
+                <h2>Categoria B: Experiências & Vivências</h2>
+
+                <div class="activity-card">
+                    <h3>6. Piquenique Francês nos Campos</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 500-1.000 (cestas, toalhas, louças vintage)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 150-300/casal</div>
+                    <p><strong>Descrição:</strong> Piquenique gourmet no estilo francês, com cesta preparada pela cozinha, louça vintage, vinho e manta xadrez em local pitoresco da fazenda.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Adquirir 3-5 cestas de vime</li>
+                        <li>Louças de brechó/antiquário (charme vintage)</li>
+                        <li>Menu fixo: baguette, queijos, frutas, patê, vinho</li>
+                        <li>Locais marcados: pasto com vista, beira do rio, sob jabuticabeira</li>
+                    </ul>
+                    <p><strong>Nome sugerido:</strong> "Le Pique-Nique Champêtre"</p>
+                </div>
+
+                <div class="activity-card">
+                    <h3>7. Aulas de Culinária Francesa</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 200-500 (aventais, utensílios extras)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 150-250/pessoa (grupos de 4-8)</div>
+                    <p><strong>Descrição:</strong> Aulas hands-on das receitas tradicionais da família Lanthiez (Quiche Lorraine, Boeuf Bourguignon, Tarte au Citron).</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Usar cozinha existente em horário específico</li>
+                        <li>Aventais personalizados "Fazenda do Francês"</li>
+                        <li>Receituário impresso para levar</li>
+                        <li>Almoço ou jantar com o que prepararam</li>
+                    </ul>
+                    <p><strong>Nome sugerido:</strong> "Les Secrets de Grand-Mère"</p>
+                </div>
+
+                <div class="activity-card">
+                    <h3>8. Astroturismo (Observação de Estrelas)</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 0-500 (tapetes, mapas celestes, app)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 30-50/pessoa ou gratuito como diferencial</div>
+                    <p><strong>Descrição:</strong> Noites de observação do céu estrelado, aproveitando a baixa poluição luminosa da região. Pode combinar com fogueira já existente.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Definir noites sem lua como especiais</li>
+                        <li>App gratuito (Star Walk, SkyView) para identificar constelações</li>
+                        <li>Tapetes de yoga no gramado</li>
+                        <li>Storytelling: mitos e lendas das estrelas</li>
+                    </ul>
+                    <p><strong>Alinhamento:</strong> Custo zero, diferencial romântico, aproveita infraestrutura</p>
+                </div>
+
+                <div class="activity-card">
+                    <h3>9. Yoga ao Amanhecer</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 0-300 (mais tapetes se necessário)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 50-80/sessão ou incluso para hóspedes</div>
+                    <p><strong>Descrição:</strong> Sessão de yoga ao nascer do sol, com vista para as montanhas. Pode ser guiado por hóspede instrutor ou parceria local.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Tapetes de yoga já disponíveis</li>
+                        <li>Horário: 6h30 (verão) / 7h (inverno)</li>
+                        <li>Parceria com instrutores locais (permuta ou comissão)</li>
+                        <li>Incluir no pacote de retiros wellness</li>
+                    </ul>
+                </div>
+
+                <div class="activity-card">
+                    <h3>10. Meditação na Floresta (Forest Bathing Guiado)</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 0-200 (capacitação básica)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 80-150/pessoa ou incluso em retiros</div>
+                    <p><strong>Descrição:</strong> Evolução do atual "Banho de Floresta" para experiência guiada estruturada, com técnicas de shinrin-yoku (banho de floresta japonês).</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Trilha interna já existe</li>
+                        <li>Criar roteiro de 2h com paradas contemplativas</li>
+                        <li>Exercícios de respiração e conexão sensorial</li>
+                        <li>Certificação opcional em Forest Therapy</li>
+                    </ul>
+                </div>
+
+                <div class="activity-card">
+                    <h3>11. Pesca no Açude</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 300-800 (varas, iscas, licenças)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 50-100/pessoa ou incluso para hóspedes</div>
+                    <p><strong>Descrição:</strong> Pesca esportiva e contemplativa no açude da propriedade, localizado próximo ao marco M-0. Atividade relaxante para famílias e pescadores iniciantes.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Equipamentos básicos de pesca disponíveis para empréstimo</li>
+                        <li>Modalidade "pesque e solte" ou "pesque e leve"</li>
+                        <li>Bancos/deck à beira do açude</li>
+                        <li>Parceria com pescador local para aulas</li>
+                        <li>Incluir no pacote de experiências rurais</li>
+                    </ul>
+                    <p><strong>Alinhamento:</strong> Baixo custo, aproveitamento de recurso natural existente, atividade familiar</p>
+                </div>
+
+                <div class="section-divider"></div>
+                <h2>Categoria C: Eventos & Gastronomia</h2>
+
+                <div class="activity-card">
+                    <h3>12. Jantares Temáticos Mensais</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 200-500/evento (ingredientes extras, decoração)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 150-250/pessoa, 20-30 pessoas</div>
+                    <p><strong>Descrição:</strong> Jantares exclusivos com temas rotativos: "Noite Provençal", "Réveillon no Campo", "Vindima Brasileira", "Festa da Colheita".</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Um sábado por mês (não conflitar com hospedagem regular)</li>
+                        <li>Divulgação em redes sociais 30 dias antes</li>
+                        <li>Menu de 4-5 etapas + harmonização</li>
+                        <li>Decoração temática reutilizável</li>
+                    </ul>
+                </div>
+
+                <div class="activity-card">
+                    <h3>13. Mercadinho da Fazenda (Sábados)</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 300-800 (barraca, displays, embalagens)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 500-2.000/sábado</div>
+                    <p><strong>Descrição:</strong> Feira semanal com produtos da fazenda e parceiros locais: mel, geleias, pães, queijos, hortaliças, artesanato.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Sábados alternados ou mensais</li>
+                        <li>Convidar produtores vizinhos (mel, queijo, artesanato)</li>
+                        <li>Criar "cesta da fazenda" para encomenda</li>
+                        <li>Café e croissant para visitantes</li>
+                    </ul>
+                </div>
+
+                <div class="activity-card">
+                    <h3>14. Cinema ao Ar Livre</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 800-2.000 (projetor, tela, caixas de som)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 30-50/pessoa ou diferencial de hospedagem</div>
+                    <p><strong>Descrição:</strong> Sessões de cinema sob as estrelas, com pipoca gourmet e vinho. Filmes franceses clássicos ou documentários sobre natureza.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Projetor portátil + lençol branco ou tela inflável</li>
+                        <li>Sextas ou sábados à noite</li>
+                        <li>Puffs e mantas para conforto</li>
+                        <li>Pipoca com ervas da fazenda (alecrim, tomilho)</li>
+                    </ul>
+                    <p><strong>Nome sugerido:</strong> "Cinéma sous les Étoiles"</p>
+                </div>
+
+                <div class="activity-card">
+                    <h3>15. Workshops de Fermentação</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 200-500 (vidros, ingredientes iniciais)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 100-180/pessoa</div>
+                    <p><strong>Descrição:</strong> Oficinas de fermentados: kombucha, kefir, chucrute, kimchi, pão de fermentação natural. Cada participante leva seu starter.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Workshops de 3-4 horas</li>
+                        <li>Kit para levar: vidro + starter + receitas</li>
+                        <li>Combinar com almoço fermentado</li>
+                        <li>Instrutor: Jennifer ou parceiro local</li>
+                    </ul>
+                </div>
+
+                <div class="activity-card">
+                    <h3>16. Retiros de Arte e Pintura</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 300-800 (materiais básicos)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 200-400/pessoa (fim de semana)</div>
+                    <p><strong>Descrição:</strong> Retiros de pintura en plein air (ao ar livre), como os impressionistas franceses. Paisagens da fazenda como inspiração.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Parceria com artista/professor local</li>
+                        <li>Materiais inclusos ou trazidos pelo participante</li>
+                        <li>Exposição final no domingo</li>
+                        <li>Enquadrar na tradição impressionista francesa</li>
+                    </ul>
+                </div>
+
+                <div class="section-divider"></div>
+                <h2>Categoria D: Digital & Produtos</h2>
+
+                <div class="activity-card">
+                    <h3>17. Conservas e Geleias Artesanais</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 500-1.500 (vidros, rótulos, ingredientes)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 25-45/vidro</div>
+                    <p><strong>Descrição:</strong> Linha de conservas, geleias e compotas com frutas da fazenda e receitas francesas da família.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Iniciar com 3-4 sabores (goiaba, pitanga, pimenta, figo)</li>
+                        <li>Rótulos artesanais com história da família</li>
+                        <li>Venda para hóspedes e no mercadinho</li>
+                        <li>Expansão futura: venda online</li>
+                    </ul>
+                    <p><strong>Nome sugerido:</strong> "Les Délices du Francês"</p>
+                </div>
+
+                <div class="activity-card">
+                    <h3>18. Kits de Receitas Francesas</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 200-500 (embalagens, impressão)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 60-120/kit</div>
+                    <p><strong>Descrição:</strong> Kits com ingredientes secos + receituário para preparar pratos da fazenda em casa: "Kit Quiche Lorraine", "Kit Tarte aux Fruits".</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Embalagens craft com laço de palha</li>
+                        <li>Incluir ingredientes secos + especiarias</li>
+                        <li>Receita ilustrada passo a passo</li>
+                        <li>QR code para vídeo tutorial</li>
+                    </ul>
+                </div>
+
+                <div class="activity-card">
+                    <h3>19. Vouchers de Experiência (Gift Cards)</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 100-300 (design, impressão ou digital)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> Antecipação de receita + novos clientes</div>
+                    <p><strong>Descrição:</strong> Vouchers para presentear: "Um Dia na Fazenda", "Piquenique Francês para Dois", "Noite Romântica com Banheira".</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Design elegante (Canva ou designer)</li>
+                        <li>Versão física (papel especial) e digital</li>
+                        <li>Validade de 1 ano</li>
+                        <li>Ótimo para datas comemorativas</li>
+                    </ul>
+                </div>
+
+                <div class="activity-card">
+                    <h3>20. Clube de Assinatura da Fazenda</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 300-800 (logística, embalagens)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 150-300/mês por assinante</div>
+                    <p><strong>Descrição:</strong> Assinatura mensal ou trimestral com produtos da fazenda: mel, geleias, café, chás, receitas, e-book.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>3 níveis: Básico, Gourmet, Premium</li>
+                        <li>Frete para RJ e SP inicialmente</li>
+                        <li>Surpresa sazonal em cada caixa</li>
+                        <li>Comunidade exclusiva no WhatsApp</li>
+                    </ul>
+                </div>
+
+                <div class="section-divider"></div>
+                <h2>Categoria E: Parcerias & Novos Modelos</h2>
+
+                <div class="activity-card">
+                    <h3>21. Coworking Rural (Nômades Digitais)</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 500-2.000 (mobiliário, tomadas extras)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 100-200/dia ou R$ 1.500-3.000/semana</div>
+                    <p><strong>Descrição:</strong> Espaço de trabalho para nômades digitais e remote workers, combinando trabalho com experiência rural.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Mesa de trabalho + cadeira ergonômica</li>
+                        <li>WiFi fibra ótica já disponível</li>
+                        <li>Pacotes semanais com hospedagem</li>
+                        <li>Incluir café da manhã + almoço</li>
+                    </ul>
+                    <p><strong>Nome sugerido:</strong> "Le Bureau Champêtre"</p>
+                    <p><strong>Público-alvo:</strong> Freelancers, startups, criativos que buscam inspiração fora da cidade</p>
+                </div>
+
+                <div class="activity-card">
+                    <h3>22. Trilha Noturna para Observação de Insetos</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 200-600 (lanternas UV, lupas, guias de identificação)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 60-120/pessoa</div>
+                    <p><strong>Descrição:</strong> Expedição noturna pela mata para observar insetos noturnos, borboletas, besouros bioluminescentes e outros invertebrados. Experiência educativa e mágica, aproveitando a biodiversidade da Mata Atlântica.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Lanternas UV para atrair insetos</li>
+                        <li>Guia com conhecimento de entomologia ou parceria com biólogo local</li>
+                        <li>Lençol branco para armadilha luminosa</li>
+                        <li>Lupas e caixas de observação</li>
+                        <li>Roteiro de 1.5-2 horas na trilha existente</li>
+                        <li>Máximo 8-10 pessoas por grupo</li>
+                    </ul>
+                    <p><strong>Alinhamento:</strong> Educação ambiental, baixo custo, experiência única, uso da trilha existente</p>
+                    <div class="note"><strong>Observação:</strong> Combina perfeitamente com astroturismo (#8) - pode oferecer pacote noturno completo</div>
+                </div>
+
+                <div class="activity-card">
+                    <h3>23. Cavalgada sob Lua Cheia</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 0-500 (se já tem cavalos; senão R$ 5.000+ por cavalo)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 100-200/pessoa</div>
+                    <p><strong>Descrição:</strong> Passeio a cavalo durante a lua cheia, aproveitando a iluminação natural para cavalgar pelos campos e trilhas da fazenda. Experiência romântica e contemplativa.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>Cronograma baseado no calendário lunar (1x por mês)</li>
+                        <li>Cavalos mansos e treinados para passeios noturnos</li>
+                        <li>Rota pré-definida em terreno seguro</li>
+                        <li>Guia experiente com conhecimento da propriedade</li>
+                        <li>Pode incluir parada para chocolate quente ou vinho</li>
+                        <li>Limite de participantes baseado no número de cavalos</li>
+                    </ul>
+                    <p><strong>Alinhamento:</strong> Alto valor percebido, baixo custo adicional (se infraestrutura existe), evento especial mensal</p>
+                    <p><strong>Pré-requisito:</strong> Cavalos disponíveis ou parceria com haras/rancho local</p>
+                    <div class="note"><strong>Observação:</strong> Criar evento no calendário mensal; promover com antecedência</div>
+                </div>
+
+                <div class="activity-card">
+                    <h3>24. Observação de Pássaros (Birdwatching)</h3>
+                    <div class="investment"><strong>Investimento:</strong> R$ 200-800 (binóculos, guias de identificação, comedouros)</div>
+                    <div class="revenue"><strong>Receita potencial:</strong> R$ 60-150/pessoa</div>
+                    <p><strong>Descrição:</strong> Atividade de observação de aves na Mata Atlântica, um dos biomas com maior diversidade de espécies endêmicas do Brasil. A região de Cachoeiras de Macacu é habitat de diversas espécies raras e coloridas.</p>
+                    <p><strong>Implementação:</strong></p>
+                    <ul>
+                        <li>2-3 binóculos de qualidade para empréstimo</li>
+                        <li>Guia ilustrado de aves da Mata Atlântica</li>
+                        <li>Parceria com ornitólogo local ou guia da REGUA</li>
+                        <li>Criar pontos estratégicos de observação (comedouros, bebedouros)</li>
+                        <li>Roteiro matinal (melhor horário: 6h-9h)</li>
+                        <li>Aplicativo de identificação (Merlin Bird ID - gratuito)</li>
+                        <li>Lista de espécies já avistadas na propriedade</li>
+                    </ul>
+                    <p><strong>Alinhamento:</strong> Ecoturismo, educação ambiental, aproveita biodiversidade existente, baixo impacto</p>
+                    <div class="note"><strong>Observação:</strong> Combina com trilha ecológica existente. Vizinhança com REGUA (Reserva Ecológica de Guapiaçu) é grande diferencial - área reconhecida internacionalmente para birdwatching</div>
+                </div>
+
+                <div class="section-divider"></div>
+                <h2>Resumo de Investimentos</h2>
+                <table>
+                    <thead>
+                        <tr><th>Categoria</th><th>Investimento Total</th><th>Receita Potencial Mensal</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Agricultura & Produção</td><td>R$ 2.800-8.300</td><td>R$ 2.000-5.000</td></tr>
+                        <tr><td>Experiências</td><td>R$ 700-1.500</td><td>R$ 3.000-8.000</td></tr>
+                        <tr><td>Eventos & Gastronomia</td><td>R$ 1.800-4.600</td><td>R$ 4.000-12.000</td></tr>
+                        <tr><td>Digital & Produtos</td><td>R$ 1.100-2.600</td><td>R$ 2.000-6.000</td></tr>
+                        <tr><td>Parcerias</td><td>R$ 500-2.000</td><td>R$ 1.500-6.000</td></tr>
+                        <tr style="background:#f0f7ed;font-weight:bold;"><td>TOTAL</td><td>R$ 6.900-19.000</td><td>R$ 12.500-37.000</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- PARTE 2 -->
+            <section id="parte-2">
+                <h1>PARTE 2: ONG Bem-Estar Animal</h1>
+
+                <h2>Tipos de Organização no Brasil</h2>
+                <h3>Associação x OSCIP</h3>
+                <table>
+                    <thead>
+                        <tr><th>Característica</th><th>Associação</th><th>OSCIP</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Definição</strong></td><td>União de pessoas para fins não econômicos</td><td>Organização da Sociedade Civil de Interesse Público</td></tr>
+                        <tr><td><strong>Mínimo de pessoas</strong></td><td>2 (recomendado 9)</td><td>2</td></tr>
+                        <tr><td><strong>Complexidade</strong></td><td>Menor</td><td>Maior (qualificação MJ)</td></tr>
+                        <tr><td><strong>Benefícios fiscais</strong></td><td>Sim (IR, PIS, COFINS)</td><td>Sim + convênios públicos</td></tr>
+                        <tr><td><strong>Recomendação</strong></td><td>Ideal para início</td><td>Após consolidação</td></tr>
+                    </tbody>
+                </table>
+                <div class="note"><strong>Recomendação:</strong> Iniciar como <strong>Associação Simples</strong>, evoluir para OSCIP após 2-3 anos se necessário.</div>
+
+                <div class="section-divider"></div>
+                <h2>Passo a Passo: Criar uma Associação</h2>
+
+                <h3>Fase 1: Planejamento</h3>
+                <ol>
+                    <li><strong>Definir nome:</strong> Sugestões:
+                        <ul>
+                            <li>"Associação Santuário Guapiaçu"</li>
+                            <li>"Instituto Bem-Estar Animal do Francês"</li>
+                            <li>"Associação Protetora dos Animais de Macacu"</li>
+                        </ul>
+                    </li>
+                    <li><strong>Definir sede:</strong> Endereço da fazenda (não pode ser residencial para fins fiscais)</li>
+                    <li><strong>Reunir fundadores:</strong> Mínimo 2, recomendado 9 pessoas (Presidente, Vice, Secretário, Tesoureiro, Conselho Fiscal - 3 membros)</li>
+                    <li><strong>Definir finalidade estatutária:</strong>
+                        <ul>
+                            <li>Resgate e acolhimento de animais de fazenda em situação de maus-tratos</li>
+                            <li>Educação ambiental e bem-estar animal</li>
+                            <li>Visitação educativa e conscientização</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <div class="note">
+                    <p><strong>Recursos Adicionais:</strong></p>
+                    <ul>
+                        <li><strong>Guide détaillé en français:</strong> <a href="https://www.cyriljarnias.com/expatriation/guide-sinstaller-bresil-expatrie/vie-associative-bresil-creation-financement/" target="_blank">Como criar associação no Brasil (em francês)</a></li>
+                        <li><strong>Procédure en anglais:</strong> <a href="https://thebrazilbusiness.com/article/how-to-start-an-association-in-brazil" target="_blank">How to start an association in Brazil (em inglês)</a></li>
+                        <li><strong>Formulaire CNPJ Receita Federal:</strong> <a href="https://www.gov.br/receitafederal/pt-br" target="_blank">Site oficial da Receita Federal</a> (pesquisar "formulário de inscrição de pessoas jurídicas")</li>
+                    </ul>
+                </div>
+
+                <h3>Fase 2: Estatuto Social</h3>
+                <p><strong>Elementos obrigatórios:</strong></p>
+                <ul>
+                    <li>Denominação e sede</li>
+                    <li>Finalidades da associação</li>
+                    <li>Requisitos para admissão/demissão de associados</li>
+                    <li>Direitos e deveres dos associados</li>
+                    <li>Forma de administração</li>
+                    <li>Modo de dissolução e destino do patrimônio</li>
+                </ul>
+                <p><strong>Importante:</strong> Contratar advogado para elaboração (R$ 800-2.000)</p>
+
+                <h3>Fase 3: Assembleia de Fundação</h3>
+                <ol>
+                    <li>Convocar todos os fundadores</li>
+                    <li>Eleger presidente e secretário da assembleia</li>
+                    <li>Aprovar estatuto social</li>
+                    <li>Eleger primeira diretoria e conselho fiscal</li>
+                    <li>Lavrar ata de fundação</li>
+                </ol>
+                <p><strong>Documentos produzidos:</strong> Ata de fundação e eleição, Estatuto social aprovado</p>
+
+                <h3>Fase 4: Registro em Cartório</h3>
+                <p><strong>Local:</strong> Cartório de Registro de Títulos e Documentos de Pessoas Jurídicas</p>
+                <p><strong>Documentos:</strong> Ata de fundação (2 vias), Estatuto social (2 vias), RG e CPF dos diretores, Comprovante de endereço da sede</p>
+                <p><strong>Custo médio:</strong> R$ 300-800 (varia por estado)</p>
+                <p><strong>Opção digital:</strong> Plataforma RTDBrasil (mais rápido)</p>
+
+                <h3>Fase 5: CNPJ</h3>
+                <ol>
+                    <li>Acessar portal da Receita Federal</li>
+                    <li>Preencher DBE (Documento Básico de Entrada)</li>
+                    <li>CNAE sugerido: 94.30-8-00 (Atividades de associações de defesa de direitos sociais)</li>
+                    <li>Aguardar emissão (3-7 dias úteis)</li>
+                </ol>
+                <p><strong>Custo:</strong> Gratuito</p>
+
+                <h3>Fase 6: Alvará e Regularização</h3>
+                <ol>
+                    <li>Alvará de funcionamento (Prefeitura de Cachoeiras de Macacu)</li>
+                    <li>Inscrição Municipal</li>
+                    <li>Licença do Corpo de Bombeiros (se receber público)</li>
+                </ol>
+                <p><strong>Custo estimado:</strong> R$ 200-500</p>
+
+                <h2>Custos Totais para Criação</h2>
+                <table>
+                    <thead><tr><th>Item</th><th>Custo</th></tr></thead>
+                    <tbody>
+                        <tr><td>Advogado (estatuto)</td><td>R$ 800-2.000</td></tr>
+                        <tr><td>Cartório</td><td>R$ 300-800</td></tr>
+                        <tr><td>Alvará municipal</td><td>R$ 200-500</td></tr>
+                        <tr><td>Contador (declarações)</td><td>R$ 150-300/mês</td></tr>
+                        <tr style="font-weight:bold;"><td>Total inicial</td><td>R$ 1.300-3.300</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="section-divider"></div>
+                <h2>Plataformas de Crowdfunding no Brasil</h2>
+
+                <h4>1. Kickante</h4>
+                <ul>
+                    <li><strong>Destaque:</strong> Recorde latino-americano de arrecadação (Santuário Animal: +R$ 1 milhão)</li>
+                    <li><strong>Taxa:</strong> 5-13% (varia por modalidade)</li>
+                    <li><strong>Modalidades:</strong> Tudo ou Nada, Flexível, Kick Solidário</li>
+                    <li><strong>Site:</strong> <a href="https://www.kickante.com.br">kickante.com.br</a></li>
+                </ul>
+
+                <h4>2. Benfeitoria</h4>
+                <ul>
+                    <li><strong>Destaque:</strong> Primeira plataforma de crowdfunding de impacto do Brasil</li>
+                    <li><strong>Taxa:</strong> Taxa livre (você escolhe quanto pagar)</li>
+                    <li><strong>Diferencial:</strong> Consultoria personalizada</li>
+                    <li><strong>Site:</strong> <a href="https://benfeitoria.com">benfeitoria.com</a></li>
+                </ul>
+
+                <h4>3. Vakinha</h4>
+                <ul>
+                    <li><strong>Destaque:</strong> Mais popular para causas pessoais</li>
+                    <li><strong>Taxa:</strong> 6,4% + taxa de pagamento</li>
+                    <li><strong>Ideal para:</strong> Campanhas de emergência (cirurgias, resgates)</li>
+                    <li><strong>Site:</strong> <a href="https://www.vakinha.com.br">vakinha.com.br</a></li>
+                </ul>
+
+                <h4>4. Catarse</h4>
+                <ul>
+                    <li><strong>Destaque:</strong> Foco em projetos criativos e culturais</li>
+                    <li><strong>Taxa:</strong> 13%</li>
+                    <li><strong>Ideal para:</strong> Documentários sobre animais, projetos educativos</li>
+                    <li><strong>Site:</strong> <a href="https://www.catarse.me">catarse.me</a></li>
+                </ul>
+
+                <div class="section-divider"></div>
+                <h2>Modelo Santuário com Visitação Educativa</h2>
+
+                <h3>Exemplos de Sucesso no Brasil</h3>
+                <h4>Santuário Terra dos Bichos (São Roque/SP)</h4>
+                <ul>
+                    <li>+500 animais de 19 espécies</li>
+                    <li>Visitas monitoradas para escolas e empresas</li>
+                    <li>Foco: educação ambiental e veganismo</li>
+                    <li>Site: <a href="https://santuarioterradosbichos.org.br">santuarioterradosbichos.org.br</a></li>
+                </ul>
+
+                <h4>Santuário das Fadas (Teresópolis/RJ)</h4>
+                <ul>
+                    <li>Fundado em 2008 por veterinária</li>
+                    <li>Especializado em animais de fazenda</li>
+                    <li><strong>Localização próxima</strong> à Fazenda do Francês</li>
+                    <li>Site: <a href="https://www.santuariodasfadas.org">santuariodasfadas.org</a></li>
+                </ul>
+
+                <h4>Santuário Vale da Rainha (MG)</h4>
+                <ul>
+                    <li>+100 animais resgatados</li>
+                    <li>Oferece aulas de yoga e meditação</li>
+                    <li>Modelo híbrido: santuário + wellness</li>
+                </ul>
+
+                <h3>Modelo Proposto para Fazenda do Francês</h3>
+                <p><strong>Nome sugerido:</strong> "Santuário Guapiaçu" ou "Refúgio do Francês"</p>
+
+                <h4>Fase 1: Resgate das Vacas Locais</h4>
+                <ul>
+                    <li>Negociar compra/doação das vacas mal cuidadas</li>
+                    <li>Custo estimado por animal: R$ 1.500-3.000</li>
+                    <li>Criar área cercada adequada</li>
+                    <li>Veterinário para avaliação inicial</li>
+                </ul>
+
+                <h4>Fase 2: Estruturação do Santuário</h4>
+                <ul>
+                    <li>Área dedicada com abrigo</li>
+                    <li>Bebedouros e cochos adequados</li>
+                    <li>Sinalização educativa</li>
+                    <li>Trilha de visitação</li>
+                </ul>
+
+                <h4>Fase 3: Programa de Visitação</h4>
+                <ul>
+                    <li>Integrar ao Day Use Escolar existente</li>
+                    <li>Criar "Adote um Animal" (apadrinhamento mensal)</li>
+                    <li>Experiências: "Um Dia de Cuidador"</li>
+                    <li>Documentação em vídeo para redes sociais</li>
+                </ul>
+
+                <h3>Receitas do Santuário</h3>
+                <table>
+                    <thead><tr><th>Fonte</th><th>Valor Estimado</th></tr></thead>
+                    <tbody>
+                        <tr><td>Visitação educativa</td><td>R$ 30-50/pessoa</td></tr>
+                        <tr><td>Apadrinhamento mensal</td><td>R$ 50-200/animal</td></tr>
+                        <tr><td>Doações pontuais</td><td>Variável</td></tr>
+                        <tr><td>Eventos beneficentes</td><td>R$ 2.000-10.000/evento</td></tr>
+                        <tr><td>Parcerias empresariais</td><td>R$ 500-5.000/mês</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- PARTE 3 -->
+            <section id="parte-3">
+                <h1>PARTE 3: Cantinho do Café</h1>
+
+                <h2>Conceito: Le Petit Coin</h2>
+                <p><strong>Posicionamento:</strong> Café rústico-francês - a combinação perfeita entre o charme rural brasileiro e a elegância do bistro francês.</p>
+                <p><strong>Slogan:</strong> "Un café, s'il vous plaît" / "Pausa francesa no campo"</p>
+                <div class="note"><strong>Localização:</strong> O café será implementado no marco M-0, onde anteriormente funcionava o curral de ordenha das vacas. Este ponto marca o canto da propriedade na confluência de duas estradas, proporcionando fácil acesso e visibilidade.</div>
+
+                <h2>Design e Estética</h2>
+                <h3>Estrutura Física - Opções de baixo custo:</h3>
+                <ol>
+                    <li><strong>Galpão/Celeiro Reformado</strong> - Aproveitar estrutura existente, manter elementos originais (madeira, tijolos). Custo: R$ 2.000-5.000</li>
+                    <li><strong>Construção com Pallets</strong> - Balcão de pallets empilhados, prateleiras de caixotes de feira. Custo: R$ 500-1.500</li>
+                    <li><strong>Quiosque de Madeira</strong> - Estrutura simples 3x3m, telhado colonial ou duas águas. Custo: R$ 3.000-8.000</li>
+                </ol>
+
+                <h3>Elementos Decorativos (Baixo Custo)</h3>
+                <table>
+                    <thead><tr><th>Elemento</th><th>Onde encontrar</th><th>Custo estimado</th></tr></thead>
+                    <tbody>
+                        <tr><td>Louças vintage</td><td>Brechós, antiquários</td><td>R$ 50-200</td></tr>
+                        <tr><td>Bule de ágata</td><td>Feiras de antiguidade</td><td>R$ 30-80</td></tr>
+                        <tr><td>Quadro-negro (menu)</td><td>DIY com tinta lousa</td><td>R$ 50-100</td></tr>
+                        <tr><td>Flores do jardim</td><td>Fazenda (gratuito)</td><td>R$ 0</td></tr>
+                        <tr><td>Mesas de madeira rústica</td><td>Marceneiro local</td><td>R$ 200-500/mesa</td></tr>
+                        <tr><td>Cadeiras misturadas</td><td>Brechós</td><td>R$ 30-100/cadeira</td></tr>
+                        <tr><td>Toalhas xadrez</td><td>Tecido por metro</td><td>R$ 20-50</td></tr>
+                        <tr><td>Panelas de cobre</td><td>Decoração</td><td>R$ 100-300</td></tr>
+                        <tr><td>Cestas de vime</td><td>Artesanato local</td><td>R$ 30-80</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Paleta de Cores</h3>
+                <ul>
+                    <li><strong>Principal:</strong> Madeira natural + branco off-white</li>
+                    <li><strong>Acentos:</strong> Azul Provençal, vermelho bordô</li>
+                    <li><strong>Metais:</strong> Cobre e bronze envelhecido</li>
+                </ul>
+
+                <h2>Menu Le Petit Coin</h2>
+                <h3>Bebidas</h3>
+                <table>
+                    <thead><tr><th>Item</th><th>Preço Sugerido</th><th>Custo Estimado</th></tr></thead>
+                    <tbody>
+                        <tr><td>Café coado</td><td>R$ 6-8</td><td>R$ 1-2</td></tr>
+                        <tr><td>Café au lait</td><td>R$ 10-14</td><td>R$ 2-4</td></tr>
+                        <tr><td>Chocolat chaud</td><td>R$ 12-16</td><td>R$ 3-5</td></tr>
+                        <tr><td>Thé (chás da fazenda)</td><td>R$ 8-10</td><td>R$ 1-2</td></tr>
+                        <tr><td>Limonada com ervas</td><td>R$ 10-14</td><td>R$ 2-4</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Comidinhas</h3>
+                <table>
+                    <thead><tr><th>Item</th><th>Preço Sugerido</th><th>Custo Estimado</th></tr></thead>
+                    <tbody>
+                        <tr><td>Croissant simples</td><td>R$ 10-14</td><td>R$ 3-5</td></tr>
+                        <tr><td>Pain au chocolat</td><td>R$ 12-16</td><td>R$ 4-6</td></tr>
+                        <tr><td>Quiche Lorraine (fatia)</td><td>R$ 18-24</td><td>R$ 5-8</td></tr>
+                        <tr><td>Tarte aux fruits (fatia)</td><td>R$ 16-22</td><td>R$ 4-7</td></tr>
+                        <tr><td>Baguette com geleia</td><td>R$ 12-16</td><td>R$ 3-5</td></tr>
+                        <tr><td>Croque-monsieur</td><td>R$ 22-28</td><td>R$ 6-10</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Combos</h3>
+                <table>
+                    <thead><tr><th>Combo</th><th>Itens</th><th>Preço</th></tr></thead>
+                    <tbody>
+                        <tr><td>Petit-Déjeuner</td><td>Café + croissant + fruta</td><td>R$ 25-35</td></tr>
+                        <tr><td>Goûter</td><td>Chá + fatia de tarte</td><td>R$ 22-28</td></tr>
+                        <tr><td>Panier Pique-Nique</td><td>Para viagem, 2 pessoas</td><td>R$ 80-120</td></tr>
+                    </tbody>
+                </table>
+
+                <h2>Orçamento de Implementação</h2>
+                <h3>Opção Econômica (R$ 5.000-8.000)</h3>
+                <table>
+                    <thead><tr><th>Item</th><th>Custo</th></tr></thead>
+                    <tbody>
+                        <tr><td>Balcão de pallets</td><td>R$ 500</td></tr>
+                        <tr><td>Mobiliário (brechó)</td><td>R$ 800</td></tr>
+                        <tr><td>Decoração</td><td>R$ 500</td></tr>
+                        <tr><td>Equipamentos (cafeteira, utensílios)</td><td>R$ 1.500</td></tr>
+                        <tr><td>Embalagens iniciais</td><td>R$ 300</td></tr>
+                        <tr><td>Ingredientes (estoque inicial)</td><td>R$ 500</td></tr>
+                        <tr><td>Reforma/adaptação espaço</td><td>R$ 1.000-4.000</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Opção Média (R$ 10.000-15.000)</h3>
+                <table>
+                    <thead><tr><th>Item</th><th>Custo</th></tr></thead>
+                    <tbody>
+                        <tr><td>Quiosque de madeira</td><td>R$ 5.000-8.000</td></tr>
+                        <tr><td>Mobiliário novo rústico</td><td>R$ 2.000</td></tr>
+                        <tr><td>Equipamentos profissionais</td><td>R$ 2.500</td></tr>
+                        <tr><td>Decoração completa</td><td>R$ 1.000</td></tr>
+                        <tr><td>Marketing (fotos, cardápios)</td><td>R$ 500</td></tr>
+                    </tbody>
+                </table>
+
+                <h2>Elementos Instagram-Worthy</h2>
+                <ol>
+                    <li><strong>Parede de flores secas</strong> (lavanda, rosas)</li>
+                    <li><strong>Balanço rústico</strong> com corda e madeira</li>
+                    <li><strong>Janela vintage</strong> como moldura para fotos</li>
+                    <li><strong>Bicicleta retrô</strong> com cesta de flores</li>
+                    <li><strong>Lettering em giz</strong> no quadro-negro</li>
+                    <li><strong>Louça descombinada</strong> mas harmônica</li>
+                    <li><strong>Iluminação com luzes de cordão</strong> (fairy lights)</li>
+                    <li><strong>Mesa com vista</strong> para as montanhas</li>
+                </ol>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- PARTE 4 -->
+            <section id="parte-4">
+                <h1>PARTE 4: Permacultura</h1>
+
+                <h2>Contexto: Mata Atlântica</h2>
+                <p>A Fazenda do Francês está localizada no bioma Mata Atlântica, na região de Cachoeiras de Macacu (RJ), área de transição entre floresta ombrófila densa e áreas agrícolas.</p>
+                <p><strong>Projeto de referência:</strong> SiAMA (Sistemas Agroflorestais na Mata Atlântica) - iniciativa que já beneficiou 581 famílias com 22 Unidades Demonstrativas.</p>
+
+                <h2>Zonas de Permacultura</h2>
+
+                <h3>Zona 0: Casa/Sede</h3>
+                <p>Já existente. Foco: eficiência energética, compostagem doméstica</p>
+
+                <h3>Zona 1: Horta e Ervas (0-10m da cozinha)</h3>
+                <ul>
+                    <li>Ervas aromáticas para culinária francesa</li>
+                    <li>Hortaliças de uso diário</li>
+                    <li>Flores comestíveis</li>
+                    <li><strong>Já parcialmente implementado</strong></li>
+                </ul>
+
+                <h3>Zona 2: Pomar e Galinhas (10-50m)</h3>
+                <ul>
+                    <li>Frutíferas de manejo frequente</li>
+                    <li>Galinheiro móvel (trator de galinhas)</li>
+                    <li>Compostagem de médio porte</li>
+                    <li><strong>Ação:</strong> Expandir pomar com frutas para geleias</li>
+                </ul>
+
+                <h3>Zona 3: Agrofloresta (50-200m)</h3>
+                <ul>
+                    <li>Sistemas agroflorestais produtivos</li>
+                    <li>Café sombreado + banana + citros</li>
+                    <li>Palmito pupunha (sustentável)</li>
+                    <li><strong>Ação:</strong> Implantar SAF piloto com espécies nativas + produtivas</li>
+                </ul>
+
+                <h3>Zona 4: Pastagem Regenerativa (200m+)</h3>
+                <ul>
+                    <li>Área atual de pastagem</li>
+                    <li>Manejo rotativo do gado</li>
+                    <li>Integração com santuário animal</li>
+                    <li><strong>Ação:</strong> Subdividir piquetes para rotação</li>
+                </ul>
+
+                <h3>Zona 5: Floresta Intocada</h3>
+                <ul>
+                    <li>Mata Atlântica preservada</li>
+                    <li>Trilhas de observação</li>
+                    <li>Coleta de sementes para viveiro</li>
+                    <li><strong>Já existente</strong> (trilha do Banho de Floresta)</li>
+                </ul>
+
+                <div class="section-divider"></div>
+                <h2>Técnicas Recomendadas</h2>
+
+                <h3>1. Sistema Agroflorestal (SAF)</h3>
+                <p><strong>Espécies sugeridas para consórcio:</strong></p>
+                <table>
+                    <thead><tr><th>Estrato</th><th>Espécies</th><th>Função</th></tr></thead>
+                    <tbody>
+                        <tr><td>Emergente</td><td>Jequitibá, Ipê</td><td>Madeira, sombra</td></tr>
+                        <tr><td>Alto</td><td>Palmito Pupunha, Ingá</td><td>Produção, nitrogênio</td></tr>
+                        <tr><td>Médio</td><td>Banana, Citros, Café</td><td>Produção principal</td></tr>
+                        <tr><td>Baixo</td><td>Mandioca, Taioba</td><td>Produção, cobertura</td></tr>
+                        <tr><td>Rasteiro</td><td>Batata-doce, Amendoim</td><td>Cobertura, produção</td></tr>
+                    </tbody>
+                </table>
+                <p><strong>Investimento:</strong> R$ 1.000-3.000/hectare | <strong>Retorno:</strong> 2-3 anos (banana, citros)</p>
+
+                <h3>2. Captação de Água da Chuva</h3>
+                <p><strong>Componentes:</strong> Calhas nos telhados existentes, cisternas de ferrocimento ou polietileno, filtro de areia simples</p>
+                <p><strong>Capacidade sugerida:</strong> 5.000-10.000 litros | <strong>Investimento:</strong> R$ 1.500-4.000 | <strong>Economia:</strong> 30-50% do consumo de água</p>
+
+                <h3>3. Compostagem em Escala</h3>
+                <p><strong>Sistema recomendado:</strong> Leiras estáticas com aeração</p>
+                <p><strong>Fontes de matéria orgânica:</strong></p>
+                <ul>
+                    <li>Restos da cozinha (R$ 0)</li>
+                    <li>Esterco dos cavalos e vacas (R$ 0)</li>
+                    <li>Podas e capim (R$ 0)</li>
+                    <li>Serragem de marcenarias locais (R$ 0 ou baixo)</li>
+                </ul>
+                <p><strong>Produção estimada:</strong> 500-1.000 kg/mês de composto | <strong>Valor do composto:</strong> R$ 200-400/m³</p>
+
+                <h3>4. Galinheiro Móvel (Trator de Galinhas)</h3>
+                <p><strong>Benefícios:</strong> Controle de pragas, adubação rotativa, ovos caipiras para culinária</p>
+                <p><strong>Investimento:</strong> R$ 500-1.500 | <strong>Receita:</strong> R$ 1,50-2,00/ovo caipira</p>
+
+                <h3>5. Círculo de Bananeiras</h3>
+                <p><strong>Função:</strong> Tratamento de águas cinzas (pias, chuveiros)</p>
+                <p><strong>Implementação:</strong></p>
+                <ul>
+                    <li>Escavar círculo de 2m diâmetro x 1m profundidade</li>
+                    <li>Preencher com galhos e matéria orgânica</li>
+                    <li>Plantar bananeiras na borda</li>
+                    <li>Direcionar água cinza para o centro</li>
+                </ul>
+                <p><strong>Investimento:</strong> R$ 100-300 | <strong>Benefício:</strong> Tratamento natural + produção de bananas</p>
+
+                <h2>Cronograma de Implementação</h2>
+                <table>
+                    <thead><tr><th>Fase</th><th>Ações</th><th>Prazo Sugerido</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td>Horta expandida + ervas</td><td>1-2 meses</td></tr>
+                        <tr><td>2</td><td>Compostagem estruturada</td><td>2-3 meses</td></tr>
+                        <tr><td>3</td><td>Galinheiro móvel</td><td>3-4 meses</td></tr>
+                        <tr><td>4</td><td>Captação de água</td><td>4-6 meses</td></tr>
+                        <tr><td>5</td><td>SAF piloto (0,5 ha)</td><td>6-12 meses</td></tr>
+                        <tr><td>6</td><td>Pastagem rotativa</td><td>12-18 meses</td></tr>
+                    </tbody>
+                </table>
+
+                <h2>Recursos e Capacitação</h2>
+                <h3>Cursos Gratuitos</h3>
+                <ul>
+                    <li><strong>Embrapa:</strong> "SAFs Agroecológicos na Mata Atlântica" (online, gratuito)</li>
+                    <li><strong>SiAMA:</strong> Capacitações regionais</li>
+                </ul>
+                <h3>Parceiros Potenciais</h3>
+                <ul>
+                    <li><strong>SiAMA:</strong> <a href="https://siama.eco.br">siama.eco.br</a></li>
+                    <li><strong>Iniciativa Verde:</strong> <a href="https://iniciativaverde.org.br">iniciativaverde.org.br</a></li>
+                    <li><strong>REGUA:</strong> Reserva vizinha, parceria existente</li>
+                </ul>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- PARTE 5 -->
+            <section id="parte-5">
+                <h1>PARTE 5: Recrutamento WWOOF</h1>
+
+                <h2>Plataformas de Voluntariado</h2>
+
+                <h3>WWOOF Brasil</h3>
+                <ul>
+                    <li><strong>Site:</strong> <a href="https://wwoofbrasil.org/pt/">wwoofbrasil.org</a></li>
+                    <li><strong>Taxa para host:</strong> R$ 150-300/ano (aprox.)</li>
+                    <li><strong>Requisito:</strong> Práticas orgânicas/sustentáveis</li>
+                    <li><strong>Troca:</strong> 4-6h trabalho/dia por hospedagem + refeições</li>
+                </ul>
+
+                <h3>Worldpackers</h3>
+                <ul>
+                    <li><strong>Site:</strong> <a href="https://www.worldpackers.com">worldpackers.com</a></li>
+                    <li><strong>Vantagem:</strong> Empresa brasileira, forte no Brasil e América Latina</li>
+                    <li><strong>Taxa para host:</strong> Gratuito (versão básica)</li>
+                    <li><strong>Comunidade:</strong> +410.000 reviews</li>
+                </ul>
+
+                <h3>Workaway</h3>
+                <ul>
+                    <li><strong>Site:</strong> <a href="https://www.workaway.info">workaway.info</a></li>
+                    <li><strong>Alcance:</strong> +50.000 oportunidades em 170 países</li>
+                    <li><strong>Taxa para host:</strong> ~USD 50/ano</li>
+                    <li><strong>Público:</strong> Internacional, muitos europeus</li>
+                </ul>
+
+                <h3>HelpX</h3>
+                <ul>
+                    <li><strong>Site:</strong> <a href="https://www.helpx.net">helpx.net</a></li>
+                    <li><strong>Taxa:</strong> EUR 20/2 anos</li>
+                    <li><strong>Perfil:</strong> Mais econômico, público diverso</li>
+                </ul>
+
+                <h2>O que Oferecer</h2>
+                <table>
+                    <thead><tr><th>Item</th><th>Descrição</th></tr></thead>
+                    <tbody>
+                        <tr><td>Hospedagem</td><td>Quarto privativo ou compartilhado</td></tr>
+                        <tr><td>Alimentação</td><td>3 refeições/dia (café, almoço, jantar)</td></tr>
+                        <tr><td>Horas de trabalho</td><td>4-5 horas/dia, 5 dias/semana</td></tr>
+                        <tr><td>Dias de folga</td><td>2 dias/semana para explorar a região</td></tr>
+                        <tr><td>Atividades gratuitas</td><td>Trilhas, piscina, banho de floresta</td></tr>
+                        <tr><td>WiFi</td><td>Fibra ótica disponível</td></tr>
+                        <tr><td>Experiências</td><td>Cavalgada, yoga (conforme disponibilidade)</td></tr>
+                    </tbody>
+                </table>
+
+                <h2>Tarefas para Voluntários</h2>
+                <table>
+                    <thead><tr><th>Área</th><th>Atividades</th></tr></thead>
+                    <tbody>
+                        <tr><td>Horta/Jardim</td><td>Plantio, irrigação, colheita, compostagem</td></tr>
+                        <tr><td>Animais</td><td>Alimentação, cuidados básicos, limpeza</td></tr>
+                        <tr><td>Hospitalidade</td><td>Apoio na recepção de hóspedes, café da manhã</td></tr>
+                        <tr><td>Manutenção</td><td>Pequenos reparos, pintura, limpeza de áreas</td></tr>
+                        <tr><td>Marketing</td><td>Fotos, redes sociais, conteúdo</td></tr>
+                        <tr><td>Culinária</td><td>Assistente de cozinha, preparo de refeições</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="section-divider"></div>
+                <h2>Texto de Recrutamento</h2>
+
+                <div class="recruitment-text">
+                    <h4>Português</h4>
+                    <p><strong>Fazenda do Francês - Guest House Regenerativa</strong><br>
+                    <em>Cachoeiras de Macacu, RJ - 120km do Rio de Janeiro</em></p>
+                    <p><strong>RE CONECTE-SE com a natureza</strong></p>
+                    <p>Somos uma fazenda familiar com mais de 40 anos de história, onde a tradição francesa encontra a exuberância da Mata Atlântica. Procuramos pessoas apaixonadas por natureza, sustentabilidade e vida rural para nos ajudar a construir um espaço regenerativo.</p>
+                    <p><strong>O que oferecemos:</strong></p>
+                    <ul>
+                        <li>Quarto confortável em ambiente familiar</li>
+                        <li>3 refeições diárias com culinária francesa autêntica</li>
+                        <li>Acesso a todas as atividades: trilhas, piscina, banho de floresta</li>
+                        <li>Experiência imersiva em permacultura e hospitalidade</li>
+                        <li>WiFi fibra ótica</li>
+                        <li>Ambiente acolhedor com vista para as montanhas</li>
+                    </ul>
+                    <p><strong>O que buscamos:</strong></p>
+                    <ul>
+                        <li>Pessoas com interesse em agricultura orgânica, permacultura ou hospitalidade</li>
+                        <li>Disponibilidade para 4-5 horas de trabalho/dia (5 dias/semana)</li>
+                        <li>Espírito colaborativo e respeito pela natureza</li>
+                        <li>Estadia mínima de 2 semanas (ideal: 1 mês)</li>
+                    </ul>
+                    <p><strong>Sobre nós:</strong> Nossa fazenda foi fundada por Erick Lanthiez, agricultor francês que trouxe receitas de família e o amor pela terra. Hoje, na terceira geração, oferecemos uma experiência única de hospitalidade regenerativa.</p>
+                    <p><strong>Contato:</strong> WhatsApp: (21) 97920-1646 | Instagram: @fazendadofrances | Email: fazendadofrances@gmail.com</p>
+                    <p><em>Venha fazer parte da nossa família e descobrir o verdadeiro sentido de reconexão.</em></p>
+                </div>
+
+                <div class="recruitment-text">
+                    <h4>Français</h4>
+                    <p><strong>Fazenda do Francês - Maison d'Hôtes Régénérative</strong><br>
+                    <em>Cachoeiras de Macacu, RJ - 120km de Rio de Janeiro</em></p>
+                    <p><strong>RECONNECTEZ-VOUS avec la nature</strong></p>
+                    <p>Nous sommes une ferme familiale avec plus de 40 ans d'histoire, où la tradition française rencontre l'exubérance de la Forêt Atlantique. Nous recherchons des personnes passionnées par la nature, la durabilité et la vie rurale pour nous aider à construire un espace régénératif.</p>
+                    <p><strong>Ce que nous offrons:</strong></p>
+                    <ul>
+                        <li>Chambre confortable dans un environnement familial</li>
+                        <li>3 repas par jour avec cuisine française authentique</li>
+                        <li>Accès à toutes les activités : randonnées, piscine, bain de forêt</li>
+                        <li>Expérience immersive en permaculture et hospitalité</li>
+                        <li>WiFi fibre optique</li>
+                        <li>Ambiance accueillante avec vue sur les montagnes</li>
+                    </ul>
+                    <p><strong>Ce que nous recherchons:</strong></p>
+                    <ul>
+                        <li>Personnes intéressées par l'agriculture biologique, la permaculture ou l'hospitalité</li>
+                        <li>Disponibilité pour 4-5 heures de travail/jour (5 jours/semaine)</li>
+                        <li>Esprit collaboratif et respect de la nature</li>
+                        <li>Séjour minimum de 2 semaines (idéal : 1 mois)</li>
+                    </ul>
+                    <p><strong>À propos de nous:</strong> Notre ferme a été fondée par Erick Lanthiez, agriculteur français qui a apporté les recettes familiales et l'amour de la terre. Aujourd'hui, à la troisième génération, nous offrons une expérience unique d'hospitalité régénérative.</p>
+                    <p><strong>Contact:</strong> WhatsApp: +55 21 97920-1646 | Instagram: @fazendadofrances | Email: fazendadofrances@gmail.com</p>
+                    <p><em>Venez faire partie de notre famille et découvrir le vrai sens de la reconnexion.</em></p>
+                </div>
+
+                <div class="recruitment-text">
+                    <h4>English</h4>
+                    <p><strong>Fazenda do Francês - Regenerative Guest House</strong><br>
+                    <em>Cachoeiras de Macacu, RJ - 120km from Rio de Janeiro</em></p>
+                    <p><strong>RECONNECT with nature</strong></p>
+                    <p>We are a family farm with over 40 years of history, where French tradition meets the exuberance of the Atlantic Forest. We are looking for people passionate about nature, sustainability, and rural life to help us build a regenerative space.</p>
+                    <p><strong>What we offer:</strong></p>
+                    <ul>
+                        <li>Comfortable room in a family environment</li>
+                        <li>3 meals daily with authentic French cuisine</li>
+                        <li>Access to all activities: trails, pool, forest bathing</li>
+                        <li>Immersive experience in permaculture and hospitality</li>
+                        <li>Fiber optic WiFi</li>
+                        <li>Welcoming atmosphere with mountain views</li>
+                    </ul>
+                    <p><strong>What we're looking for:</strong></p>
+                    <ul>
+                        <li>People interested in organic farming, permaculture, or hospitality</li>
+                        <li>Availability for 4-5 hours of work/day (5 days/week)</li>
+                        <li>Collaborative spirit and respect for nature</li>
+                        <li>Minimum stay of 2 weeks (ideal: 1 month)</li>
+                    </ul>
+                    <p><strong>About us:</strong> Our farm was founded by Erick Lanthiez, a French farmer who brought family recipes and a love for the land. Today, in the third generation, we offer a unique regenerative hospitality experience.</p>
+                    <p><strong>Location:</strong> 120km from Rio de Janeiro (1.5 hours by car) | Cachoeiras de Macacu region | Neighbors to the Guapiaçu Ecological Reserve (REGUA)</p>
+                    <p><strong>Contact:</strong> WhatsApp: +55 21 97920-1646 | Instagram: @fazendadofrances | Email: fazendadofrances@gmail.com</p>
+                    <p><em>Come be part of our family and discover the true meaning of reconnection.</em></p>
+                </div>
+
+                <h2>Onde Publicar</h2>
+                <table>
+                    <thead><tr><th>Plataforma</th><th>Link</th><th>Prioridade</th></tr></thead>
+                    <tbody>
+                        <tr><td>WWOOF Brasil</td><td>wwoofbrasil.org</td><td>Alta</td></tr>
+                        <tr><td>Worldpackers</td><td>worldpackers.com</td><td>Alta</td></tr>
+                        <tr><td>Workaway</td><td>workaway.info</td><td>Média</td></tr>
+                        <tr><td>HelpX</td><td>helpx.net</td><td>Média</td></tr>
+                        <tr><td>Facebook Groups</td><td>"WWOOF Brasil", "Voluntariado Brasil"</td><td>Média</td></tr>
+                        <tr><td>Instagram</td><td>@fazendadofrances (stories/posts)</td><td>Alta</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- ANEXOS -->
+            <section id="anexos">
+                <h1>ANEXOS: Recursos e Links</h1>
+
+                <h2>Links Úteis</h2>
+
+                <h3>Turismo Rural</h3>
+                <ul>
+                    <li><a href="https://www.gov.br/turismo/pt-br/acesso-a-informacao/acoes-e-programas/programas-projetos-acoes-obras-e-atividades/experiencias-do-brasil-rural">Experiências do Brasil Rural - MTur</a></li>
+                    <li><a href="https://digital.agrishow.com.br/gesto/negciosoportunidades/agroturismo-como-transformar-a-fazenda-em-destino-de-experiencias-e-negocio-lucrativo/">Agrishow - Agroturismo</a></li>
+                </ul>
+
+                <h3>Associações e ONGs</h3>
+                <ul>
+                    <li><a href="https://sebrae.com.br/sites/PortalSebrae/artigos/roteiro-para-criar-uma-associacao">SEBRAE - Roteiro para Criar Associação</a></li>
+                    <li><a href="https://institutodea.com/artigo/como-criar-uma-associacao-sem-fins-lucrativos/">Como Criar Associação - IDEA</a></li>
+                </ul>
+
+                <h3>Crowdfunding</h3>
+                <ul>
+                    <li><a href="https://www.kickante.com.br">Kickante</a></li>
+                    <li><a href="https://benfeitoria.com">Benfeitoria</a></li>
+                    <li><a href="https://www.vakinha.com.br">Vakinha</a></li>
+                </ul>
+
+                <h3>Santuários de Referência</h3>
+                <ul>
+                    <li><a href="https://santuarioterradosbichos.org.br">Santuário Terra dos Bichos</a></li>
+                    <li><a href="https://www.santuariodasfadas.org">Santuário das Fadas</a></li>
+                    <li><a href="https://www.kickante.com.br/vaquinha-online/santuarios-do-brasil-unidos-pelos-animais">Rede Santuários do Brasil</a></li>
+                </ul>
+
+                <h3>Permacultura e Agrofloresta</h3>
+                <ul>
+                    <li><a href="https://siama.eco.br">Projeto SiAMA</a></li>
+                    <li><a href="https://www.embrapa.br/en/busca-de-noticias/-/noticia/99707613/curso-gratuito-fortalece-sistemas-agroflorestais-agroecologicos-na-mata-atlantica">Embrapa - Curso SAFs</a></li>
+                    <li><a href="https://iniciativaverde.org.br">Iniciativa Verde</a></li>
+                </ul>
+
+                <h3>Voluntariado</h3>
+                <ul>
+                    <li><a href="https://wwoofbrasil.org/pt/">WWOOF Brasil</a></li>
+                    <li><a href="https://www.worldpackers.com">Worldpackers</a></li>
+                    <li><a href="https://www.workaway.info">Workaway</a></li>
+                    <li><a href="https://www.helpx.net">HelpX</a></li>
+                </ul>
+
+                <h2>Contatos da Fazenda</h2>
+                <table>
+                    <thead><tr><th>Canal</th><th>Informação</th></tr></thead>
+                    <tbody>
+                        <tr><td>WhatsApp</td><td>(21) 97920-1646</td></tr>
+                        <tr><td>Instagram</td><td>@fazendadofrances</td></tr>
+                        <tr><td>Email</td><td>fazendadofrances@gmail.com</td></tr>
+                        <tr><td>Website</td><td>www.fazendadofrances.com.br</td></tr>
+                        <tr><td>Maps</td><td><a href="https://maps.app.goo.gl/prEDdoQVswtARX3y8">Ver no Google Maps</a></td></tr>
+                    </tbody>
+                </table>
+
+                <h2>Próximos Passos Recomendados</h2>
+
+                <h3>1. Curto prazo (1-3 meses)</h3>
+                <ul>
+                    <li>Implementar 3-5 ideias de receita de baixo custo</li>
+                    <li>Cadastrar fazenda em plataformas de voluntariado</li>
+                    <li>Iniciar negociação para resgate das vacas</li>
+                </ul>
+
+                <h3>2. Médio prazo (3-6 meses)</h3>
+                <ul>
+                    <li>Formalizar associação/ONG</li>
+                    <li>Lançar campanha de crowdfunding</li>
+                    <li>Construir cantinho do café básico</li>
+                </ul>
+
+                <h3>3. Longo prazo (6-12 meses)</h3>
+                <ul>
+                    <li>Implementar SAF piloto</li>
+                    <li>Estruturar santuário com visitação</li>
+                    <li>Lançar clube de assinatura</li>
+                </ul>
+
+                <p style="text-align:center;margin-top:60px;font-style:italic;color:#666;">
+                    Documento criado em Dezembro 2025<br>
+                    Fazenda do Francês - RE CONECTE-SE
+                </p>
+            </section>
+        </main>
+    </div>
+
+    <button id="back-to-top" title="Voltar ao topo">↑</button>
+
+    <script>
+        function toggleNav() {
+            document.getElementById('nav-menu').classList.toggle('collapsed');
+        }
+
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('nav-menu');
+            const st = window.pageYOffset || document.documentElement.scrollTop;
+            if (st > 200 && st > lastScrollTop) {
+                nav.classList.add('collapsed');
+            }
+            lastScrollTop = st <= 0 ? 0 : st;
+
+            const btn = document.getElementById('back-to-top');
+            if (window.pageYOffset > 300) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        });
+
+        document.getElementById('back-to-top').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
