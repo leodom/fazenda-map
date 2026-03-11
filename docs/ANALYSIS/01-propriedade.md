@@ -9,6 +9,8 @@
 |--------|-------|
 | **Área Total** | **425.350,15 m²** |
 | **Hectares** | **42,54 ha** |
+| **Proprietário registrado** | Serra Negra Agropecuária LTDA - ME |
+| **CNPJ** | 27.712.553/0001-23 |
 
 ### Histórico da Subdivisão (2004)
 | Parcela | Área | Status |
@@ -18,6 +20,17 @@
 | **Fazenda do Francês (REMANESCENTE)** | **42,54 ha** | **Propriedade atual** |
 
 *Matrícula nº 71 - Averbação 09/71 de 14.09.2004*
+
+### Planta Topográfica Oficial
+
+A propriedade possui planta topográfica oficial (`docs/PLANTA .pdf`) com:
+- **Nome na planta:** Fazenda Vale do Beraka - Boa Sorte
+- **Área na planta:** 44 hectares
+- **21 vértices georreferenciados** (UTM SIRGAS 2000 / Fuso 23S)
+- **Responsável técnica:** Lorena Abreu Aseve (CREA-RJ: 2014127679)
+
+> **Nota:** A diferença entre 44 ha (planta) e 42,54 ha (averbação) requer investigação.
+> Ver detalhes completos em `14-planta-topografica.md`.
 
 ---
 

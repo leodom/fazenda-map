@@ -6,9 +6,9 @@
 
 | Métrica | Valor |
 |---------|-------|
-| **Documentos analisados** | 9 de 11 |
-| **Porcentagem concluída** | 82% |
-| **Data:** | 2025-12-13 |
+| **Documentos analisados** | 10 de 12 |
+| **Porcentagem concluída** | 83% |
+| **Data:** | 2026-03-10 |
 
 ---
 
@@ -42,6 +42,15 @@
 |---|-----------|--------|
 | 8 | Permuta Parceria.pdf | Concluído |
 
+### Batch 6 - Planta Topográfica (Concluído)
+| # | Documento | Status |
+|---|-----------|--------|
+| 9 | PLANTA .pdf | Concluído |
+
+> Planta topográfica oficial com 21 vértices georreferenciados (SIRGAS 2000 / UTM 23S).
+> Proprietário: Serra Negra Agropecuária LTDA - ME. Área: 44 ha.
+> Responsável técnica: Lorena Abreu Aseve (CREA-RJ: 2014127679).
+
 ---
 
 ## Documentos Pendentes
@@ -74,7 +83,7 @@
 ```
 docs/ANALYSIS/
 ├── 00-resumo-executivo.md     [CRIADO]
-├── 01-propriedade.md          [CRIADO]
+├── 01-propriedade.md          [ATUALIZADO - planta topográfica adicionada]
 ├── 02-acomodacoes.md          [CRIADO - parcial]
 ├── 03-atividades.md           [CRIADO]
 ├── 04-gastronomia.md          [CRIADO - parcial]
@@ -82,10 +91,12 @@ docs/ANALYSIS/
 ├── 06-investimento.md         [CRIADO]
 ├── 07-presenca-digital.md     [CRIADO]
 ├── 08-proximos-passos.md      [ATUALIZADO]
-├── 09-retiros.md              [CRIADO] ← NOVO
-├── 10-programas-educacionais.md [CRIADO] ← NOVO
-├── 11-parcerias.md            [CRIADO] ← NOVO
-└── 12-receitas-detalhadas.md  [CRIADO] ← NOVO
+├── 09-retiros.md              [CRIADO]
+├── 10-programas-educacionais.md [CRIADO]
+├── 11-parcerias.md            [CRIADO]
+├── 12-receitas-detalhadas.md  [CRIADO]
+├── 13-plano-desenvolvimento.md [CRIADO]
+└── 14-planta-topografica.md   [CRIADO] ← NOVO (coordenadas oficiais da propriedade)
 ```
 
 ---
@@ -163,16 +174,18 @@ docs/ANALYSIS/
 | Categoria | Status |
 |-----------|--------|
 | Propriedade | Completo |
+| Planta Topográfica | **Completo** (PLANTA .pdf - 21 vértices SIRGAS 2000) |
 | Acomodações | Parcial (falta detalhes das suítes) |
 | Atividades | Completo |
 | Gastronomia | Completo (receitas + cardápio) |
 | Eventos | Parcial (falta casamentos) |
 | Investimento | Completo |
 | Presença Digital | Completo |
-| Retiros | **Completo** ← NOVO |
-| Programas Educacionais | **Completo** ← NOVO |
-| Parcerias | **Completo** ← NOVO |
-| Receitas Detalhadas | **Completo** ← NOVO |
+| Retiros | Completo |
+| Programas Educacionais | Completo |
+| Parcerias | Completo |
+| Receitas Detalhadas | Completo |
+| Plano de Desenvolvimento | Completo (24 ideias, ONG, WWOOF, permacultura) |
 
 ---
 
