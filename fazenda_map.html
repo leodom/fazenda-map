@@ -404,6 +404,11 @@
                 <button class="export-btn" onclick="saveProject()">Salvar Projeto</button>
                 <button class="export-btn" onclick="loadProject()">Carregar Projeto</button>
             </div>
+            <div style="margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <button class="export-btn" style="border-color:#4CAF50;color:#4CAF50;" onclick="saveToGitHub()">&#9729; Salvar no GitHub</button>
+                <span id="gh-status" style="font-size:10px;color:#666;font-style:italic;"></span>
+            </div>
+            <div class="hint">Token PAT fica apenas na sessão atual do browser.</div>
         </div>
     </div>
 
@@ -1078,7 +1083,7 @@
         download(JSON.stringify(data, null, 2), 'fazenda_zones.json', 'application/json');
     }
 
-    function saveProject() {
+    function getProjectState() {
         const data = {
             version: 2,
             saved: new Date().toISOString(),
@@ -1093,16 +1098,94 @@
             }),
             mapState: { center: [map.getCenter().lat, map.getCenter().lng], zoom: map.getZoom() }
         };
-        // Save overlay positions
         for (const [name, cfg] of Object.entries(overlayConfigs)) {
             data.overlays[name] = {
                 offset_ns: cfg.offset_ns, offset_ew: cfg.offset_ew,
                 scale: cfg.scale
             };
         }
+        return data;
+    }
+
+    function saveProject() {
+        const data = getProjectState();
         localStorage.setItem('fazenda_project_v2', JSON.stringify(data));
         download(JSON.stringify(data, null, 2), 'fazenda_project.json', 'application/json');
         alert('Projeto salvo!');
+    }
+
+    // =========================================================================
+    // GITHUB CLOUD SAVE
+    // =========================================================================
+    const GH_REPO = 'leodom/fazenda-map';
+    const GH_FILE = 'project_state.json';
+    const GH_RAW  = `https://raw.githubusercontent.com/${GH_REPO}/main/${GH_FILE}`;
+    const GH_API  = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
+
+    async function loadFromGitHub() {
+        try {
+            const resp = await fetch(GH_RAW + '?t=' + Date.now());
+            if (!resp.ok) return false;
+            const data = await resp.json();
+            restoreProject(data);
+            console.log('Projeto carregado do GitHub (' + data.saved + ')');
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }
+
+    async function saveToGitHub() {
+        const statusEl = document.getElementById('gh-status');
+        let token = sessionStorage.getItem('gh_pat');
+        if (!token) {
+            token = prompt(
+                'Token GitHub (PAT com escopo public_repo):\n\n' +
+                'github.com → Settings → Developer Settings →\n' +
+                'Personal access tokens → Generate new token → selecione "public_repo"'
+            );
+            if (!token) return;
+            token = token.trim();
+            sessionStorage.setItem('gh_pat', token);
+        }
+
+        statusEl.textContent = 'Salvando...';
+        statusEl.style.color = '#aaa';
+
+        const jsonStr = JSON.stringify(getProjectState(), null, 2);
+        // btoa with UTF-8 support
+        const content = btoa(unescape(encodeURIComponent(jsonStr)));
+
+        // Get current file SHA (required for updates)
+        let sha = null;
+        try {
+            const r = await fetch(GH_API, { headers: { 'Authorization': 'token ' + token } });
+            if (r.ok) { const info = await r.json(); sha = info.sha; }
+        } catch(e) {}
+
+        const body = { message: 'Update project state', content };
+        if (sha) body.sha = sha;
+
+        try {
+            const resp = await fetch(GH_API, {
+                method: 'PUT',
+                headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            if (resp.ok) {
+                const now = new Date();
+                statusEl.textContent = `Salvo às ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+                statusEl.style.color = '#4CAF50';
+            } else {
+                const err = await resp.json().catch(() => ({}));
+                statusEl.textContent = 'Erro: ' + (err.message || resp.status);
+                statusEl.style.color = '#f44336';
+                sessionStorage.removeItem('gh_pat'); // clear bad token
+            }
+        } catch(e) {
+            statusEl.textContent = 'Erro de rede';
+            statusEl.style.color = '#f44336';
+        }
     }
 
     function loadProject() {
@@ -1581,9 +1664,13 @@
     updateSettingsDisplay();
     initCollapsibleSections();
 
-    // Load saved project
-    const savedProject = localStorage.getItem('fazenda_project_v2');
-    if (savedProject) { try { restoreProject(JSON.parse(savedProject)); } catch(e) {} }
+    // Load saved project — GitHub first, fallback to localStorage
+    loadFromGitHub().then(loaded => {
+        if (!loaded) {
+            const savedProject = localStorage.getItem('fazenda_project_v2');
+            if (savedProject) { try { restoreProject(JSON.parse(savedProject)); } catch(e) {} }
+        }
+    });
 
     </script>
 </body>
