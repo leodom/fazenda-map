@@ -1096,12 +1096,14 @@
                     latlngs: (isPolygon ? (latlngs[0] || latlngs) : latlngs).map(ll => [ll.lat, ll.lng])
                 };
             }),
-            mapState: { center: [map.getCenter().lat, map.getCenter().lng], zoom: map.getZoom() }
+            mapState: { center: [map.getCenter().lat, map.getCenter().lng], zoom: map.getZoom() },
+        basemap: currentBasemap,
+        layers: { santaFe: santaFeVisible, fdf: fdfVisible }
         };
         for (const [name, cfg] of Object.entries(overlayConfigs)) {
             data.overlays[name] = {
                 offset_ns: cfg.offset_ns, offset_ew: cfg.offset_ew,
-                scale: cfg.scale
+                scale: cfg.scale, opacity: cfg.opacity, visible: cfg.visible
             };
         }
         return data;
@@ -1236,6 +1238,63 @@
         }
         renderZonesList();
         if (data.mapState) map.setView(data.mapState.center, data.mapState.zoom);
+
+        // Restore overlay states (opacity, visibility, sliders)
+        if (data.overlays) {
+            for (const [name, s] of Object.entries(data.overlays)) {
+                if (!overlayConfigs[name]) continue;
+                const cfg = overlayConfigs[name];
+                cfg.offset_ns = s.offset_ns || 0;
+                cfg.offset_ew = s.offset_ew || 0;
+                cfg.scale = s.scale || 100;
+                if (s.opacity !== undefined) cfg.opacity = s.opacity;
+                if (s.visible !== undefined) cfg.visible = s.visible;
+
+                // Sync position sliders
+                const setSlider = (axis, val) => {
+                    const slider = document.querySelector(`[oninput*="'${name}', '${axis}'"]`);
+                    if (slider) slider.value = val;
+                };
+                setSlider('ns', cfg.offset_ns);
+                setSlider('ew', cfg.offset_ew);
+                setSlider('scale', cfg.scale);
+
+                // Sync opacity slider
+                const opSlider = document.querySelector(`[oninput*="setOverlayOpacity('${name}'"]`);
+                if (opSlider) opSlider.value = Math.round(cfg.opacity * 100);
+
+                // Sync labels
+                const el = id => document.getElementById(id);
+                if (el('adj-' + name + '-ns'))    el('adj-' + name + '-ns').textContent    = cfg.offset_ns + ' m';
+                if (el('adj-' + name + '-ew'))    el('adj-' + name + '-ew').textContent    = cfg.offset_ew + ' m';
+                if (el('adj-' + name + '-scale')) el('adj-' + name + '-scale').textContent = cfg.scale + '%';
+                if (el('opacity-' + name))        el('opacity-' + name).textContent        = Math.round(cfg.opacity * 100) + '%';
+
+                // Sync visibility toggle
+                const toggle = document.getElementById('toggle-' + name);
+                if (toggle) toggle.classList.toggle('active', cfg.visible);
+
+                updateOverlay(name);
+            }
+        }
+
+        // Restore basemap
+        if (data.basemap && basemaps[data.basemap] && data.basemap !== currentBasemap) {
+            map.removeLayer(basemaps[currentBasemap]);
+            basemaps[data.basemap].addTo(map);
+            currentBasemap = data.basemap;
+            document.querySelectorAll('.basemap-opt').forEach(el => {
+                el.classList.toggle('active', el.getAttribute('onclick') === `setBasemap('${data.basemap}')`);
+            });
+        }
+
+        // Restore boundary layer visibilities
+        if (data.layers) {
+            if (data.layers.santaFe !== undefined && data.layers.santaFe !== santaFeVisible) toggleSantaFe();
+            if (data.layers.fdf     !== undefined && data.layers.fdf     !== fdfVisible)     toggleFdF();
+        }
+
+        updateSettingsDisplay();
     }
 
     function download(content, filename, mime) {
