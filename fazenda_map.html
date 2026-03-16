@@ -404,11 +404,22 @@
                 <button class="export-btn" onclick="saveProject()">Salvar Projeto</button>
                 <button class="export-btn" onclick="loadProject()">Carregar Projeto</button>
             </div>
+            <div style="margin-top:10px;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
+                    <span style="font-size:11px;color:#aaa;">GitHub Token:</span>
+                    <span id="gh-token-status" style="font-size:11px;"></span>
+                    <button class="export-btn" id="gh-token-clear" onclick="clearGitHubToken()" style="display:none;padding:2px 7px;font-size:10px;">Limpar</button>
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <input type="password" id="gh-token-input" placeholder="ghp_..."
+                        style="flex:1;padding:4px 8px;border:1px solid #555;border-radius:4px;background:#2a2a3e;color:#eee;font-size:11px;font-family:monospace;">
+                    <button class="export-btn" onclick="validateAndSaveToken()">Salvar</button>
+                </div>
+            </div>
             <div style="margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                 <button class="export-btn" style="border-color:#4CAF50;color:#4CAF50;" onclick="saveToGitHub()">&#9729; Salvar no GitHub</button>
                 <span id="gh-status" style="font-size:10px;color:#666;font-style:italic;"></span>
             </div>
-            <div class="hint">Token PAT fica apenas na sessão atual do browser.</div>
         </div>
     </div>
 
@@ -1139,16 +1150,11 @@
 
     async function saveToGitHub() {
         const statusEl = document.getElementById('gh-status');
-        let token = sessionStorage.getItem('gh_pat');
+        let token = localStorage.getItem('gh_pat');
         if (!token) {
-            token = prompt(
-                'Token GitHub (PAT com escopo public_repo):\n\n' +
-                'github.com → Settings → Developer Settings →\n' +
-                'Personal access tokens → Generate new token → selecione "public_repo"'
-            );
-            if (!token) return;
-            token = token.trim();
-            sessionStorage.setItem('gh_pat', token);
+            statusEl.textContent = 'Configure o token GitHub no painel acima';
+            statusEl.style.color = '#f44336';
+            return;
         }
 
         statusEl.textContent = 'Salvando...';
@@ -1182,12 +1188,62 @@
                 const err = await resp.json().catch(() => ({}));
                 statusEl.textContent = 'Erro: ' + (err.message || resp.status);
                 statusEl.style.color = '#f44336';
-                sessionStorage.removeItem('gh_pat'); // clear bad token
+                localStorage.removeItem('gh_pat');
+                updateTokenStatus();
             }
         } catch(e) {
             statusEl.textContent = 'Erro de rede';
             statusEl.style.color = '#f44336';
         }
+    }
+
+    // =========================================================================
+    // GITHUB TOKEN MANAGEMENT
+    // =========================================================================
+    function updateTokenStatus() {
+        const token = localStorage.getItem('gh_pat');
+        const statusEl = document.getElementById('gh-token-status');
+        const clearBtn  = document.getElementById('gh-token-clear');
+        if (!statusEl) return;
+        if (token) {
+            statusEl.textContent = '✓ configurado';
+            statusEl.style.color = '#4CAF50';
+            if (clearBtn) clearBtn.style.display = '';
+        } else {
+            statusEl.textContent = 'não configurado';
+            statusEl.style.color = '#f44336';
+            if (clearBtn) clearBtn.style.display = 'none';
+        }
+    }
+
+    async function validateAndSaveToken() {
+        const input    = document.getElementById('gh-token-input');
+        const statusEl = document.getElementById('gh-token-status');
+        const token = input.value.trim();
+        if (!token) return;
+        statusEl.textContent = 'Validando...';
+        statusEl.style.color = '#aaa';
+        try {
+            const resp = await fetch(`https://api.github.com/repos/${GH_REPO}`, {
+                headers: { 'Authorization': 'token ' + token }
+            });
+            if (resp.ok) {
+                localStorage.setItem('gh_pat', token);
+                input.value = '';
+                updateTokenStatus();
+            } else {
+                statusEl.textContent = 'Token inválido (' + resp.status + ')';
+                statusEl.style.color = '#f44336';
+            }
+        } catch(e) {
+            statusEl.textContent = 'Erro de rede';
+            statusEl.style.color = '#f44336';
+        }
+    }
+
+    function clearGitHubToken() {
+        localStorage.removeItem('gh_pat');
+        updateTokenStatus();
     }
 
     function loadProject() {
@@ -1722,6 +1778,7 @@
     updateOverlay('satellite_overlay');
     updateSettingsDisplay();
     initCollapsibleSections();
+    updateTokenStatus();
 
     // Load saved project — GitHub first, fallback to localStorage
     loadFromGitHub().then(loaded => {
