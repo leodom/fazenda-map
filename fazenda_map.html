@@ -578,6 +578,7 @@
         const bounds = getOverlayBounds(name);
         if (cfg.layer) {
             cfg.layer.setBounds(bounds);
+            cfg.layer.setOpacity(cfg.opacity);
         } else {
             cfg.layer = L.imageOverlay(cfg.url, bounds, {
                 opacity: cfg.opacity, interactive: false
@@ -1108,8 +1109,10 @@
                 };
             }),
             mapState: { center: [map.getCenter().lat, map.getCenter().lng], zoom: map.getZoom() },
-        basemap: currentBasemap,
-        layers: { santaFe: santaFeVisible, fdf: fdfVisible }
+            basemap: currentBasemap,
+            layers: { santaFe: santaFeVisible, fdf: fdfVisible },
+            collapsedSections: [...document.querySelectorAll('.sidebar .section.collapsed')]
+                .map(s => s.dataset.sid).filter(Boolean)
         };
         for (const [name, cfg] of Object.entries(overlayConfigs)) {
             data.overlays[name] = {
@@ -1348,6 +1351,14 @@
         if (data.layers) {
             if (data.layers.santaFe !== undefined && data.layers.santaFe !== santaFeVisible) toggleSantaFe();
             if (data.layers.fdf     !== undefined && data.layers.fdf     !== fdfVisible)     toggleFdF();
+        }
+
+        // Restore collapsed/expanded state of sidebar sections
+        if (data.collapsedSections) {
+            document.querySelectorAll('.sidebar .section').forEach(s => {
+                if (!s.dataset.sid) return;
+                s.classList.toggle('collapsed', data.collapsedSections.includes(s.dataset.sid));
+            });
         }
 
         updateSettingsDisplay();
@@ -1759,6 +1770,10 @@
             chevron.className = 'section-chevron';
             chevron.innerHTML = '&#9660;';
             title.appendChild(chevron);
+
+            // Assign stable ID from title text for state persistence
+            const sid = title.firstChild.textContent.trim().toLowerCase().replace(/\s+/g, '-');
+            section.dataset.sid = sid;
 
             // Toggle on click
             title.addEventListener('click', () => section.classList.toggle('collapsed'));
