@@ -1143,10 +1143,17 @@
             const resp = await fetch(GH_RAW + '?t=' + Date.now());
             if (!resp.ok) return false;
             const data = await resp.json();
-            restoreProject(data);
-            console.log('Projeto carregado do GitHub (' + data.saved + ')');
+            // Also keep localStorage in sync so fallback is always fresh
+            localStorage.setItem('fazenda_project_v2', JSON.stringify(data));
+            try {
+                restoreProject(data);
+                console.log('Projeto carregado do GitHub (' + data.saved + ')');
+            } catch(e) {
+                console.error('Erro ao restaurar projeto:', e);
+            }
             return true;
         } catch(e) {
+            console.error('Erro ao carregar do GitHub:', e);
             return false;
         }
     }
@@ -1184,6 +1191,8 @@
                 body: JSON.stringify(body)
             });
             if (resp.ok) {
+                const state = getProjectState();
+                localStorage.setItem('fazenda_project_v2', JSON.stringify(state));
                 const now = new Date();
                 statusEl.textContent = `Salvo às ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
                 statusEl.style.color = '#4CAF50';
