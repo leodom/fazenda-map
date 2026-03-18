@@ -1225,6 +1225,9 @@
             statusEl.textContent = 'não configurado';
             statusEl.style.color = '#f44336';
             if (clearBtn) clearBtn.style.display = 'none';
+            // Auto-expand Exportar so user sees token input
+            const exportSec = document.querySelector('.sidebar .section[data-sid="exportar"]');
+            if (exportSec) exportSec.classList.remove('collapsed');
         }
     }
 
@@ -1797,20 +1800,31 @@
     // =========================================================================
     // INIT
     // =========================================================================
+
+    // 1. Read token from URL hash (e.g. #ghtoken=xxx) — auto-configures new browsers
+    (function() {
+        const m = location.hash.match(/[#&]ghtoken=([^&#]+)/);
+        if (m) {
+            localStorage.setItem('gh_pat', decodeURIComponent(m[1]));
+            history.replaceState(null, '', location.pathname + location.search);
+        }
+    })();
+
     loadOverlayPosition();
     updateOverlay('planta');
     updateOverlay('satellite_overlay');
     updateSettingsDisplay();
     initCollapsibleSections();
+
+    // 2. Apply cached state synchronously — eliminates flash of default state
+    const _cached = localStorage.getItem('fazenda_project_v2');
+    if (_cached) { try { restoreProject(JSON.parse(_cached)); } catch(e) { console.error('Restore error:', e); } }
+
+    // 3. Token status — auto-expands Exportar section if no token
     updateTokenStatus();
 
-    // Load saved project — GitHub first, fallback to localStorage
-    loadFromGitHub().then(loaded => {
-        if (!loaded) {
-            const savedProject = localStorage.getItem('fazenda_project_v2');
-            if (savedProject) { try { restoreProject(JSON.parse(savedProject)); } catch(e) {} }
-        }
-    });
+    // 4. Async GitHub fetch — overrides with newer data if available
+    loadFromGitHub();
 
     </script>
 </body>
