@@ -396,7 +396,7 @@
         </div>
 
         <!-- Export -->
-        <div class="section">
+        <div class="section" data-sid="exportar">
             <div class="section-title">Exportar</div>
             <div class="export-bar">
                 <button class="export-btn" onclick="exportZones()">Zonas JSON</button>
@@ -409,6 +409,7 @@
                     <span style="font-size:11px;color:#aaa;">GitHub Token:</span>
                     <span id="gh-token-status" style="font-size:11px;"></span>
                     <button class="export-btn" id="gh-token-clear" onclick="clearGitHubToken()" style="display:none;padding:2px 7px;font-size:10px;">Limpar</button>
+                    <button class="export-btn" id="gh-token-copy-link" onclick="copyTokenLink()" style="display:none;padding:2px 7px;font-size:10px;">Copiar link</button>
                 </div>
                 <div style="display:flex; gap:6px;">
                     <input type="password" id="gh-token-input" placeholder="ghp_..."
@@ -1216,15 +1217,18 @@
         const token = localStorage.getItem('gh_pat');
         const statusEl = document.getElementById('gh-token-status');
         const clearBtn  = document.getElementById('gh-token-clear');
+        const copyLinkBtn = document.getElementById('gh-token-copy-link');
         if (!statusEl) return;
         if (token) {
             statusEl.textContent = '✓ configurado';
             statusEl.style.color = '#4CAF50';
             if (clearBtn) clearBtn.style.display = '';
+            if (copyLinkBtn) copyLinkBtn.style.display = '';
         } else {
             statusEl.textContent = 'não configurado';
             statusEl.style.color = '#f44336';
             if (clearBtn) clearBtn.style.display = 'none';
+            if (copyLinkBtn) copyLinkBtn.style.display = 'none';
             // Auto-expand Exportar so user sees token input
             const exportSec = document.querySelector('.sidebar .section[data-sid="exportar"]');
             if (exportSec) exportSec.classList.remove('collapsed');
@@ -1259,6 +1263,18 @@
     function clearGitHubToken() {
         localStorage.removeItem('gh_pat');
         updateTokenStatus();
+    }
+
+    function copyTokenLink() {
+        const token = localStorage.getItem('gh_pat');
+        if (!token) return;
+        const url = location.origin + location.pathname + '#ghtoken=' + encodeURIComponent(token);
+        navigator.clipboard.writeText(url).then(() => {
+            const statusEl = document.getElementById('gh-token-status');
+            const prev = statusEl.textContent;
+            statusEl.textContent = 'Link copiado!';
+            setTimeout(() => { statusEl.textContent = prev; }, 2000);
+        });
     }
 
     function loadProject() {
