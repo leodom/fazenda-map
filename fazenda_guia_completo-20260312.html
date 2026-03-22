@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fazenda do Francês - Guia Completo</title>
+<style>
+:root {
+  --bg: #faf9f6; --card: #fff; --text: #2d2d2d; --muted: #6b6b6b;
+  --accent: #4a6741; --accent2: #8b4513; --border: #e5e0d8;
+  --highlight: #f5f0e8; --blue: #2c5282; --red: #9b2c2c;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.5; font-size: 14px; }
+h1,h2,h3,h4,h5 { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; }
+
+/* HEADER */
+.hero { background: linear-gradient(135deg, #2d4a22 0%, #4a6741 50%, #6b8f5e 100%); color: #fff; padding: 32px 24px; text-align: center; }
+.hero h1 { font-size: 28px; font-weight: 300; letter-spacing: 3px; margin-bottom: 4px; }
+.hero .tagline { font-size: 13px; letter-spacing: 6px; text-transform: uppercase; opacity: 0.8; }
+.hero .sub { margin-top: 12px; font-size: 12px; opacity: 0.7; font-family: Georgia, serif; }
+
+/* NAV */
+.nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 8px 16px; position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+.nav a { font-family: sans-serif; font-size: 11px; text-decoration: none; color: var(--accent); padding: 4px 8px; border-radius: 3px; white-space: nowrap; }
+.nav a:hover { background: var(--highlight); }
+
+/* LAYOUT */
+.container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+.section { margin-bottom: 24px; }
+.section-title { font-size: 18px; color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 6px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.section-title .icon { font-size: 20px; }
+
+/* CARDS */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px; margin-bottom: 10px; }
+.card-title { font-size: 14px; font-weight: 700; color: var(--accent2); margin-bottom: 6px; font-family: sans-serif; }
+.card-sm { font-size: 13px; }
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+@media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+/* TABLES */
+table { width: 100%; border-collapse: collapse; font-size: 13px; font-family: sans-serif; margin: 8px 0; }
+th { background: var(--accent); color: #fff; text-align: left; padding: 6px 10px; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+td { padding: 5px 10px; border-bottom: 1px solid var(--border); }
+tr:nth-child(even) td { background: var(--highlight); }
+
+/* BADGES */
+.badge { display: inline-block; font-family: sans-serif; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.badge-green { background: #e6f4ea; color: #1e7e34; }
+.badge-amber { background: #fff3e0; color: #e65100; }
+.badge-blue { background: #e3f2fd; color: #1565c0; }
+.badge-red { background: #fce4ec; color: #c62828; }
+.badge-purple { background: #f3e5f5; color: #6a1b9a; }
+
+/* KPI */
+.kpi-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+.kpi { flex: 1; min-width: 140px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 12px; text-align: center; }
+.kpi-val { font-size: 22px; font-weight: 700; color: var(--accent); font-family: sans-serif; }
+.kpi-label { font-size: 11px; color: var(--muted); font-family: sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* TIMELINE */
+.timeline { border-left: 3px solid var(--accent); padding-left: 16px; margin: 10px 0; }
+.timeline-item { margin-bottom: 12px; position: relative; }
+.timeline-item::before { content: ''; position: absolute; left: -21px; top: 5px; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; }
+.timeline-date { font-family: sans-serif; font-size: 11px; font-weight: 700; color: var(--accent); }
+
+/* PRIORITY INDICATOR */
+.priority { display: flex; align-items: center; gap: 6px; font-family: sans-serif; font-size: 12px; margin: 4px 0; }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-easy { background: #4caf50; }
+.dot-medium { background: #ff9800; }
+.dot-hard { background: #f44336; }
+
+/* RECIPE CARD */
+.recipe { border-left: 4px solid var(--accent2); }
+
+/* MARKETING */
+.marketing-phase { background: linear-gradient(to right, var(--highlight), var(--card)); border-left: 4px solid var(--blue); padding: 12px; margin-bottom: 10px; border-radius: 0 6px 6px 0; }
+.marketing-phase h4 { color: var(--blue); font-size: 13px; margin-bottom: 4px; }
+
+/* CHECKLIST */
+.checklist { list-style: none; font-family: sans-serif; font-size: 13px; }
+.checklist li { padding: 3px 0; padding-left: 20px; position: relative; }
+.checklist li::before { content: ''; position: absolute; left: 0; top: 7px; width: 12px; height: 12px; border: 2px solid var(--accent); border-radius: 2px; }
+
+/* COLLAPSIBLE */
+details { margin-bottom: 8px; }
+details summary { cursor: pointer; font-family: sans-serif; font-weight: 600; font-size: 13px; color: var(--accent2); padding: 6px 0; }
+details summary:hover { color: var(--accent); }
+
+/* NICHE */
+.niche-card { background: linear-gradient(135deg, #f5f0e8, #fff); border: 1px solid var(--border); border-radius: 6px; padding: 14px; margin-bottom: 10px; }
+.niche-card h4 { color: var(--accent); margin-bottom: 4px; font-size: 14px; }
+.niche-score { display: flex; gap: 2px; }
+.niche-star { width: 14px; height: 14px; background: var(--accent); border-radius: 2px; }
+.niche-star.empty { background: #ddd; }
+
+/* PRINT */
+@media print { .nav { display: none; } body { font-size: 11px; } .hero { padding: 16px; } }
+
+/* UTILS */
+.text-sm { font-size: 12px; }
+.text-xs { font-size: 11px; font-family: sans-serif; }
+.text-muted { color: var(--muted); }
+.mt-8 { margin-top: 8px; }
+.mb-8 { margin-bottom: 8px; }
+.fw-700 { font-weight: 700; }
+.font-sans { font-family: sans-serif; }
+hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+.callout { background: var(--highlight); border-left: 4px solid var(--accent); padding: 10px 14px; border-radius: 0 6px 6px 0; margin: 10px 0; font-size: 13px; }
+.callout-warn { border-left-color: #e65100; background: #fff8e1; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hero">
+  <h1>FAZENDA DO FRANC&Ecirc;S</h1>
+  <div class="tagline">Guest House Regenerativa</div>
+  <div class="sub">Cachoeiras de Macacu, RJ &middot; 120km do Rio de Janeiro &middot; RE CONECTE-SE</div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <a href="#propriedade">Propriedade</a>
+  <a href="#acomodacoes">Acomoda&ccedil;&otilde;es</a>
+  <a href="#atividades">Atividades</a>
+  <a href="#gastronomia">Gastronomia</a>
+  <a href="#receitas">Receitas</a>
+  <a href="#eventos">Eventos</a>
+  <a href="#retiros">Retiros</a>
+  <a href="#educacional">Educacional</a>
+  <a href="#investimento">Investimento</a>
+  <a href="#ideias">24 Ideias</a>
+  <a href="#quick-wins">Quick Wins</a>
+  <a href="#nicho">Nicho</a>
+  <a href="#marketing">Marketing</a>
+  <a href="#parcerias">Parcerias</a>
+  <a href="#digital">Digital</a>
+  <a href="#desenvolvimento">Desenvolvimento</a>
+  <a href="#contatos">Contatos</a>
+</div>
+
+<div class="container">
+
+<!-- ========== NUMEROS CHAVE ========== -->
+<div class="kpi-row">
+  <div class="kpi"><div class="kpi-val">42,54 ha</div><div class="kpi-label">&Aacute;rea Total</div></div>
+  <div class="kpi"><div class="kpi-val">7</div><div class="kpi-label">Su&iacute;tes Exclusivas</div></div>
+  <div class="kpi"><div class="kpi-val">100</div><div class="kpi-label">Capacidade Eventos</div></div>
+  <div class="kpi"><div class="kpi-val">1980</div><div class="kpi-label">Fundada</div></div>
+  <div class="kpi"><div class="kpi-val">120km</div><div class="kpi-label">do Rio de Janeiro</div></div>
+</div>
+
+<!-- ========== PROPRIEDADE ========== -->
+<div class="section" id="propriedade">
+  <h2 class="section-title">Propriedade</h2>
+  <div class="grid-2">
+    <div class="card card-sm">
+      <div class="card-title">Registro &amp; Legal</div>
+      <table>
+        <tr><td class="fw-700 font-sans">Propriet&aacute;rio</td><td>Serra Negra Agropecu&aacute;ria LTDA - ME</td></tr>
+        <tr><td class="fw-700 font-sans">CNPJ</td><td>27.712.553/0001-23</td></tr>
+        <tr><td class="fw-700 font-sans">&Aacute;rea (averba&ccedil;&atilde;o)</td><td>42,54 ha (425.350,15 m&sup2;)</td></tr>
+        <tr><td class="fw-700 font-sans">&Aacute;rea (planta)</td><td>44 ha (21 v&eacute;rtices georreferenciados)</td></tr>
+        <tr><td class="fw-700 font-sans">Matr&iacute;cula</td><td>n&ordm; 71 - Averba&ccedil;&atilde;o 09/71 (14.09.2004)</td></tr>
+        <tr><td class="fw-700 font-sans">Nome na planta</td><td>Fazenda Vale do Beraka - Boa Sorte</td></tr>
+      </table>
+      <div class="callout-warn callout text-xs">Discrep&acirc;ncia de &aacute;rea: 44 ha (planta) vs 42,54 ha (averba&ccedil;&atilde;o) requer investiga&ccedil;&atilde;o.</div>
+    </div>
+    <div class="card card-sm">
+      <div class="card-title">Hist&oacute;ria &amp; Fam&iacute;lia</div>
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-date">1980</div>Athos Rache compra a fazenda para manter a filha Cristina no Brasil</div>
+        <div class="timeline-item"><div class="timeline-date">1980-2010+</div>Erick Lanthiez (franc&ecirc;s, genro) gere a fazenda: gado leiteiro &amp; queijaria artesanal</div>
+        <div class="timeline-item"><div class="timeline-date">2004</div>Subdivis&atilde;o: 156,83 ha vendidos (DESMEMBRADO), 42,54 ha mantidos (REMANESCENTE)</div>
+        <div class="timeline-item"><div class="timeline-date">Atualmente</div>Rodrigo Lanthiez &amp; Jennifer Lepoutre transformam em Guest House Regenerativa</div>
+      </div>
+      <div class="text-xs text-muted">Legado: +40 anos de tradi&ccedil;&atilde;o, receitas francesas, queijaria artesanal</div>
+    </div>
+  </div>
+
+  <div class="card card-sm mt-8">
+    <div class="card-title">Localiza&ccedil;&atilde;o &amp; Acesso</div>
+    <div class="grid-2">
+      <div>
+        <p class="font-sans text-sm"><strong>Como chegar:</strong></p>
+        <ol class="font-sans text-xs" style="padding-left:16px;">
+          <li>Vindo de Guapimirim ou AMBEV, virar em frente ao Posto BR</li>
+          <li>Dire&ccedil;&atilde;o Funchal ou REGUA</li>
+          <li>1km ap&oacute;s entrada da &Aacute;gua Persona (n&atilde;o entrar)</li>
+          <li>Ap&oacute;s curral em ru&iacute;nas e bambuzal</li>
+          <li>Port&atilde;o de madeira PEQUENO &agrave; direita</li>
+        </ol>
+        <div class="callout-warn callout text-xs mt-8">N&Atilde;O usar Waze (mais buracos). Usar Google Maps.</div>
+      </div>
+      <div>
+        <p class="font-sans text-sm"><strong>Infraestrutura:</strong></p>
+        <table>
+          <tr><td class="fw-700 font-sans">WiFi Sede</td><td>Tahiti / natureza</td></tr>
+          <tr><td class="fw-700 font-sans">WiFi Su&iacute;tes 6-7</td><td>LouiseHay / eumeamo1</td></tr>
+          <tr><td class="fw-700 font-sans">Tipo</td><td>Fibra &oacute;tica</td></tr>
+          <tr><td class="fw-700 font-sans">&Aacute;gua</td><td>Pot&aacute;vel da torneira</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== ACOMODACOES ========== -->
+<div class="section" id="acomodacoes">
+  <h2 class="section-title">Acomoda&ccedil;&otilde;es</h2>
+  <div class="grid-2">
+    <div class="card card-sm">
+      <div class="card-title">7 Su&iacute;tes Exclusivas</div>
+      <table>
+        <tr><th>Su&iacute;te</th><th>Nome</th><th>WiFi</th></tr>
+        <tr><td>6</td><td>Vosges</td><td>eumeamo1</td></tr>
+        <tr><td>7</td><td>Alpes</td><td>eumeamo1</td></tr>
+        <tr><td>1-5</td><td>A identificar</td><td>Tahiti (sede)</td></tr>
+      </table>
+    </div>
+    <div class="card card-sm">
+      <div class="card-title">Diferenciais &amp; Servi&ccedil;os</div>
+      <div class="font-sans text-xs">
+        <p><strong>Amenidades:</strong> Banheiras vitorianas, sais de banho franceses, velas, flores frescas do jardim, mosquiteiros</p>
+        <p class="mt-8"><strong>Inclusos:</strong> Caf&eacute; da manh&atilde; (8h-10h), toalhas de piscina, WiFi fibra, estacionamento seguro</p>
+      </div>
+    </div>
+  </div>
+  <div class="card card-sm">
+    <div class="card-title">Regras &amp; Taxas</div>
+    <div class="grid-3">
+      <div class="font-sans text-xs">
+        <strong>Hor&aacute;rios</strong><br>
+        Check-in: 14h &middot; Check-out: 11h<br>
+        Caf&eacute;: 8h-10h &middot; Menu: 48h anteced&ecirc;ncia
+      </div>
+      <div class="font-sans text-xs">
+        <strong>Taxas</strong><br>
+        Pet: R$ 25/c&atilde;o/dia<br>
+        Rolha: R$ 7/pessoa &middot; R$ 15/vinho<br>
+        Cau&ccedil;&atilde;o bike: R$ 50
+      </div>
+      <div class="font-sans text-xs">
+        <strong>Regras</strong><br>
+        Proibido fumar &middot; Cozinha fechada<br>
+        Janelas 9h-16h fechadas<br>
+        P&ecirc;los em cobertores: R$ 100 lavanderia
+      </div>
+    </div>
+  </div>
+  <div class="card card-sm" style="border-left: 4px solid #8b4513;">
+    <div class="card-title">Experi&ecirc;ncia "Bath and View" - R$ 50/pessoa</div>
+    <div class="font-sans text-xs">Banheira vitoriana + sais de banho franceses + velas + vista panor&acirc;mica para montanhas</div>
+  </div>
+</div>
+
+<!-- ========== ATIVIDADES ========== -->
+<div class="section" id="atividades">
+  <h2 class="section-title">Atividades</h2>
+  <div class="grid-3">
+    <div class="card card-sm">
+      <div class="card-title">Com Pre&ccedil;o</div>
+      <table>
+        <tr><th>Atividade</th><th>Pre&ccedil;o</th></tr>
+        <tr><td>Cavalgada (3-4h)</td><td>R$ 180/p</td></tr>
+        <tr><td>Bath and View</td><td>R$ 50/p</td></tr>
+        <tr><td>Passeio Bicicleta</td><td>R$ 30/p</td></tr>
+        <tr><td>Pet Friendly</td><td>R$ 25/dia</td></tr>
+      </table>
+      <div class="text-xs text-muted mt-8">Sob consulta: Pesque e Pague, Colha e Pague, Ordenha</div>
+    </div>
+    <div class="card card-sm">
+      <div class="card-title">Gratuitas / Inclusas</div>
+      <div class="font-sans text-xs">
+        Fogueira &middot; Banho de Floresta &middot; Trilha Interna (1h) &middot; Badminton &middot;
+        Yoga &middot; Piscina &middot; Campo de Futebol &middot; Jogos de Tabuleiro &middot;
+        Pesca Infantil &middot; Bird Watching (REGUA)
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div class="card-title">Cachoeiras Pr&oacute;ximas</div>
+      <table>
+        <tr><th>Local</th><th>Dist.</th></tr>
+        <tr><td>Rio do Gato</td><td>13 min</td></tr>
+        <tr><td>Prainha Guapia&ccedil;u</td><td>14 min</td></tr>
+        <tr><td>Santo Amaro</td><td>23 min</td></tr>
+        <tr><td>Quizanga</td><td>23 min</td></tr>
+        <tr><td>Messias</td><td>23 min</td></tr>
+        <tr><td>Po&ccedil;o do Anil</td><td>38 min</td></tr>
+        <tr><td>REGUA (R$ 150/grupo)</td><td>20 min</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="card card-sm">
+    <div class="card-title">Guias Parceiros</div>
+    <div class="font-sans text-xs">Thiago Freitas Trilhas: (21) 96940-3439 &middot; Guia Macacu: @guiamacacu (Instagram)</div>
+  </div>
+</div>
+
+<!-- ========== GASTRONOMIA ========== -->
+<div class="section" id="gastronomia">
+  <h2 class="section-title">Gastronomia</h2>
+  <div class="callout">"Sabores que atravessam gera&ccedil;&otilde;es" &mdash; Culin&aacute;ria francesa aut&ecirc;ntica com ingredientes frescos da horta e produtores locais.</div>
+  <div class="grid-2">
+    <div class="card card-sm">
+      <div class="card-title">Servi&ccedil;o</div>
+      <div class="font-sans text-xs">
+        <strong>Caf&eacute; da manh&atilde;:</strong> 8h-10h (p&atilde;o artesanal assado diariamente)<br>
+        <strong>Menu:</strong> Definido 48h antes &middot; Horta pr&oacute;pria + produtores locais<br>
+        <strong>Diferenciais:</strong> Flores frescas, receitas de fam&iacute;lia Lanthiez, ingredientes org&acirc;nicos
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div class="card-title">Proje&ccedil;&atilde;o Financeira (Restaurante Futuro)</div>
+      <table>
+        <tr><th>Cen&aacute;rio</th><th>Faturamento</th><th>Lucro L&iacute;quido</th></tr>
+        <tr><td>Conservador</td><td>R$ 10.752</td><td class="fw-700">R$ 2.835</td></tr>
+        <tr><td>Moderado</td><td>R$ 26.880</td><td class="fw-700">R$ 9.408</td></tr>
+        <tr><td>Otimista</td><td>R$ 53.760</td><td class="fw-700">R$ 21.536</td></tr>
+      </table>
+      <div class="text-xs text-muted">Custo comida 33% + Outros 15%</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== RECEITAS ========== -->
+<div class="section" id="receitas">
+  <h2 class="section-title">Livre de Cuisine</h2>
+  <div class="text-xs text-muted mb-8 font-sans">Por Jennifer Lepoutre &amp; Rodrigo Rache</div>
+
+  <details class="card recipe card-sm">
+    <summary>1. Quiche Lorraine <span class="badge badge-green">30min + 40min forno</span> <span class="badge badge-blue">6 fatias</span></summary>
+    <div class="grid-2 mt-8 font-sans text-xs">
+      <div><strong>Massa:</strong> 250g farinha + 150g manteiga fria. Misturar at&eacute; farofa, forrar forma, pr&eacute;-assar 10min a 200&deg;C.</div>
+      <div><strong>Recheio:</strong> 250g bacon + cebola refogados. Creme: creme de leite + 1 ovo + 150g queijo Minas + 150g Meia Cura. Degla&ccedil;&ecirc; na frigideira, despejar na massa, forno 30-40min a 200&deg;C.</div>
+    </div>
+  </details>
+
+  <details class="card recipe card-sm">
+    <summary>2. R&ocirc;ti de Porc au Moutarde de Dijon <span class="badge badge-green">30min + 30-40min</span></summary>
+    <div class="font-sans text-xs mt-8">Fil&eacute; mignon de porco em medalh&otilde;es. Selar em manteiga+azeite, refogar cebola, press&atilde;o 20min. Abrir, adicionar 2 col. mostarda + creme de leite. Molho cremoso.</div>
+  </details>
+
+  <details class="card recipe card-sm">
+    <summary>3. Boeuf Bourguignon <span class="badge badge-amber">50min + 20-30min press&atilde;o</span></summary>
+    <div class="font-sans text-xs mt-8">1,5-2kg carne + 300g bacon + cebolas + cenouras + shiitake. Selar cada separado, juntar com &frac12; garrafa vinho tinto. <strong>SEM louro, SEM alho, SEM ervas</strong> (receita da casa). Press&atilde;o 20-30min. Acompanhar com ratatouille.</div>
+  </details>
+
+  <details class="card recipe card-sm">
+    <summary>4. Tarte au Citron <span class="badge badge-green">30min + 20min</span></summary>
+    <div class="font-sans text-xs mt-8">P&acirc;te Sabl&eacute;e: 250g farinha + 125g manteiga + 70g a&ccedil;&uacute;car + 2 ovos. Cr&egrave;me au Citron: 4 lim&otilde;es + 150g a&ccedil;&uacute;car + 3 ovos.</div>
+  </details>
+
+  <details class="card recipe card-sm">
+    <summary>5. Sorvete da Guest <span class="badge badge-blue">20min + 4-6h congelador</span> <span class="badge badge-green">10 bolas</span></summary>
+    <div class="font-sans text-xs mt-8">2 creme de leite + 1 leite condensado. Bater 10min. Saborizar: canela / maracuj&aacute; / coco / amora (100-200g). Congelar.</div>
+  </details>
+
+  <details class="card recipe card-sm">
+    <summary>6. Reine de Saba <span class="badge badge-amber">30min + 15-20min</span></summary>
+    <div class="font-sans text-xs mt-8">200g chocolate + 125g manteiga + 4 ovos (claras em neve) + 4 col. farinha + 100g a&ccedil;&uacute;car + 3 col. leite. Forno 200&deg;C, retirar quase seco (fica &uacute;mido por dentro).</div>
+  </details>
+</div>
+
+<!-- ========== EVENTOS ========== -->
+<div class="section" id="eventos">
+  <h2 class="section-title">Eventos</h2>
+  <div class="grid-2">
+    <div class="card card-sm">
+      <div class="card-title">Capacidade &amp; Tipos</div>
+      <div class="font-sans text-xs">
+        <strong>At&eacute; 100 pessoas</strong> &middot; Casamentos &middot; Anivers&aacute;rios &middot; Corporativos<br>
+        <strong>Espa&ccedil;os:</strong> &Aacute;rea externa com vista, jardim, piscina, campo, fogueira<br>
+        <strong>Vantagens:</strong> Localiza&ccedil;&atilde;o exclusiva, Mata Atl&acirc;ntica, gastronomia francesa, hospedagem integrada
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div class="card-title">Proje&ccedil;&atilde;o (4 eventos/m&ecirc;s)</div>
+      <table>
+        <tr><th>Cen&aacute;rio</th><th>Receita</th><th>Lucro</th><th>Margem</th></tr>
+        <tr><td>Conservador</td><td>R$ 12.000</td><td class="fw-700">R$ 10.000</td><td>83%</td></tr>
+        <tr><td>M&eacute;dio</td><td>R$ 18.000</td><td class="fw-700">R$ 16.000</td><td>89%</td></tr>
+        <tr><td>Premium</td><td>R$ 24.000</td><td class="fw-700">R$ 22.000</td><td>92%</td></tr>
+      </table>
+      <div class="text-xs text-muted">Custo fixo: R$ 500/evento. Margem excepcional.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== RETIROS ========== -->
+<div class="section" id="retiros">
+  <h2 class="section-title">Retiros</h2>
+  <div class="text-xs text-muted font-sans mb-8">Parceria com Be Your Better (BYB) - Jennifer Lepoutre, Facilitadora Oficial Louise Hay</div>
+  <div class="grid-2">
+    <div class="card card-sm">
+      <div class="card-title">Consult&oacute;rio de Sucesso (Imers&atilde;o)</div>
+      <div class="font-sans text-xs">
+        <strong>P&uacute;blico:</strong> Profissionais de sa&uacute;de<br>
+        <strong>Dura&ccedil;&atilde;o:</strong> 4 dias (Qui-Dom)<br>
+        <strong>Metodologia:</strong> Louise Hay + Estrat&eacute;gia de Neg&oacute;cios<br>
+        <strong>Dia 1:</strong> Floresta Sagrada, medita&ccedil;&atilde;o, estrat&eacute;gia<br>
+        <strong>Dia 2-3:</strong> Retiro Louise Hay (corpo, mente, emo&ccedil;&atilde;o)<br>
+        <strong>Dia 4:</strong> Ritual no rio, caf&eacute; de celebra&ccedil;&atilde;o, rodadas de neg&oacute;cio
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div class="card-title">Pacotes</div>
+      <table>
+        <tr><th>Retiro</th><th>Dias</th><th>Valor</th></tr>
+        <tr><td>HYL (Heal Your Life)</td><td>2</td><td>R$ 2.700</td></tr>
+        <tr><td>P&amp;P (Prop&oacute;sito &amp; Prosperidade)</td><td>2</td><td>R$ 2.700</td></tr>
+        <tr><td><strong>Combo HYL + P&amp;P</strong></td><td>5</td><td><strong>R$ 4.500</strong></td></tr>
+      </table>
+      <div class="text-xs text-muted">Estadia: R$ 297/noite (normal) ou R$ 200/noite (combo). Refei&ccedil;&otilde;es inclusas.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== EDUCACIONAL ========== -->
+<div class="section" id="educacional">
+  <h2 class="section-title">Day Use Escolar</h2>
+  <div class="grid-2">
+    <div class="card card-sm">
+      <div class="card-title">Vis&atilde;o Geral</div>
+      <div class="font-sans text-xs">
+        <strong>Valor:</strong> R$ 100/crian&ccedil;a &middot; <strong>Capacidade:</strong> At&eacute; 30 crian&ccedil;as &middot; <strong>Hor&aacute;rio:</strong> 9h-17h<br>
+        <strong>Inclui:</strong> 3 refei&ccedil;&otilde;es + todas atividades<br>
+        <strong>Transporte:</strong> N&atilde;o incluso (escola providencia)
+      </div>
+      <div class="mt-8 font-sans text-xs">
+        <strong>Atividades:</strong> Cavalgada, ordenha, plantio, piscina, pescaria, pintura, bola de sab&atilde;o, fogueira com marshmallows
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div class="card-title">Cronograma Tipo</div>
+      <table>
+        <tr><th>Hora</th><th>Atividade</th></tr>
+        <tr><td>09:30</td><td>Caf&eacute; da manh&atilde;</td></tr>
+        <tr><td>10:30</td><td>Ordenha / Cavalgada (2 grupos)</td></tr>
+        <tr><td>11:30</td><td>Plantar</td></tr>
+        <tr><td>12:00</td><td>Almo&ccedil;o</td></tr>
+        <tr><td>13:00</td><td>Piscina ou Pescaria</td></tr>
+        <tr><td>15:00</td><td>Lanche</td></tr>
+        <tr><td>16:00</td><td>Fogueira + Marshmallows</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========== INVESTIMENTO ========== -->
+<div class="section" id="investimento">
+  <h2 class="section-title">An&aacute;lise de Investimento</h2>
+  <div class="card card-sm">
+    <div class="card-title">Cen&aacute;rios de Constru&ccedil;&atilde;o</div>
+    <table>
+      <tr><th>Espa&ccedil;o</th><th>m&sup2;</th><th>A (R$3k/m&sup2;)</th><th>B (R$5k/m&sup2;)</th><th>C (R$7k/m&sup2;)</th></tr>
+      <tr><td>Restaurante/Caf&eacute;</td><td>100</td><td>R$ 300k</td><td>R$ 500k</td><td>R$ 700k</td></tr>
+      <tr><td>Espa&ccedil;o Eventos</td><td>100</td><td>R$ 300k</td><td>R$ 500k</td><td>R$ 700k</td></tr>
+      <tr><td>Recep&ccedil;&atilde;o</td><td>15</td><td>R$ 45k</td><td>R$ 75k</td><td>R$ 105k</td></tr>
+      <tr><td>Coworking</td><td>40</td><td>R$ 120k</td><td>R$ 200k</td><td>R$ 280k</td></tr>
+      <tr style="background: var(--highlight);"><td class="fw-700">TOTAL</td><td class="fw-700">225</td><td class="fw-700">R$ 675k</td><td class="fw-700">R$ 1.125k</td><td class="fw-700">R$ 1.575k</td></tr>
+    </table>
+  </div>
+  <div class="grid-3">
+    <div class="card card-sm" style="border-top: 3px solid #4caf50;">
+      <div class="card-title">Conservador</div>
+      <div class="font-sans text-xs">Investimento: R$ 675k<br>Lucro anual: R$ 154k<br><strong>Payback: ~4,4 anos</strong></div>
+    </div>
+    <div class="card card-sm" style="border-top: 3px solid #ff9800;">
+      <div class="card-title">Moderado</div>
+      <div class="font-sans text-xs">Investimento: R$ 1.125k<br>Lucro anual: R$ 305k<br><strong>Payback: ~3,7 anos</strong></div>
+    </div>
+    <div class="card card-sm" style="border-top: 3px solid #2196f3;">
+      <div class="card-title">Otimista</div>
+      <div class="font-sans text-xs">Investimento: R$ 1.575k<br>Lucro anual: R$ 522k<br><strong>Payback: ~3,0 anos</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 24 IDEIAS ========== -->
+<div class="section" id="ideias">
+  <h2 class="section-title">24 Ideias de Desenvolvimento</h2>
+  <div class="callout font-sans text-xs">Mercado global de agroturismo: US$ 69,2 bi (2019) &rarr; US$ 197,4 bi projetado (2032). Investimento total estimado: <strong>R$ 6.900-19.000</strong> para receita potencial de <strong>R$ 12.500-37.000/m&ecirc;s</strong>.</div>
+
+  <table>
+    <tr><th>#</th><th>Ideia</th><th>Investimento</th><th>Receita Potencial</th><th>Dificuldade</th></tr>
+    <tr><td>1</td><td>Meliponicultura (abelhas nativas)</td><td>R$ 500-2k</td><td>R$ 80-150/kg mel</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>2</td><td>Cogumelos Gourmet</td><td>R$ 1-3k</td><td>R$ 40-80/kg</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>3</td><td>Viveiro de Mudas Nativas</td><td>R$ 500-1,5k</td><td>R$ 5-50/muda</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>4</td><td>Horta Comunit&aacute;ria para H&oacute;spedes</td><td>R$ 300-800</td><td>Redu&ccedil;&atilde;o custos</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>5</td><td>Colha e Pague Expandido</td><td>R$ 500-1k</td><td>R$ 15-40/kg</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>6</td><td>Piquenique Franc&ecirc;s</td><td>R$ 500-1k</td><td>R$ 150-300/casal</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>7</td><td>Aulas de Culin&aacute;ria Francesa</td><td>R$ 200-500</td><td>R$ 150-250/pessoa</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>8</td><td>Astroturismo</td><td>R$ 0-500</td><td>R$ 30-50/pessoa</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>9</td><td>Yoga ao Amanhecer</td><td>R$ 0-300</td><td>R$ 50-80/sess&atilde;o</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>10</td><td>Forest Bathing Guiado</td><td>R$ 0-200</td><td>R$ 80-150/pessoa</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>11</td><td>Pesca no A&ccedil;ude</td><td>R$ 300-800</td><td>R$ 50-100/pessoa</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>12</td><td>Jantares Tem&aacute;ticos Mensais</td><td>R$ 200-500/ev</td><td>R$ 150-250/pessoa</td><td><span class="badge badge-amber">M&eacute;dio</span></td></tr>
+    <tr><td>13</td><td>Mercadinho da Fazenda</td><td>R$ 300-800</td><td>R$ 500-2k/s&aacute;bado</td><td><span class="badge badge-amber">M&eacute;dio</span></td></tr>
+    <tr><td>14</td><td>Cinema ao Ar Livre</td><td>R$ 800-2k</td><td>R$ 30-50/pessoa</td><td><span class="badge badge-amber">M&eacute;dio</span></td></tr>
+    <tr><td>15</td><td>Workshops Fermenta&ccedil;&atilde;o</td><td>R$ 200-500</td><td>R$ 100-180/pessoa</td><td><span class="badge badge-amber">M&eacute;dio</span></td></tr>
+    <tr><td>16</td><td>Retiros de Arte/Pintura</td><td>R$ 300-800</td><td>R$ 200-400/pessoa</td><td><span class="badge badge-amber">M&eacute;dio</span></td></tr>
+    <tr><td>17</td><td>Conservas e Geleias Artesanais</td><td>R$ 500-1,5k</td><td>R$ 25-45/vidro</td><td><span class="badge badge-amber">M&eacute;dio</span></td></tr>
+    <tr><td>18</td><td>Kits de Receitas Francesas</td><td>R$ 200-500</td><td>R$ 60-120/kit</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>19</td><td>Vouchers de Experi&ecirc;ncia</td><td>R$ 100-300</td><td>Antecipa receita</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>20</td><td>Clube de Assinatura</td><td>R$ 300-800</td><td>R$ 150-300/m&ecirc;s/assinante</td><td><span class="badge badge-red">Complexo</span></td></tr>
+    <tr><td>21</td><td>Coworking Rural</td><td>R$ 500-2k</td><td>R$ 100-200/dia</td><td><span class="badge badge-amber">M&eacute;dio</span></td></tr>
+    <tr><td>22</td><td>Trilha Noturna (Insetos)</td><td>R$ 200-600</td><td>R$ 60-120/pessoa</td><td><span class="badge badge-amber">M&eacute;dio</span></td></tr>
+    <tr><td>23</td><td>Cavalgada Lua Cheia</td><td>R$ 0-500</td><td>R$ 100-200/pessoa</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+    <tr><td>24</td><td>Birdwatching</td><td>R$ 200-800</td><td>R$ 60-150/pessoa</td><td><span class="badge badge-green">F&aacute;cil</span></td></tr>
+  </table>
+</div>
+
+<!-- ========== QUICK WINS EXPANDED ========== -->
+<div class="section" id="quick-wins">
+  <h2 class="section-title">Quick Wins: Id&eacute;ias Mais F&aacute;ceis e Baratas (Expans&atilde;o Detalhada)</h2>
+  <div class="callout font-sans text-xs">Estas 10 ideias podem ser implementadas em <strong>1-4 semanas</strong> com investimento m&iacute;nimo (<strong>R$ 0-1.000 cada</strong>), usando infraestrutura que j&aacute; existe na fazenda.</div>
+
+  <div class="card card-sm" style="border-left: 4px solid #4caf50;">
+    <div class="card-title">1. Piquenique Franc&ecirc;s "Le Pique-Nique Champ&ecirc;tre" <span class="badge badge-green">R$ 500-1k</span></div>
+    <div class="grid-2 font-sans text-xs">
+      <div>
+        <strong>Por que &eacute; f&aacute;cil:</strong> Usa cozinha e espa&ccedil;os que j&aacute; existem. S&oacute; precisa de cestas, toalhas e lou&ccedil;as vintage de brech&oacute;.<br><br>
+        <strong>Implementa&ccedil;&atilde;o imediata:</strong>
+        <ul style="padding-left:14px;">
+          <li>Comprar 3-5 cestas de vime (R$ 30-60 cada em feiras)</li>
+          <li>Lou&ccedil;as de brech&oacute;/antiquário (charme vintage, R$ 50-200 total)</li>
+          <li>Toalhas xadrez (R$ 20-50 no tecido por metro)</li>
+          <li>Definir 3 locais pitorescos: pasto com vista, beira do rio, sob jabuticabeira</li>
+        </ul>
+      </div>
+      <div>
+        <strong>Menu fixo:</strong> Baguette caseiro, queijos locais, pat&ecirc;, frutas da &eacute;poca, vinho ou suco natural<br><br>
+        <strong>Precifica&ccedil;&atilde;o:</strong> R$ 150-300/casal<br>
+        <strong>Custo estimado por piquenique:</strong> R$ 40-60 (ingredientes)<br>
+        <strong>Margem:</strong> ~70-80%<br><br>
+        <strong>Marketing:</strong> Fotos incr&iacute;veis para Instagram. Vende por si s&oacute;. Oferecer como upgrade para h&oacute;spedes ou experi&ecirc;ncia solo.
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-sm" style="border-left: 4px solid #4caf50;">
+    <div class="card-title">2. Aulas de Culin&aacute;ria "Les Secrets de Grand-M&egrave;re" <span class="badge badge-green">R$ 200-500</span></div>
+    <div class="grid-2 font-sans text-xs">
+      <div>
+        <strong>Por que &eacute; f&aacute;cil:</strong> As receitas j&aacute; existem, a cozinha j&aacute; existe, a expertise j&aacute; existe. &Eacute; s&oacute; formalizar.<br><br>
+        <strong>Investimento:</strong> Aventais personalizados (R$ 25-40 cada x 8 = R$ 200-320), receitu&aacute;rio impresso (R$ 50), utens&iacute;lios extras (R$ 100).<br><br>
+        <strong>Formato:</strong> Grupos de 4-8 pessoas, 3-4h, o grupo cozinha junto e depois come o que preparou.
+      </div>
+      <div>
+        <strong>3 aulas rotat&oacute;rias:</strong>
+        <ol style="padding-left:14px;">
+          <li><strong>Quiche Lorraine + Tarte au Citron</strong> (entrada + sobremesa)</li>
+          <li><strong>Boeuf Bourguignon</strong> (prato principal completo)</li>
+          <li><strong>R&ocirc;ti + Reine de Saba</strong> (principal + chocolate)</li>
+        </ol><br>
+        <strong>Pre&ccedil;o:</strong> R$ 150-250/pessoa (inclui refei&ccedil;&atilde;o + receitu&aacute;rio)<br>
+        <strong>Receita por aula (6 pessoas):</strong> R$ 900-1.500<br>
+        <strong>Custo ingredientes:</strong> ~R$ 150-200<br>
+        <strong>Margem:</strong> ~80%
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-sm" style="border-left: 4px solid #4caf50;">
+    <div class="card-title">3. Astroturismo + Fogueira <span class="badge badge-green">R$ 0</span></div>
+    <div class="font-sans text-xs">
+      <strong>Custo ZERO.</strong> A fogueira j&aacute; existe. O c&eacute;u j&aacute; existe. A baixa polui&ccedil;&atilde;o luminosa j&aacute; existe.<br><br>
+      <strong>Implementa&ccedil;&atilde;o:</strong> Baixar app gratuito (Star Walk ou SkyView), usar tapetes de yoga no gramado, contar mitos e lendas das constela&ccedil;&otilde;es. Programar para noites sem lua. Combinar com chocolate quente ou vinho.<br><br>
+      <strong>Impacto:</strong> Diferencial rom&acirc;ntico enorme para casais. Conte&uacute;do incr&iacute;vel para Stories. Pode virar atividade paga (R$ 30-50/pessoa) ou permanecer gratuita como diferencial de hospedagem que gera reviews 5 estrelas.
+    </div>
+  </div>
+
+  <div class="card card-sm" style="border-left: 4px solid #4caf50;">
+    <div class="card-title">4. Vouchers / Gift Cards <span class="badge badge-green">R$ 100-300</span></div>
+    <div class="font-sans text-xs">
+      <strong>O mais r&aacute;pido de todos.</strong> Pode come&ccedil;ar hoje. Design no Canva (j&aacute; t&ecirc;m conta) + vers&atilde;o digital PDF.<br><br>
+      <strong>Pacotes sugeridos:</strong>
+      &bull; "Um Dia na Fazenda" (R$ 200-350) &middot; "Piquenique Franc&ecirc;s para Dois" (R$ 300-500) &middot; "Noite Rom&acirc;ntica com Banheira" (R$ 400-600)<br><br>
+      <strong>Estrat&eacute;gia:</strong> Ideal para Dia das M&atilde;es, Namorados, Natal. Antecipa receita. Cada voucher vendido &eacute; um novo cliente potencial. Validade 1 ano. Vender pelo Instagram, WhatsApp e OTAs.
+    </div>
+  </div>
+
+  <div class="card card-sm" style="border-left: 4px solid #4caf50;">
+    <div class="card-title">5. Cavalgada sob Lua Cheia <span class="badge badge-green">R$ 0 (cavalos j&aacute; existem)</span></div>
+    <div class="font-sans text-xs">
+      <strong>J&aacute; t&ecirc;m cavalos, j&aacute; t&ecirc;m cavalgada di&aacute;ria.</strong> S&oacute; adaptar para noite de lua cheia (1x/m&ecirc;s).<br><br>
+      <strong>Diferencial:</strong> Experi&ecirc;ncia &uacute;nica, alto valor percebido, escassez natural (s&oacute; 12x/ano). Incluir parada para chocolate quente ou vinho quente. R$ 200-250/pessoa facilmente justificado. Criar evento mensal no Instagram com antecced&ecirc;ncia. As vagas se esgotam &mdash; &eacute; o tipo de conte&uacute;do que viraliza.
+    </div>
+  </div>
+
+  <div class="card card-sm" style="border-left: 4px solid #4caf50;">
+    <div class="card-title">6. Forest Bathing Guiado (Shinrin-Yoku) <span class="badge badge-green">R$ 0-200</span></div>
+    <div class="font-sans text-xs">
+      <strong>J&aacute; t&ecirc;m a trilha, j&aacute; t&ecirc;m o "Banho de Floresta".</strong> S&oacute; estruturar em experi&ecirc;ncia premium de 2h com roteiro definido.<br><br>
+      <strong>Evolu&ccedil;&atilde;o:</strong> Criar 5 paradas contemplativas na trilha, cada uma com exerc&iacute;cio sens&oacute;rio (tato, olfato, audi&ccedil;&atilde;o, vis&atilde;o, paladar). Terminar com ch&aacute; de ervas da horta. Cobrar R$ 80-150/pessoa (ou incluso em retiros). Trend global de wellness com demanda crescente.
+    </div>
+  </div>
+
+  <div class="card card-sm" style="border-left: 4px solid #4caf50;">
+    <div class="card-title">7. Kits de Receitas Francesas <span class="badge badge-green">R$ 200-500</span></div>
+    <div class="font-sans text-xs">
+      <strong>Produto f&iacute;sico para levar = receita recorrente sem h&oacute;spede presente.</strong><br><br>
+      <strong>Formato:</strong> Embalagem craft com la&ccedil;o de palha. Ingredientes secos + especiarias + receita ilustrada + QR code para v&iacute;deo tutorial. "Kit Quiche Lorraine" e "Kit Tarte aux Fruits" como primeiros. R$ 60-120/kit com custo de R$ 15-30. Vender para h&oacute;spedes no checkout e online.
+    </div>
+  </div>
+
+  <div class="card card-sm" style="border-left: 4px solid #4caf50;">
+    <div class="card-title">8. Horta Comunit&aacute;ria para H&oacute;spedes <span class="badge badge-green">R$ 300-800</span></div>
+    <div class="font-sans text-xs">
+      <strong>J&aacute; t&ecirc;m horta.</strong> S&oacute; demarcar canteiros "adot&aacute;veis", criar placas bonitas, oferecer "hora na horta" matinal.<br><br>
+      <strong>Bonus:</strong> Kit de sementes como lembrancinha (R$ 3-5/kit, valor percebido alto). Reduz custo da cozinha. Conte&uacute;do aut&ecirc;ntico para redes sociais. Refor&ccedil;a posicionamento regenerativo.
+    </div>
+  </div>
+
+  <div class="card card-sm" style="border-left: 4px solid #4caf50;">
+    <div class="card-title">9. Birdwatching <span class="badge badge-green">R$ 200-800</span></div>
+    <div class="font-sans text-xs">
+      <strong>A REGUA ao lado &eacute; refer&ecirc;ncia internacional.</strong> Comprar 2-3 bin&oacute;culos (R$ 100-200 cada), baixar app Merlin Bird ID (gratuito), instalar comedouros estrat&eacute;gicos.<br><br>
+      <strong>P&uacute;blico:</strong> Nicho altamente lucrativo. Birdwatchers viajam especificamente para regi&otilde;es. Gastam 2-3x mais que turista m&eacute;dio. Ficam mais tempo. Voltam. Criar lista de esp&eacute;cies avistadas na propriedade. R$ 60-150/pessoa por sa&iacute;da matinal guiada (6h-9h).
+    </div>
+  </div>
+
+  <div class="card card-sm" style="border-left: 4px solid #4caf50;">
+    <div class="card-title">10. Yoga ao Amanhecer <span class="badge badge-green">R$ 0-300</span></div>
+    <div class="font-sans text-xs">
+      <strong>Tapetes j&aacute; dispon&iacute;veis.</strong> Parceria com instrutora local (permuta ou comiss&atilde;o, custo zero).<br><br>
+      <strong>Formato:</strong> 6h30 (ver&atilde;o) / 7h (inverno), vista para montanhas. Incluso para h&oacute;spedes como diferencial, ou R$ 50-80 para visitantes. Combina perfeitamente com retiros wellness e com o p&uacute;blico-alvo j&aacute; existente.
+    </div>
+  </div>
+</div>
+
+<!-- ========== NICHO ========== -->
+<div class="section" id="nicho">
+  <h2 class="section-title">Identifica&ccedil;&atilde;o de Nicho</h2>
+
+  <div class="callout font-sans text-xs">A Fazenda do Franc&ecirc;s j&aacute; tem um posicionamento &uacute;nico. O desafio &eacute; comunicar isso de forma clara para o p&uacute;blico certo. Abaixo, an&aacute;lise dos nichos mais promissores por potencial &times; facilidade.</div>
+
+  <div class="niche-card">
+    <h4>Nicho #1: Casais Urbanos do Rio (25-45 anos) &mdash; "Escapada Rom&acirc;ntica"</h4>
+    <div class="grid-2 font-sans text-xs">
+      <div>
+        <strong>Por que funciona:</strong> 120km do Rio = viagem de fim de semana perfeita. Banheira vitoriana + gastronomia francesa + natureza = combina&ccedil;&atilde;o imbat&iacute;vel para casais. Experi&ecirc;ncias como Bath and View e Piquenique Franc&ecirc;s s&atilde;o altamente "instagramm&aacute;veis".<br><br>
+        <strong>Ticket m&eacute;dio:</strong> R$ 600-1.200/casal/noite (hospedagem + experi&ecirc;ncias)<br>
+        <strong>Sazonalidade:</strong> Ano todo, pico em datas comemorativas
+      </div>
+      <div>
+        <strong>Como atingir:</strong>
+        <ul style="padding-left:14px;">
+          <li>Instagram Reels mostrando a banheira com vista</li>
+          <li>Parcerias com perfis de casais do Rio (@riodejaneirotips etc)</li>
+          <li>Pacotes "Dia dos Namorados", "Anivers&aacute;rio"</li>
+          <li>Google Ads: "escapada rom&acirc;ntica perto do rio"</li>
+          <li>Vouchers de presente</li>
+        </ul>
+        <div class="mt-8"><strong>Potencial:</strong> <span class="badge badge-green">ALTO</span> <strong>Facilidade:</strong> <span class="badge badge-green">ALTA</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="niche-card">
+    <h4>Nicho #2: Fam&iacute;lias com Crian&ccedil;as (30-50 anos) &mdash; "Fazenda Educativa"</h4>
+    <div class="grid-2 font-sans text-xs">
+      <div>
+        <strong>Por que funciona:</strong> Day Use Escolar j&aacute; funciona. Atividades para crian&ccedil;as (cavalo, ordenha, pesca, piscina) s&atilde;o o pacote perfeito para fam&iacute;lias. Pet-friendly amplia o p&uacute;blico. Seguran&ccedil;a e natureza &eacute; o que fam&iacute;lias procuram.<br><br>
+        <strong>Ticket m&eacute;dio:</strong> R$ 400-800/fam&iacute;lia/noite<br>
+        <strong>Sazonalidade:</strong> F&eacute;rias escolares, feriados prolongados
+      </div>
+      <div>
+        <strong>Como atingir:</strong>
+        <ul style="padding-left:14px;">
+          <li>Parcerias com escolas (j&aacute; existente)</li>
+          <li>Conte&uacute;do mostrando crian&ccedil;as na fazenda</li>
+          <li>Grupos de m&atilde;es no Facebook/WhatsApp</li>
+          <li>Experi&ecirc;ncias Airbnb para crian&ccedil;as (j&aacute; ativo)</li>
+        </ul>
+        <div class="mt-8"><strong>Potencial:</strong> <span class="badge badge-green">ALTO</span> <strong>Facilidade:</strong> <span class="badge badge-green">ALTA</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="niche-card">
+    <h4>Nicho #3: Wellness / Desenvolvimento Pessoal &mdash; "Retiro Transformador"</h4>
+    <div class="grid-2 font-sans text-xs">
+      <div>
+        <strong>Por que funciona:</strong> Jennifer j&aacute; &eacute; facilitadora Louise Hay. Os retiros j&aacute; existem. Infraestrutura (Floresta Sagrada, rio, espa&ccedil;o) j&aacute; pronta. Mercado de wellness cresce 10%+ ao ano.<br><br>
+        <strong>Ticket m&eacute;dio:</strong> R$ 2.700-4.500/pessoa/retiro<br>
+        <strong>Sazonalidade:</strong> Ano todo, agendamento pr&oacute;prio
+      </div>
+      <div>
+        <strong>Como atingir:</strong>
+        <ul style="padding-left:14px;">
+          <li>Instagram/YouTube de Jennifer (Be Your Better)</li>
+          <li>Parcerias com profissionais de sa&uacute;de</li>
+          <li>Comunidade WhatsApp de ex-participantes</li>
+          <li>Plataformas de retiros (Retreat Guru, BookRetreats)</li>
+        </ul>
+        <div class="mt-8"><strong>Potencial:</strong> <span class="badge badge-green">ALTO</span> <strong>Facilidade:</strong> <span class="badge badge-green">ALTA</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="niche-card">
+    <h4>Nicho #4: Birdwatchers / Ecoturistas Internacionais &mdash; "Mata Atl&acirc;ntica Experience"</h4>
+    <div class="grid-2 font-sans text-xs">
+      <div>
+        <strong>Por que funciona:</strong> REGUA ao lado &eacute; destino internacional de birdwatching. Birdwatchers pagam premium, ficam mais tempo, voltam. Comunidade fiel que recomenda. A Mata Atl&acirc;ntica tem esp&eacute;cies end&ecirc;micas que n&atilde;o existem em nenhum outro lugar do mundo.<br><br>
+        <strong>Ticket m&eacute;dio:</strong> R$ 300-600/pessoa/noite (h&oacute;spedes internacionais)<br>
+        <strong>Sazonalidade:</strong> Ano todo, pico na migra&ccedil;&atilde;o (set-mar)
+      </div>
+      <div>
+        <strong>Como atingir:</strong>
+        <ul style="padding-left:14px;">
+          <li>Perfil no eBird (lista de esp&eacute;cies da propriedade)</li>
+          <li>Parceria formal com REGUA para indicar hospedagem</li>
+          <li>Conte&uacute;do em ingl&ecirc;s no site</li>
+          <li>F&oacute;runs internacionais de birdwatching</li>
+          <li>TripAdvisor otimizado</li>
+        </ul>
+        <div class="mt-8"><strong>Potencial:</strong> <span class="badge badge-amber">M&Eacute;DIO-ALTO</span> <strong>Facilidade:</strong> <span class="badge badge-amber">M&Eacute;DIA</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="niche-card">
+    <h4>Nicho #5: N&ocirc;mades Digitais &mdash; "Le Bureau Champ&ecirc;tre"</h4>
+    <div class="grid-2 font-sans text-xs">
+      <div>
+        <strong>Por que funciona:</strong> WiFi fibra &oacute;tica j&aacute; existe. Tend&ecirc;ncia global p&oacute;s-pandemia. Combina trabalho + natureza + gastronomia. Estadias longas (1-4 semanas) = receita previs&iacute;vel.<br><br>
+        <strong>Ticket m&eacute;dio:</strong> R$ 150-250/dia ou R$ 2.500-4.000/semana
+      </div>
+      <div>
+        <strong>Como atingir:</strong>
+        <ul style="padding-left:14px;">
+          <li>NomadList, Remote Year, grupos Facebook</li>
+          <li>Pacotes semanais (hospedagem + caf&eacute; + almo&ccedil;o)</li>
+          <li>Conte&uacute;do "work from farm" no LinkedIn/Instagram</li>
+        </ul>
+        <div class="mt-8"><strong>Potencial:</strong> <span class="badge badge-amber">M&Eacute;DIO</span> <strong>Facilidade:</strong> <span class="badge badge-amber">M&Eacute;DIA</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PLANO DE MARKETING ========== -->
+<div class="section" id="marketing">
+  <h2 class="section-title">Plano de Comunica&ccedil;&atilde;o &amp; Marketing</h2>
+
+  <div class="callout font-sans text-xs">Plano pr&aacute;tico de 12 semanas. Custo total estimado: <strong>R$ 0-500</strong> (tudo com ferramentas gratuitas e esfor&ccedil;o pr&oacute;prio). Objetivo: dobrar seguidores e reservas diretas em 3 meses.</div>
+
+  <!-- FASE 1 -->
+  <div class="marketing-phase">
+    <h4>FASE 1 &mdash; Funda&ccedil;&atilde;o (Semanas 1-2)</h4>
+    <div class="font-sans text-xs">
+      <strong>Objetivo:</strong> Organizar a base digital<br><br>
+      <ul class="checklist">
+        <li><strong>Google Business Profile:</strong> Atualizar fotos (min. 20), hor&aacute;rios, descri&ccedil;&atilde;o completa, responder TODOS os reviews</li>
+        <li><strong>Instagram Bio:</strong> "Guest House Regenerativa | Culin&aacute;ria Francesa | 120km do Rio | Reservas &darr;" + link para WhatsApp</li>
+        <li><strong>Destaques do Instagram (5):</strong> Su&iacute;tes | Gastronomia | Atividades | Como Chegar | Depoimentos</li>
+        <li><strong>WhatsApp Business:</strong> Configurar cat&aacute;logo com experi&ecirc;ncias e pre&ccedil;os, mensagem autom&aacute;tica de boas-vindas</li>
+        <li><strong>Banco de Fotos:</strong> 1 dia dedicado a fotografar tudo (celular + boa luz natural basta)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FASE 2 -->
+  <div class="marketing-phase">
+    <h4>FASE 2 &mdash; Conte&uacute;do (Semanas 3-6)</h4>
+    <div class="font-sans text-xs">
+      <strong>Objetivo:</strong> Criar ritmo de publica&ccedil;&atilde;o consistente<br><br>
+
+      <strong>Calend&aacute;rio semanal (4 posts/semana):</strong>
+      <table>
+        <tr><th>Dia</th><th>Tipo</th><th>Exemplo</th></tr>
+        <tr><td>Segunda</td><td>Bastidores</td><td>"P&atilde;o saindo do forno &agrave;s 6h da manh&atilde;" / receita sendo preparada</td></tr>
+        <tr><td>Quarta</td><td>Experi&ecirc;ncia</td><td>Reel de 15-30s: cavalgada, banheira, trilha, fogueira</td></tr>
+        <tr><td>Sexta</td><td>Dica/Educativo</td><td>"3 cachoeiras perto de Macacu que voc&ecirc; n&atilde;o conhece" / "Como fazer Quiche Lorraine"</td></tr>
+        <tr><td>Domingo</td><td>Depoimento/Resultado</td><td>Foto de h&oacute;spede (com permiss&atilde;o) + review / antes e depois</td></tr>
+      </table>
+
+      <strong class="mt-8" style="display:block;">Formatos priorit&aacute;rios:</strong>
+      <ol style="padding-left:14px;">
+        <li><strong>Reels curtos (15-30s)</strong> &mdash; Maior alcance org&acirc;nico. Foco visual: banheira com vista, cavalo no p&ocirc;r-do-sol, prato franc&ecirc;s sendo montado</li>
+        <li><strong>Carrosseis</strong> &mdash; "7 coisas para fazer na Fazenda do Franc&ecirc;s" / "Receita Quiche Lorraine em 5 passos"</li>
+        <li><strong>Stories di&aacute;rios</strong> &mdash; Rotina real da fazenda. Autenticidade &gt; produ&ccedil;&atilde;o.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- FASE 3 -->
+  <div class="marketing-phase">
+    <h4>FASE 3 &mdash; Distribui&ccedil;&atilde;o &amp; Parcerias (Semanas 7-10)</h4>
+    <div class="font-sans text-xs">
+      <strong>Objetivo:</strong> Ampliar alcance al&eacute;m dos seguidores atuais<br><br>
+      <ul class="checklist">
+        <li><strong>Micro-influenciadores (5-50k seguidores):</strong> Convidar 1-2/m&ecirc;s para permuta (modelo j&aacute; definido: 4 noites + refei&ccedil;&otilde;es + experi&ecirc;ncias em troca de conte&uacute;do)</li>
+        <li><strong>Parceria REGUA:</strong> Indica&ccedil;&atilde;o m&uacute;tua (eles indicam hospedagem, voc&ecirc;s indicam visita&ccedil;&atilde;o)</li>
+        <li><strong>Collab posts Instagram:</strong> Com guias locais, restaurantes da regi&atilde;o, produtores</li>
+        <li><strong>TripAdvisor:</strong> Criar perfil, pedir reviews a h&oacute;spedes satisfeitos (link direto no checkout)</li>
+        <li><strong>Grupos Facebook:</strong> "Turismo Rural RJ", "Escapadas perto do Rio", "N&ocirc;mades Digitais Brasil"</li>
+        <li><strong>Plataformas WWOOF/Worldpackers:</strong> Cadastrar (volunt&aacute;rios = conte&uacute;do + m&atilde;o de obra + avalia&ccedil;&otilde;es)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FASE 4 -->
+  <div class="marketing-phase">
+    <h4>FASE 4 &mdash; Convers&atilde;o &amp; Fideliza&ccedil;&atilde;o (Semanas 11-12+)</h4>
+    <div class="font-sans text-xs">
+      <strong>Objetivo:</strong> Transformar seguidores em h&oacute;spedes e h&oacute;spedes em embaixadores<br><br>
+      <ul class="checklist">
+        <li><strong>Lista de transmiss&atilde;o WhatsApp:</strong> Enviar novidades mensais (jantares tem&aacute;ticos, lua cheia, vagas de retiro)</li>
+        <li><strong>Programa "Volte &amp; Ganhe":</strong> H&oacute;spede que volta ganha upgrade ou experi&ecirc;ncia gratu&iacute;ta (custo marginal baixo, alto impacto)</li>
+        <li><strong>Pedido de review:</strong> Mensagem no WhatsApp 2 dias ap&oacute;s checkout com link direto para Google/Booking/Airbnb</li>
+        <li><strong>Vouchers sazonais:</strong> Dia dos Namorados (jun), Dia das M&atilde;es (mai), Natal, Anivers&aacute;rios</li>
+        <li><strong>Newsletter mensal (e-mail):</strong> "O que est&aacute; acontecendo na Fazenda" &mdash; usar MailChimp free (at&eacute; 500 contatos)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card card-sm mt-8">
+    <div class="card-title">Resumo: Calend&aacute;rio Anual de Marketing</div>
+    <table>
+      <tr><th>M&ecirc;s</th><th>Tema/Campanha</th><th>A&ccedil;&atilde;o Principal</th></tr>
+      <tr><td>Jan-Fev</td><td>Ver&atilde;o / F&eacute;rias</td><td>Pacotes fam&iacute;lia, piscina, cachoeiras</td></tr>
+      <tr><td>Mar</td><td>Carnaval alternativo</td><td>"Fuja do Carnaval" &mdash; retiro de descanso</td></tr>
+      <tr><td>Abr</td><td>P&aacute;scoa na Fazenda</td><td>Workshop chocolate (Reine de Saba) + crian&ccedil;as</td></tr>
+      <tr><td>Mai</td><td>Dia das M&atilde;es</td><td>Vouchers + pacote especial m&atilde;e-filha</td></tr>
+      <tr><td>Jun</td><td>Dia dos Namorados + S&atilde;o Jo&atilde;o</td><td>Pacote rom&acirc;ntico + fogueira tem&aacute;tica</td></tr>
+      <tr><td>Jul</td><td>F&eacute;rias Inverno</td><td>Forest bathing + chocolate quente + fogueira</td></tr>
+      <tr><td>Ago</td><td>Dia dos Pais</td><td>Cavalgada + pesca + churrasco</td></tr>
+      <tr><td>Set-Out</td><td>Primavera / Retiros</td><td>Retiros BYB + birdwatching (migra&ccedil;&atilde;o)</td></tr>
+      <tr><td>Nov</td><td>Black Friday</td><td>Vouchers com desconto (antecipa receita)</td></tr>
+      <tr><td>Dez</td><td>Natal / R&eacute;veillon</td><td>Ceia francesa + virada no campo</td></tr>
+    </table>
+  </div>
+
+  <div class="card card-sm">
+    <div class="card-title">M&eacute;tricas para Acompanhar (mensal)</div>
+    <div class="grid-3 font-sans text-xs">
+      <div><strong>Instagram:</strong> Seguidores, Alcance, Engajamento (%), Cliques no link, DMs recebidas</div>
+      <div><strong>Reservas:</strong> Reservas diretas (WhatsApp) vs OTAs, Taxa de ocupa&ccedil;&atilde;o, Ticket m&eacute;dio, Receita por canal</div>
+      <div><strong>Reviews:</strong> Nota m&eacute;dia Google/Booking/Airbnb, Qtd de reviews novos, Palavras mais citadas</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PARCERIAS ========== -->
+<div class="section" id="parcerias">
+  <h2 class="section-title">Modelo de Parcerias</h2>
+  <div class="grid-2">
+    <div class="card card-sm">
+      <div class="card-title">O que a Fazenda Oferece</div>
+      <div class="font-sans text-xs">
+        <strong>4 noites para casal</strong> (pode dividir em 2 fins de semana)<br>
+        <strong>Refei&ccedil;&otilde;es:</strong> Sex (jantar), S&aacute;b (3 refei&ccedil;&otilde;es), Dom (caf&eacute;)<br>
+        <strong>Experi&ecirc;ncias:</strong> Cavalgada + Bath and View<br>
+        <strong>Bebidas n&atilde;o inclusas</strong>
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div class="card-title">Contrapartidas do Parceiro</div>
+      <div class="font-sans text-xs">
+        <ol style="padding-left:14px;">
+          <li>Reels + Stories divulgando a fazenda</li>
+          <li>Men&ccedil;&atilde;o em eventos pr&oacute;prios</li>
+          <li>Espa&ccedil;o para Jennifer apresentar</li>
+          <li>Acesso a grupo de leads</li>
+          <li>Epis&oacute;dio de podcast com entrevista</li>
+          <li>Uso respeitoso das marcas</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div class="card card-sm">
+    <div class="card-title">Perfil Ideal de Parceiro</div>
+    <div class="font-sans text-xs">Influenciadores lifestyle/bem-estar/turismo (5-50k seguidores) &middot; Organizadores de eventos wellness &middot; Podcasters de desenvolvimento pessoal &middot; Profissionais de sa&uacute;de com presen&ccedil;a digital &middot; Criadores de conte&uacute;do sobre natureza/sustentabilidade</div>
+  </div>
+</div>
+
+<!-- ========== DIGITAL ========== -->
+<div class="section" id="digital">
+  <h2 class="section-title">Presen&ccedil;a Digital Atual</h2>
+  <div class="grid-2">
+    <div class="card card-sm">
+      <div class="card-title">Canais Ativos</div>
+      <table>
+        <tr><th>Plataforma</th><th>Status</th></tr>
+        <tr><td>Booking.com</td><td><span class="badge badge-green">Ativo</span></td></tr>
+        <tr><td>Airbnb</td><td><span class="badge badge-green">Ativo</span></td></tr>
+        <tr><td>Expedia</td><td><span class="badge badge-green">Ativo</span></td></tr>
+        <tr><td>Instagram @fazendadofrances</td><td><span class="badge badge-green">Ativo</span></td></tr>
+        <tr><td>Website</td><td><span class="badge badge-green">Ativo</span></td></tr>
+        <tr><td>Google Maps</td><td><span class="badge badge-green">Ativo</span></td></tr>
+      </table>
+    </div>
+    <div class="card card-sm">
+      <div class="card-title">Ferramentas &amp; Melhorias</div>
+      <div class="font-sans text-xs">
+        <strong>CRM:</strong> Kommo &middot; <strong>PMS:</strong> Hospedin &middot; <strong>Design:</strong> Canva<br><br>
+        <strong>Oportunidades:</strong>
+        <ol style="padding-left:14px;">
+          <li>SEO local (otimiza&ccedil;&atilde;o Google Business)</li>
+          <li>TripAdvisor (presen&ccedil;a e reviews)</li>
+          <li>YouTube (v&iacute;deos das experi&ecirc;ncias)</li>
+          <li>Blog (conte&uacute;do da regi&atilde;o)</li>
+          <li>Unificar reservas OTAs no Hospedin</li>
+          <li>Automa&ccedil;&atilde;o follow-up via Kommo</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== DESENVOLVIMENTO ========== -->
+<div class="section" id="desenvolvimento">
+  <h2 class="section-title">Plano de Desenvolvimento</h2>
+
+  <div class="grid-3">
+    <div class="card card-sm" style="border-top: 3px solid #4caf50;">
+      <div class="card-title" style="color:#4caf50;">Curto Prazo (1-3 meses)</div>
+      <ul class="checklist font-sans text-xs">
+        <li>Vouchers/Gift Cards (Canva)</li>
+        <li>Piquenique Franc&ecirc;s (cestas + lou&ccedil;as)</li>
+        <li>Aulas de culin&aacute;ria (formalizar)</li>
+        <li>Astroturismo (custo zero)</li>
+        <li>Google Business otimizado</li>
+        <li>Cadastrar WWOOF/Worldpackers</li>
+        <li>Calend&aacute;rio de conte&uacute;do Instagram</li>
+        <li>1&ordf; permuta com influenciador</li>
+      </ul>
+    </div>
+    <div class="card card-sm" style="border-top: 3px solid #ff9800;">
+      <div class="card-title" style="color:#ff9800;">M&eacute;dio Prazo (3-6 meses)</div>
+      <ul class="checklist font-sans text-xs">
+        <li>Le Petit Coin (caf&eacute; b&aacute;sico)</li>
+        <li>Jantares tem&aacute;ticos mensais</li>
+        <li>Mercadinho da Fazenda</li>
+        <li>Kits de receitas para venda</li>
+        <li>Conservas/geleias artesanais</li>
+        <li>Meliponicultura (abelhas)</li>
+        <li>Birdwatching estruturado</li>
+        <li>Formalizar ONG/Associa&ccedil;&atilde;o</li>
+      </ul>
+    </div>
+    <div class="card card-sm" style="border-top: 3px solid #2196f3;">
+      <div class="card-title" style="color:#2196f3;">Longo Prazo (6-12 meses)</div>
+      <ul class="checklist font-sans text-xs">
+        <li>Restaurante/Recep&ccedil;&atilde;o constru&ccedil;&atilde;o</li>
+        <li>SAF piloto (0,5 ha)</li>
+        <li>Santu&aacute;rio animal com visita&ccedil;&atilde;o</li>
+        <li>Clube de assinatura</li>
+        <li>Coworking rural</li>
+        <li>Cinema ao ar livre</li>
+        <li>Crowdfunding para expans&atilde;o</li>
+        <li>Permacultura completa (zonas 1-4)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card card-sm mt-8">
+    <div class="card-title">Le Petit Coin (Cantinho do Caf&eacute;)</div>
+    <div class="grid-2 font-sans text-xs">
+      <div>
+        <strong>Localiza&ccedil;&atilde;o:</strong> Marco M-0 (antigo curral), conflu&ecirc;ncia de estradas<br>
+        <strong>Conceito:</strong> Bistro r&uacute;stico-franc&ecirc;s<br>
+        <strong>Slogan:</strong> "Un caf&eacute;, s'il vous pla&icirc;t"<br><br>
+        <strong>Op&ccedil;&atilde;o Econ&ocirc;mica:</strong> R$ 5-8k (pallets, brech&oacute;, DIY)<br>
+        <strong>Op&ccedil;&atilde;o M&eacute;dia:</strong> R$ 10-15k (quiosque madeira)
+      </div>
+      <div>
+        <strong>Menu:</strong><br>
+        Caf&eacute; coado R$ 6-8 &middot; Caf&eacute; au lait R$ 10-14<br>
+        Croissant R$ 10-14 &middot; Quiche fatia R$ 18-24<br>
+        Croque-monsieur R$ 22-28<br>
+        Combo Petit-D&eacute;jeuner R$ 25-35<br>
+        Panier Pique-Nique R$ 80-120
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-sm">
+    <div class="card-title">ONG / Santu&aacute;rio Animal</div>
+    <div class="grid-2 font-sans text-xs">
+      <div>
+        <strong>Recomenda&ccedil;&atilde;o:</strong> Iniciar como Associa&ccedil;&atilde;o Simples<br>
+        <strong>Custo cria&ccedil;&atilde;o:</strong> R$ 1.300-3.300<br>
+        <strong>Mensal:</strong> R$ 150-300 (contador)<br>
+        <strong>Etapas:</strong> Estatuto &rarr; Assembleia &rarr; Cart&oacute;rio &rarr; CNPJ &rarr; Alvar&aacute;
+      </div>
+      <div>
+        <strong>Receitas do Santu&aacute;rio:</strong><br>
+        Visita&ccedil;&atilde;o: R$ 30-50/pessoa<br>
+        Apadrinhamento: R$ 50-200/animal/m&ecirc;s<br>
+        Eventos beneficentes: R$ 2-10k/evento<br>
+        <strong>Crowdfunding:</strong> Kickante, Benfeitoria, Vakinha
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-sm">
+    <div class="card-title">Permacultura (Zonas)</div>
+    <div class="font-sans text-xs">
+      <strong>Z0:</strong> Sede (existente) &middot;
+      <strong>Z1:</strong> Horta/ervas 0-10m (parcial) &middot;
+      <strong>Z2:</strong> Pomar/galinhas 10-50m &middot;
+      <strong>Z3:</strong> Agrofloresta SAF 50-200m &middot;
+      <strong>Z4:</strong> Pastagem regenerativa 200m+ &middot;
+      <strong>Z5:</strong> Floresta intocada (existente)<br><br>
+      <strong>Pr&oacute;ximas a&ccedil;&otilde;es:</strong> Horta expandida (1-2 meses) &rarr; Compostagem (2-3m) &rarr; Galinheiro m&oacute;vel (3-4m) &rarr; Capta&ccedil;&atilde;o &aacute;gua (4-6m) &rarr; SAF piloto (6-12m)
+    </div>
+  </div>
+</div>
+
+<!-- ========== CONTATOS ========== -->
+<div class="section" id="contatos">
+  <h2 class="section-title">Contatos &amp; Links</h2>
+  <div class="grid-2">
+    <div class="card card-sm">
+      <div class="card-title">Fazenda do Franc&ecirc;s</div>
+      <table>
+        <tr><td class="fw-700 font-sans">WhatsApp</td><td>(21) 97920-1646</td></tr>
+        <tr><td class="fw-700 font-sans">Instagram</td><td>@fazendadofrances</td></tr>
+        <tr><td class="fw-700 font-sans">Email</td><td>fazendadofrances@gmail.com</td></tr>
+        <tr><td class="fw-700 font-sans">Website</td><td>www.fazendadofrances.com.br</td></tr>
+        <tr><td class="fw-700 font-sans">Google Maps</td><td>maps.app.goo.gl/prEDdoQVswtARX3y8</td></tr>
+      </table>
+    </div>
+    <div class="card card-sm">
+      <div class="card-title">Parceiros &amp; Refer&ecirc;ncias</div>
+      <table>
+        <tr><td class="fw-700 font-sans">Guia Trilhas</td><td>(21) 96940-3439</td></tr>
+        <tr><td class="fw-700 font-sans">Guia Macacu</td><td>@guiamacacu</td></tr>
+        <tr><td class="fw-700 font-sans">Be Your Better</td><td>Jennifer Lepoutre</td></tr>
+        <tr><td class="fw-700 font-sans">REGUA</td><td>Reserva vizinha</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="card card-sm">
+    <div class="card-title">Links &Uacute;teis</div>
+    <div class="grid-3 font-sans text-xs">
+      <div>
+        <strong>Voluntariado:</strong><br>
+        WWOOF Brasil &middot; Worldpackers &middot; Workaway &middot; HelpX
+      </div>
+      <div>
+        <strong>Crowdfunding:</strong><br>
+        Kickante &middot; Benfeitoria &middot; Vakinha &middot; Catarse
+      </div>
+      <div>
+        <strong>Permacultura:</strong><br>
+        SiAMA &middot; Iniciativa Verde &middot; Embrapa SAFs
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center; padding: 24px; color: var(--muted); font-size: 11px; font-family: sans-serif; border-top: 1px solid var(--border);">
+  <strong>Fazenda do Franc&ecirc;s</strong> &mdash; Guest House Regenerativa &middot; Cachoeiras de Macacu, RJ<br>
+  Documento compilado em Mar&ccedil;o 2026 &middot; RE CONECTE-SE
+</div>
+
+</div><!-- /container -->
+</body>
+</html>
