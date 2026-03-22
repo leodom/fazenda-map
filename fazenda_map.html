@@ -423,7 +423,7 @@
                 </div>
             </div>
             <div style="margin-top:8px;">
-                <button class="export-btn" onclick="window.open(location.href, '_blank')" title="Abre esta pagina em uma nova aba do navegador">&#x1F5D7; Abrir no Navegador</button>
+                <button class="export-btn" onclick="openInBrowser()" title="Abre esta pagina no navegador com token incluso">&#x1F5D7; Abrir no Navegador</button>
             </div>
             <div style="margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                 <button class="export-btn" style="border-color:#4CAF50;color:#4CAF50;" onclick="saveToGitHub()">&#9729; Salvar no GitHub</button>
@@ -1285,6 +1285,12 @@
     function clearGitHubToken() {
         localStorage.removeItem('gh_pat');
         updateTokenStatus();
+    }
+
+    function openInBrowser() {
+        const token = localStorage.getItem('gh_pat');
+        const hash = token ? '#ghtoken=' + encodeURIComponent(token) : '';
+        location.href = location.origin + location.pathname + hash;
     }
 
     function copyTokenLink() {

@@ -171,4 +171,23 @@ Acoes prioritarias:
 
 ---
 
-*Ultima atualizacao: 2026-03-10*
+## Git — Dois Repositorios
+
+Este projeto e publicado em dois repositorios:
+
+| Remote | Repositorio | Tipo |
+|--------|------------|------|
+| `origin` | `leodom/fazenda-do-frances` | Privado |
+| `fazenda-map` | `leodom/fazenda-map` | Publico (GitHub Pages) |
+
+Ao fazer push, **sempre use**:
+```
+git pushall
+```
+Este alias sincroniza commits do `fazenda-map` (gerados pelo botao "Salvar no GitHub" do mapa) e depois envia para ambos os remotes.
+
+**Nunca use `git push` simples** — ele envia para apenas um remote.
+
+---
+
+*Ultima atualizacao: 2026-03-22*
