@@ -122,6 +122,11 @@
             background: none; border: none; color: #f44336; cursor: pointer;
             font-size: 16px; padding: 0 4px;
         }
+        .zone-toggle {
+            background: none; border: none; color: #aaa;
+            cursor: pointer; font-size: 13px; padding: 0 3px; line-height: 1;
+        }
+        .zone-toggle:hover { color: #fff; }
 
         .export-bar { display: flex; gap: 6px; flex-wrap: wrap; }
         .export-btn {
@@ -926,7 +931,7 @@
         </div>`);
 
         drawnItems.addLayer(layer);
-        zones.push({ id: Date.now(), type, label, layer, areaM2, lengthM, style });
+        zones.push({ id: Date.now(), type, label, layer, areaM2, lengthM, style, visible: true });
         renderZonesList();
         removeDrawControl();
         activeZoneType = null;
@@ -939,11 +944,13 @@
         if (zones.length === 0) { section.style.display = 'none'; return; }
         section.style.display = 'block';
         container.innerHTML = zones.map(z => `
-            <div class="zone-item">
+            <div class="zone-item" style="opacity:${z.visible !== false ? 1 : 0.45}">
                 <span class="zone-color" style="background:${z.style.color}"></span>
                 <div class="zone-info">
                     <div>${z.label}${z.areaM2 > 0 ? ' — ' + (z.areaM2/10000).toFixed(2) + ' ha' : ''}${z.lengthM > 0 ? ' — ' + z.lengthM.toFixed(0) + ' m' : ''}</div>
                 </div>
+                <button class="zone-toggle" onclick="toggleZoneVisibility(${z.id})"
+                  title="${z.visible !== false ? 'Ocultar' : 'Mostrar'}">${z.visible !== false ? '◉' : '○'}</button>
                 <button class="zone-delete" onclick="deleteZone(${z.id})">&times;</button>
             </div>
         `).join('');
@@ -952,6 +959,18 @@
     function deleteZone(id) {
         const idx = zones.findIndex(z => z.id === id);
         if (idx >= 0) { drawnItems.removeLayer(zones[idx].layer); zones.splice(idx, 1); renderZonesList(); }
+    }
+
+    function toggleZoneVisibility(id) {
+        const z = zones.find(z => z.id === id);
+        if (!z) return;
+        z.visible = !z.visible;
+        if (z.visible) {
+            z.layer.setStyle({ opacity: 1, fillOpacity: z.style.fillOpacity || 0 });
+        } else {
+            z.layer.setStyle({ opacity: 0, fillOpacity: 0 });
+        }
+        renderZonesList();
     }
 
     // =========================================================================
@@ -1105,7 +1124,7 @@
                 const latlngs = z.layer.getLatLngs ? z.layer.getLatLngs() : [];
                 const isPolygon = z.layer instanceof L.Polygon;
                 return {
-                    type: z.type, label: z.label, isPolygon,
+                    type: z.type, label: z.label, isPolygon, visible: z.visible !== false,
                     latlngs: (isPolygon ? (latlngs[0] || latlngs) : latlngs).map(ll => [ll.lat, ll.lng])
                 };
             }),
@@ -1320,7 +1339,9 @@
                     ${lengthM > 0 ? `Comprimento: ${lengthM.toFixed(1)} m` : ''}
                 </div>`);
                 drawnItems.addLayer(layer);
-                zones.push({ id: Date.now() + Math.random(), type: z.type, label: z.label, layer, areaM2, lengthM, style });
+                const visible = z.visible !== false;
+                if (!visible) layer.setStyle({ opacity: 0, fillOpacity: 0 });
+                zones.push({ id: Date.now() + Math.random(), type: z.type, label: z.label, layer, areaM2, lengthM, style, visible });
             });
         }
         renderZonesList();
