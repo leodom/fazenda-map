@@ -1290,7 +1290,8 @@
     function openInBrowser() {
         const token = localStorage.getItem('gh_pat');
         const hash = token ? '#ghtoken=' + encodeURIComponent(token) : '';
-        location.href = location.origin + location.pathname + hash;
+        window.location.href = location.origin + location.pathname + hash;
+        window.location.reload();
     }
 
     function copyTokenLink() {
