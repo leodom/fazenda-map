@@ -1,0 +1,65 @@
+{
+  "version": 2,
+  "saved": "2026-03-22T23:31:40.366Z",
+  "overlays": {
+    "planta": {
+      "offset_ns": 0,
+      "offset_ew": 0,
+      "scale": 100,
+      "opacity": 0.6,
+      "visible": false
+    },
+    "satellite_overlay": {
+      "offset_ns": 0,
+      "offset_ew": 0,
+      "scale": 100,
+      "opacity": 0.5,
+      "visible": false
+    }
+  },
+  "zones": [
+    {
+      "type": "custom",
+      "label": "Café aux laits",
+      "isPolygon": true,
+      "visible": true,
+      "latlngs": [
+        [
+          -22.485176888144487,
+          -42.76214987039566
+        ],
+        [
+          -22.485060407831952,
+          -42.762361764907844
+        ],
+        [
+          -22.484720879553162,
+          -42.76212304830551
+        ],
+        [
+          -22.484852230007945,
+          -42.76193529367447
+        ]
+      ]
+    }
+  ],
+  "mapState": {
+    "center": [
+      -22.483028182351823,
+      -42.76142835617066
+    ],
+    "zoom": 17
+  },
+  "basemap": "google",
+  "layers": {
+    "santaFe": false,
+    "fdf": true
+  },
+  "collapsedSections": [
+    "mapa-base",
+    "planta-topografica-(pdf-overlay)",
+    "parametros-atuais-(para-algoritmo)",
+    "zoneamento",
+    "ferramentas"
+  ]
+}
