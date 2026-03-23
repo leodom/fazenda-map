@@ -423,7 +423,7 @@
                 </div>
             </div>
             <div style="margin-top:8px;">
-                <button class="export-btn" onclick="openInBrowser()" title="Abre esta pagina no navegador com token incluso">&#x1F5D7; Abrir no Navegador</button>
+                <button class="export-btn" onclick="openInBrowser()" title="Abre o mapa publicado com o token salvo">&#x1F5D7; Carregar save token</button>
             </div>
             <div style="margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                 <button class="export-btn" style="border-color:#4CAF50;color:#4CAF50;" onclick="saveToGitHub()">&#9729; Salvar no GitHub</button>
@@ -1290,8 +1290,8 @@
     function openInBrowser() {
         const token = localStorage.getItem('gh_pat');
         const hash = token ? '#ghtoken=' + encodeURIComponent(token) : '';
-        window.location.href = location.origin + location.pathname + hash;
-        window.location.reload();
+        const url = 'https://leodom.github.io/fazenda-map/fazenda_map.html' + hash;
+        window.open(url, '_blank');
     }
 
     function copyTokenLink() {
