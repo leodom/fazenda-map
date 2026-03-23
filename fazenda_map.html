@@ -1288,9 +1288,13 @@
     }
 
     function openInBrowser() {
-        const token = localStorage.getItem('gh_pat');
-        const hash = token ? '#ghtoken=' + encodeURIComponent(token) : '';
-        const url = 'https://leodom.github.io/fazenda-map/fazenda_map.html' + hash;
+        const token = localStorage.getItem('gh_pat')
+            || (location.hash.match(/[#&]ghtoken=([^&#]+)/) || [])[1];
+        if (!token) {
+            alert('Nenhum token encontrado. Configure o token primeiro.');
+            return;
+        }
+        const url = 'https://leodom.github.io/fazenda-map/fazenda_map.html#ghtoken=' + encodeURIComponent(token);
         window.open(url, '_blank');
     }
 
