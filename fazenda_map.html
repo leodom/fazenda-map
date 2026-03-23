@@ -1288,13 +1288,13 @@
     }
 
     function openInBrowser() {
-        const token = localStorage.getItem('gh_pat')
-            || (location.hash.match(/[#&]ghtoken=([^&#]+)/) || [])[1];
+        var token = localStorage.getItem('gh_pat');
         if (!token) {
-            alert('Nenhum token encontrado. Configure o token primeiro.');
-            return;
+            token = prompt('Cole seu GitHub token (ghp_...):');
+            if (!token) return;
+            localStorage.setItem('gh_pat', token);
         }
-        const url = 'https://leodom.github.io/fazenda-map/fazenda_map.html#ghtoken=' + encodeURIComponent(token);
+        var url = 'https://leodom.github.io/fazenda-map/fazenda_map.html#ghtoken=' + encodeURIComponent(token);
         window.open(url, '_blank');
     }
 
