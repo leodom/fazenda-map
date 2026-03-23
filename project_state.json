@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "saved": "2026-03-23T00:00:50.347Z",
+  "saved": "2026-03-23T03:28:58.381Z",
   "overlays": {
     "planta": {
       "offset_ns": 0,
@@ -22,7 +22,7 @@
       "type": "custom",
       "label": "Café aux laits",
       "isPolygon": true,
-      "visible": false,
+      "visible": true,
       "latlngs": [
         [
           -22.485176888144487,
